@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-import NoAccountRoute from "./routes/NoAccountRoute";
+import NoAccountRoute from "./routes/ProtectedRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
+
 import AuthLayout from "./layouts/AuthLayout";
+import MainLayout from "./layouts/MainLayout";
+
 import Loading from "./components/Loading";
 
 export default function App() {
@@ -12,36 +15,22 @@ export default function App() {
   const SignUp = lazy(() => import("./pages/SignUpPage"));
 
   const NotFound = lazy(()=> import("./pages/NotFoundPage"))
+
+  const Account = lazy(()=>import("./modules/Account"));
+
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
-          <Route element={<NoAccountRoute />}>
+        <Route element={<ProtectedRoute />}>
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
             </Route>
-          </Route>
-
-          {/* Authenticated Only */}
-          <Route element={<ProtectedRoute />}>
-            {/* <Route element={<DashBoardPageLayout />}>
-              <Route path="/" element={<Dashboard />} />
-
-              <Route path="/users" element={<Users />} />
-
-              <Route path="/posts" element={<Posts />} />
-
-              <Route path="/comments" element={<Comments />} />
-
-              <Route path="/albums" element={<Albums />} />
-
-              <Route path="/usememo" element={<UseMemo />} />
-
-              <Route path="/usecallback" element={<UseCallback />} />
-
-              <Route path="/useref" element={<UseRef />} />
-            </Route> */}
+          
+            <Route element={<MainLayout />}>
+              <Route path="/account" element={<Account />} />
+            </Route>
           </Route>
 
           <Route path="*" element={<NotFound />} />
