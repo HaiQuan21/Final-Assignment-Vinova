@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Label from "./Label";
 
 function FieldInputSingle({
   label,
@@ -18,8 +19,7 @@ function FieldInputSingle({
 
   return (
     <div className="w-full">
-      {/* Label */}
-      <label className="block mb-2 text-lg font-medium">{label}{required && <span className="text-red-500">*</span>}</label>
+      <Label label={label} required={required}/>
 
       {/* Input Wrapper */}
       <div className="relative">
