@@ -18,9 +18,8 @@ export default function App() {
         <Routes>
           <Route element={<NoAccountRoute />}>
             <Route element={<AuthLayout />}>
-              <Route path="/signup" element={<SignUp />} />
-
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
             </Route>
           </Route>
 
