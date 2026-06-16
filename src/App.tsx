@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route,Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-import NoAccountRoute from "./routes/ProtectedRoute";
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import AuthLayout from "./layouts/AuthLayout";
@@ -22,6 +22,8 @@ export default function App() {
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+
         <Route element={<ProtectedRoute />}>
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<Login />} />
