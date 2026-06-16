@@ -9,6 +9,7 @@ function FieldInputSingle({
   error,
   disabled = false,
   className = "",
+  required = false
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -18,7 +19,7 @@ function FieldInputSingle({
   return (
     <div className="w-full">
       {/* Label */}
-      <label className="block mb-2 text-lg font-medium">{label}</label>
+      <label className="block mb-2 text-lg font-medium">{label}{required && <span className="text-red-500">*</span>}</label>
 
       {/* Input Wrapper */}
       <div className="relative">
