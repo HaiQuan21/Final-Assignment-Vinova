@@ -1,72 +1,97 @@
-import Select from "react-select";
-import Label from "./Label";
+import Select, { type SingleValue } from "react-select";
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+interface FieldSelectProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: SelectOption[];
+  error?: string;
+  disabled?: boolean;
+  required?: boolean;
+  className?: string;
+  placeholder?: string;
+  isClearable?: boolean;
+}
 
 function FieldSelect({
   label,
+  name,
   value,
   onChange,
-  options = [],
+  options,
   error,
   disabled = false,
   required = false,
+  className = "",
   placeholder,
   isClearable = true
-}) {
-  // react-select làm việc với cả object { value, label }, nên cần map qua/lại
-  const selectedOption = options.find((opt) => opt.value === value) || null;
+}: FieldSelectProps) {
+  // react-select làm việc với object { value, label }, nên cần map qua/lại
+  // với "value" dạng string mà Form đang quản lý
+  const selectedOption = options.find((opt) => opt.value === value) ?? null;
 
-  const handleChange = (option) => {
+  const handleChange = (option: SingleValue<SelectOption>) => {
     onChange(option ? option.value : "");
   };
-
-  const customStyles = {
-    control: ({ isFocused }) =>
-      `rounded-xl border-2 px-3 py-1.5 transition ${
-        error
-          ? "border-red-500"
-          : isFocused
-          ? "border-gray-500"
-          : "border-gray-300"
-      }`,
-    placeholder: () => "text-gray-400",
-    input: () => "text-base",
-    singleValue: () => "text-gray-900",
-    menu: () =>
-      "mt-2 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-10",
-    menuList: () => "py-1",
-    option: ({ isFocused, isSelected }) =>
-      `px-4 py-2 cursor-pointer ${
-        isSelected
-          ? "bg-gray-800 text-white"
-          : isFocused
-          ? "bg-gray-100"
-          : "bg-white"
-      }`,
-    dropdownIndicator: () => "text-gray-400 px-2",
-    clearIndicator: () =>
-      "text-gray-400 hover:text-gray-600 px-1 cursor-pointer",
-    indicatorSeparator: () => "bg-gray-200",
-    loadingMessage: () => "px-4 py-2 text-gray-400",
-    noOptionsMessage: () => "px-4 py-2 text-gray-400"
-  }
 
   return (
     <div className="w-full">
       {/* Label */}
-      <Label label={label} required={required}/>
+      <label className="block mb-2 text-lg font-medium" htmlFor={name}>
+        {label}
+        {required && <span className="text-red-500">*</span>}
+      </label>
 
       {/* React Select - click mở list, gõ để search option */}
-      <Select
+      <Select<SelectOption>
+        inputId={name}
+        name={name}
         value={selectedOption}
         onChange={handleChange}
         options={options}
         isDisabled={disabled}
         isClearable={isClearable}
         isSearchable
-        placeholder={placeholder || `-- Chọn ${String(label).toLowerCase()} --`}
-        noOptionsMessage={() => "No options"}
+        placeholder={placeholder || `-- Chọn ${label.toLowerCase()} --`}
+        noOptionsMessage={() => "Không có kết quả"}
         unstyled
-        classNames={customStyles}
+        className={className}
+        classNames={{
+          control: ({ isFocused }) =>
+            `rounded-xl border-2 px-3 py-1.5 transition ${
+              error
+                ? "border-red-500"
+                : isFocused
+                ? "border-gray-500"
+                : "border-gray-300"
+            }`,
+          placeholder: () => "text-gray-400",
+          input: () => "text-base",
+          singleValue: () => "text-gray-900",
+          menu: () =>
+            "mt-2 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-10",
+          menuList: () => "py-1",
+          option: ({ isFocused, isSelected }) =>
+            `px-4 py-2 cursor-pointer ${
+              isSelected
+                ? "bg-gray-800 text-white"
+                : isFocused
+                ? "bg-gray-100"
+                : "bg-white"
+            }`,
+          dropdownIndicator: () => "text-gray-400 px-2",
+          clearIndicator: () =>
+            "text-gray-400 hover:text-gray-600 px-1 cursor-pointer",
+          indicatorSeparator: () => "bg-gray-200",
+          loadingMessage: () => "px-4 py-2 text-gray-400",
+          noOptionsMessage: () => "px-4 py-2 text-gray-400"
+        }}
       />
 
       {/* Error */}

@@ -1,6 +1,18 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Label from "./Label";
+
+export type InputFieldType = "text" | "email" | "password" | "number" | "tel";
+
+interface FieldInputSingleProps {
+  label: string;
+  type?: InputFieldType;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
+  disabled?: boolean;
+  className?: string;
+  required?: boolean;
+}
 
 function FieldInputSingle({
   label,
@@ -10,8 +22,8 @@ function FieldInputSingle({
   error,
   disabled = false,
   className = "",
-  required = false
-}) {
+  required = false,
+}: FieldInputSingleProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const inputType =
@@ -19,7 +31,11 @@ function FieldInputSingle({
 
   return (
     <div className="w-full">
-      <Label label={label} required={required}/>
+      {/* Label */}
+      <label className="block mb-2 text-lg font-medium">
+        {label}
+        {required && <span className="text-red-500">*</span>}
+      </label>
 
       {/* Input Wrapper */}
       <div className="relative">
@@ -29,19 +45,9 @@ function FieldInputSingle({
           value={value}
           onChange={onChange}
           disabled={disabled}
-          className={`
-            w-full
-            rounded-xl
-            border-2
-            border-gray-300
-            px-4
-            py-3
-            pr-12
-            outline-none
-            transition
-            focus:border-gray-500
-            ${error ? "border-red-500" : ""}
-            ${className}
+          className={`w-full rounded border-2 border-gray-300 px-4 py-3 pr-12 outline-none transition focus:border-gray-500
+          ${error ? "border-red-500" : ""}
+          ${className}
           `}
         />
 
