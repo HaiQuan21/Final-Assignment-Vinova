@@ -5,7 +5,7 @@ import Form, { type FieldConfig, type FormValues } from "../components/Form";
 const loginFields: FieldConfig[] = [
   {
     name: "username",
-    label: "Username or email",
+    label: "User name or email",
     type: "text",
     required: true
   },

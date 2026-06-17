@@ -6,7 +6,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
-
+// import Account from "./modules/Account";
 import Loading from "./components/Loading";
 
 export default function App() {
