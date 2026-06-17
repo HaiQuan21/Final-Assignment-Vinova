@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 import logo from "../assets/logo.svg";
 import Form, { type FieldConfig, type FormValues } from "../components/Form";
+import { postLogin } from "../api/apiService";
 
 const loginFields: FieldConfig[] = [
   {
@@ -18,18 +22,44 @@ const loginFields: FieldConfig[] = [
 ];
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [values, setValues] = useState<FormValues>({
     username: "",
     password: ""
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (name: string, value: string) => {
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Login:", values);
+    setLoading(true);
+
+    try {
+      const { data } = await postLogin({
+        username: values.username,
+        password: values.password
+      });
+
+      const { admin, tokens } = data.data;
+
+      localStorage.setItem("accessToken", tokens.accessToken);
+      localStorage.setItem("refreshToken", tokens.refreshToken);
+      localStorage.setItem("currentUser", JSON.stringify(admin));
+
+      navigate("/account");
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? (error.response?.data?.message as string | undefined) ??
+          "Login failed. Please check your credentials."
+        : "An unexpected error occurred. Please try again.";
+
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,12 +70,12 @@ function LoginPage() {
       </div>
 
       <Form
-        fields={loginFields}
+        fields={loginFields.map((field) => ({ ...field, disabled: loading }))}
         values={values}
         onChange={handleChange}
         onSubmit={handleSubmit}
-        submitLabel="Login"
-        submitClassName="mt-2 self-end rounded-md bg-indigo-700 px-6 py-2 font-bold text-white transition hover:bg-indigo-800"
+        submitLabel={loading ? "Logging in..." : "Login"}
+        submitClassName="mt-2 self-end rounded-md bg-indigo-700 px-6 py-2 font-bold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
       />
     </div>
   );

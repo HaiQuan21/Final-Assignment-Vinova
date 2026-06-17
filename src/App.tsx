@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route,Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
-import ProtectedRoute from "./routes/ProtectedRoute";
+import { PublicRoute, PrivateRoute } from "./routes/ProtectedRoute";
 
 import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
@@ -24,12 +26,14 @@ export default function App() {
         <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
 
-        <Route element={<ProtectedRoute />}>
+        <Route element={<PublicRoute />}>
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
             </Route>
-          
+          </Route>
+
+          <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
               <Route path="/account" element={<Account />} />
             </Route>
@@ -38,6 +42,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      <ToastContainer position="top-right" autoClose={3000} />
     </BrowserRouter>
   );
 }

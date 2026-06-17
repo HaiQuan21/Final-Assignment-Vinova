@@ -1,13 +1,24 @@
+import { Navigate, Outlet } from "react-router-dom";
 
-import { Navigate, Outlet} from "react-router-dom";
+function isAuthenticated() {
+  return !!(
+    localStorage.getItem("accessToken") &&
+    localStorage.getItem("currentUser")
+  );
+}
 
-export default function ProtectedRoute() {
-  const token = localStorage.getItem("token");
-  const user = localStorage.getItem("currentUser");
+export function PublicRoute() {
+  return isAuthenticated() ? (
+    <Navigate to="/account" replace />
+  ) : (
+    <Outlet />
+  );
+}
 
-  const isAuthenticated = token && user;
-
-  return isAuthenticated
-    ? <Navigate to="/account"/>
-    : <Outlet/>;
+export function PrivateRoute() {
+  return isAuthenticated() ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" replace />
+  );
 }

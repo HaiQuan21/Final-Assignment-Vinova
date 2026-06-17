@@ -6,12 +6,37 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface Admin {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  status: string;
+  email: string;
+  picture: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+export interface LoginResponse {
+  message: string;
+  data: {
+    admin: Admin;
+    tokens: {
+      accessToken: string;
+      refreshToken: string;
+    };
+  };
+}
+
 export interface RefreshTokenPayload {
   refreshToken: string;
 }
 
 export const postLogin = (data: LoginPayload) =>
-  axiosInstance.post("/auth/login", data);
+  axiosInstance.post<LoginResponse>("/auth/login", data);
 export const refreshToken = (data: RefreshTokenPayload) =>
   axiosInstance.post("/auth/refresh-access-token", data);
 
