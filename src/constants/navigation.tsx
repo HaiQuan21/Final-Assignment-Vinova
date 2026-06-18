@@ -21,11 +21,11 @@ import {
   
   export const navItems: NavItem[] = [
     { label: "Static Content", path: "/static-content", icon: HiOutlineDesktopComputer },
-    { label: "Article", path: "/articles", icon: HiOutlineChatAlt2 },
+    { label: "Article", path: "/articles", icon: HiOutlineChatAlt2,formType:"article" },
     { label: "PD Session", path: "/pd-session", icon: HiOutlineCalculator },
     { label: "Category", path: "/category", icon: HiOutlineViewGrid },
     { label: "Subscriptions", path: "/subscriptions", icon: HiOutlineCube },
-    { label: "Voucher", path: "/vouchers", icon: HiOutlineTicket },
+    { label: "Voucher", path: "/vouchers", icon: HiOutlineTicket,formType:"voucher" },
     { label: "Help Documents", path: "/help-documents", icon: HiOutlineDocumentText },
     { label: "Search Settings", path: "/search-settings", icon: HiOutlineSearchCircle },
   ];
