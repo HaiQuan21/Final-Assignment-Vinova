@@ -1,21 +1,7 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Label from "./Label";
-export type InputFieldType = "text" | "email" | "password" | "number" | "tel";
-
-interface FieldInputSingleProps {
-  label: string;
-  type?: InputFieldType;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  disabled?: boolean;
-  className?: string;
-  required?: boolean;
-  placeholder?: string;
-  suffix?: string; //các kí tự đặc biệt hiện bên phải
-  maxLength?: number; //số đếm kí tự
-}
+import type { FieldInputSingleProps } from "../constants/fieldProps";
 
 function FieldInputSingle({
   label,

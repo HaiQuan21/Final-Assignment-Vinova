@@ -1,15 +1,6 @@
 import { FaCalendarAlt } from "react-icons/fa";
 import Label from "./Label";
-
-interface FieldDateProps {
-  label: string;
-  value: string; // format yyyy-mm-dd theo input type="date"
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  disabled?: boolean;
-  className?: string;
-  required?: boolean;
-}
+import type { FieldDateProps } from "../constants/fieldProps";
 
 function FieldDate({
   label,

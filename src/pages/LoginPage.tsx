@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, Bounce } from "react-toastify";
 import logo from "../assets/logo.svg";
 import Form, { type FieldConfig, type FormValues } from "../components/Form";
 import { postLogin } from "../api/apiService";
@@ -44,12 +44,21 @@ function LoginPage() {
       });
 
       const { admin, tokens } = data.data;
-
       localStorage.setItem("accessToken", tokens.accessToken);
       localStorage.setItem("refreshToken", tokens.refreshToken);
       localStorage.setItem("currentUser", JSON.stringify(admin));
-
-      navigate("/account");
+      toast.success(data.message, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+      setTimeout(()=>(navigate("/account")),2000);
     } catch (error) {
       const message = axios.isAxiosError(error)
         ? (error.response?.data?.message as string | undefined) ??

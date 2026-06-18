@@ -1,5 +1,5 @@
 import Label from "./Label";
-import { FieldTextAreaProps } from "../constants/fieldProps";
+import type { FieldTextAreaProps } from "../constants/fieldProps";
 
 function FieldTextArea({
   label,
