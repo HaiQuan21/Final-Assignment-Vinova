@@ -20,6 +20,22 @@ export default function App() {
 
   const Account = lazy(()=>import("./modules/Account"));
 
+  const Article = lazy(()=>import("./modules/Article"));
+
+  const Category = lazy(()=>import("./modules/Category"));
+
+  const HelpDocuments = lazy(()=>import("./modules/HelpDocuments"));
+
+  const PDSession = lazy(()=>import("./modules/PDSession"));
+
+  const SearchSetting = lazy(()=>import("./modules/SearchSettings"));
+
+  const StaticContent = lazy(()=>import("./modules/StaticContent"));
+
+  const Subscriptions = lazy(()=>import("./modules/Subscriptions"));
+
+  const Voucher = lazy(()=>import("./modules/Voucher"));
+  
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
@@ -36,6 +52,14 @@ export default function App() {
           <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
               <Route path="/account" element={<Account />} />
+              <Route path="/articles" element={<Article />} />
+              <Route path="/category" element={<Category />} />
+              <Route path="/help-documents" element={<HelpDocuments />} />
+              <Route path="/pd-session" element={<PDSession />} />
+              <Route path="/search-settings" element={<SearchSetting />} />
+              <Route path="/static-content" element={<StaticContent />} />
+              <Route path="/subscriptions" element={<Subscriptions />} />
+              <Route path="/vouchers" element={<Voucher />} />
             </Route>
           </Route>
 
