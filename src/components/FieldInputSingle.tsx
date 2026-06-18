@@ -12,6 +12,9 @@ interface FieldInputSingleProps {
   disabled?: boolean;
   className?: string;
   required?: boolean;
+  placeholder?: string;
+  suffix?: string; //các kí tự đặc biệt hiện bên phải
+  maxLength?: number; //số đếm kí tự
 }
 
 function FieldInputSingle({
@@ -23,6 +26,9 @@ function FieldInputSingle({
   disabled = false,
   className = "",
   required = false,
+  placeholder,
+  suffix,
+  maxLength,
 }: FieldInputSingleProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,10 +43,11 @@ function FieldInputSingle({
       <div className="relative">
         <input
           type={inputType}
-          placeholder={label}
+          placeholder={placeholder ?? label}
           value={value}
           onChange={onChange}
           disabled={disabled}
+          maxLength={maxLength}
           className={`w-full rounded border-2 border-gray-300 px-4 py-3 pr-12 outline-none transition focus:border-gray-500
           ${error ? "border-red-500" : ""}
           ${className}
@@ -56,6 +63,18 @@ function FieldInputSingle({
           >
             {showPassword ? <FaEye size={22} /> : <FaEyeSlash size={22} />}
           </button>
+        )}
+
+        {suffix && (
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+            {suffix}
+          </span>
+        )}
+
+        {maxLength !== undefined && (
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+            {value.length}/{maxLength}
+          </span>
         )}
       </div>
 
