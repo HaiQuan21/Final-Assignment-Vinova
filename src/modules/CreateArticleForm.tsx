@@ -1,7 +1,5 @@
-import { useState } from "react";
-import FieldInputSingle from "../components/FieldInputSingle";
-import FieldSelect from "../components/FieldSelect";
-import FieldTextArea from "../components/FieldTextArea";
+import { useState, type FormEvent } from "react";
+import Form, { type FieldConfig, type FormErrors } from "../components/Form";
 
 const statusOptions = [
   { value: "draft", label: "Draft" },
@@ -15,7 +13,34 @@ const categoryOptions = [
   { value: "fitness", label: "Fitness" },
 ];
 
+const articleFields: FieldConfig[] = [
+  { name: "title", label: "Title", type: "text", required: true },
+  { name: "author", label: "Author", type: "text", required: true },
+  {
+    name: "status",
+    label: "Status",
+    type: "select",
+    required: true,
+    options: statusOptions,
+    placeholder: "Select Status",
+  },
+  {
+    name: "category",
+    label: "Category",
+    type: "select",
+    required: true,
+    options: categoryOptions,
+    placeholder: "Select",
+  },
+  { name: "duration", label: "Duration (Ex: 3 mins)", type: "text", required: true },
+  { name: "image", label: "Image", type: "text" },
+  { name: "content", label: "Content", type: "textarea", required: true, rows: 6 },
+];
+
+const requiredFields = ["title", "author", "status", "category", "duration", "content"];
+
 export interface ArticleFormValues {
+  [key: string]: string;
   title: string;
   author: string;
   status: string;
@@ -41,25 +66,17 @@ interface CreateArticleFormProps {
 
 function CreateArticleForm({ onSubmit }: CreateArticleFormProps) {
   const [values, setValues] = useState<ArticleFormValues>(initialValues);
-  const [errors, setErrors] = useState<Partial<Record<keyof ArticleFormValues, string>>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
-  const setField = <K extends keyof ArticleFormValues>(key: K, value: string) => {
-    setValues((prev) => ({ ...prev, [key]: value }));
-    setErrors((prev) => ({ ...prev, [key]: undefined }));
+  const handleChange = (name: string, value: string) => {
+    setValues((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const requiredFields: (keyof ArticleFormValues)[] = [
-      "title",
-      "author",
-      "status",
-      "category",
-      "duration",
-      "content",
-    ];
-    const nextErrors: typeof errors = {};
+    const nextErrors: FormErrors = {};
     requiredFields.forEach((field) => {
       if (!values[field].trim()) nextErrors[field] = "Trường này là bắt buộc";
     });
@@ -73,71 +90,15 @@ function CreateArticleForm({ onSubmit }: CreateArticleFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex h-full flex-col">
-      <div className="flex flex-1 flex-col gap-5">
-        <FieldInputSingle
-          label="Title"
-          required
-          value={values.title}
-          onChange={(e) => setField("title", e.target.value)}
-          error={errors.title}
-        />
-        <FieldInputSingle
-          label="Author"
-          required
-          value={values.author}
-          onChange={(e) => setField("author", e.target.value)}
-          error={errors.author}
-        />
-        <FieldSelect
-          label="Status"
-          name="status"
-          required
-          placeholder="Select Status"
-          options={statusOptions}
-          value={values.status}
-          onChange={(value) => setField("status", value)}
-          error={errors.status}
-        />
-        <FieldSelect
-          label="Category"
-          name="category"
-          required
-          placeholder="Select"
-          options={categoryOptions}
-          value={values.category}
-          onChange={(value) => setField("category", value)}
-          error={errors.category}
-        />
-        <FieldInputSingle
-          label="Duration (Ex: 3 mins)"
-          required
-          value={values.duration}
-          onChange={(e) => setField("duration", e.target.value)}
-          error={errors.duration}
-        />
-        <FieldInputSingle
-          label="Image"
-          value={values.image}
-          onChange={(e) => setField("image", e.target.value)}
-        />
-        <FieldTextArea
-          label="Content"
-          required
-          rows={6}
-          value={values.content}
-          onChange={(e) => setField("content", e.target.value)}
-          error={errors.content}
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="sticky bottom-0 -mx-6 mt-6 w-[calc(100%+3rem)] bg-[#3A0099] py-4 text-base font-semibold text-white transition hover:bg-[#2d0080]"
-      >
-        Create
-      </button>
-    </form>
+    <Form
+      fields={articleFields}
+      values={values}
+      errors={errors}
+      onChange={handleChange}
+      onSubmit={handleSubmit}
+      submitLabel="Create"
+      submitClassName="mt-2 w-full rounded-md bg-[#3A0099] px-4 py-3 font-semibold text-white transition hover:bg-[#2d0080]"
+    />
   );
 }
 
