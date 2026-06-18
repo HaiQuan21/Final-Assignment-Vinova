@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
       try {
         const rt = localStorage.getItem("refreshToken");
         const { data } = await refreshTokenApi({ refreshToken: rt! });
-        localStorage.setItem("accessToken", data.tokens['accessToken']);
+        localStorage.setItem("accessToken", data.tokens["accessToken"]);
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
         return axiosInstance(originalRequest);
       } catch {
@@ -33,7 +33,7 @@ axiosInstance.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

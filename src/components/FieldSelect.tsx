@@ -1,23 +1,8 @@
 import Select, { type SingleValue } from "react-select";
-
-export interface SelectOption {
-  value: string;
-  label: string;
-}
-
-interface FieldSelectProps {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: SelectOption[];
-  error?: string;
-  disabled?: boolean;
-  required?: boolean;
-  className?: string;
-  placeholder?: string;
-  isClearable?: boolean;
-}
+import {
+  type FieldSelectProps,
+  type SelectOption,
+} from "../constants/fieldProps";
 
 function FieldSelect({
   label,
@@ -30,7 +15,7 @@ function FieldSelect({
   required = false,
   className = "",
   placeholder,
-  isClearable = true
+  isClearable = true,
 }: FieldSelectProps) {
   // react-select làm việc với object { value, label }, nên cần map qua/lại
   // với "value" dạng string mà Form đang quản lý
@@ -68,8 +53,8 @@ function FieldSelect({
               error
                 ? "border-red-500"
                 : isFocused
-                ? "border-gray-500"
-                : "border-gray-300"
+                  ? "border-gray-500"
+                  : "border-gray-300"
             }`,
           placeholder: () => "text-gray-400",
           input: () => "text-base",
@@ -82,15 +67,15 @@ function FieldSelect({
               isSelected
                 ? "bg-gray-800 text-white"
                 : isFocused
-                ? "bg-gray-100"
-                : "bg-white"
+                  ? "bg-gray-100"
+                  : "bg-white"
             }`,
           dropdownIndicator: () => "text-gray-400 px-2",
           clearIndicator: () =>
             "text-gray-400 hover:text-gray-600 px-1 cursor-pointer",
           indicatorSeparator: () => "bg-gray-200",
           loadingMessage: () => "px-4 py-2 text-gray-400",
-          noOptionsMessage: () => "px-4 py-2 text-gray-400"
+          noOptionsMessage: () => "px-4 py-2 text-gray-400",
         }}
       />
 

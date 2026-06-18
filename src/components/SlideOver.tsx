@@ -1,12 +1,6 @@
 import { useEffect } from "react";
 import { HiX } from "react-icons/hi";
-
-interface SlideOverProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-}
+import { type SlideOverProps } from "../constants/formTypes";
 
 function SlideOver({ isOpen, onClose, title, children }: SlideOverProps) {
   useEffect(() => {

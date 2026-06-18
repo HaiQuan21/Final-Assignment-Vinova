@@ -153,7 +153,7 @@ function Sidebar() {
               onClick={handleLogout}
               className="w-full px-4 py-2.5 text-left text-sm font-medium text-gray-700 transition hover:bg-red-500 hover:text-white  flex items-center gap-2"
             >
-             <HiLogout className="h-5 w-5 shrink-0"/> LogOut  
+              <HiLogout className="h-5 w-5 shrink-0" /> LogOut
             </button>
           </div>
         )}

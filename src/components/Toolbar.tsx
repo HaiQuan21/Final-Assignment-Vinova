@@ -3,12 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import SlideOver from "./SlideOver";
 import CreateArticleForm from "../modules/CreateArticleForm";
 import CreateVoucherForm from "../modules/CreateVoucherForm";
-import type { FormType } from "../constants/navigation";
-
-interface ToolbarProps {
-  title: string;
-  formType?: FormType;
-}
+import type { ToolbarProps } from "../constants/formTypes";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,9 +15,13 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
   };
 
   const renderForm = () => {
-    if (formType === "article") return <CreateArticleForm onSubmit={handleCreated} />;
-    if (formType === "voucher") return <CreateVoucherForm onSubmit={handleCreated} />;
-    return <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>;
+    if (formType === "article")
+      return <CreateArticleForm onSubmit={handleCreated} />;
+    if (formType === "voucher")
+      return <CreateVoucherForm onSubmit={handleCreated} />;
+    return (
+      <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>
+    );
   };
 
   return (
@@ -51,7 +50,11 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
         </button>
       </div>
 
-      <SlideOver isOpen={isOpen} onClose={() => setIsOpen(false)} title={`Create ${title}`}>
+      <SlideOver
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title={`Create ${title}`}
+      >
         {renderForm()}
       </SlideOver>
     </>

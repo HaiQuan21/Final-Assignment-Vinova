@@ -15,16 +15,16 @@ export interface FieldInputSingleProps {
 }
 
 export interface FieldTextAreaProps {
-    label: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    error?: string;
-    disabled?: boolean;
-    className?: string;
-    required?: boolean;
-    placeholder?: string;
-    rows?: number;
-  }
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  error?: string;
+  disabled?: boolean;
+  className?: string;
+  required?: boolean;
+  placeholder?: string;
+  rows?: number;
+}
 
 export interface FieldDateProps {
   label: string;
@@ -34,4 +34,23 @@ export interface FieldDateProps {
   disabled?: boolean;
   className?: string;
   required?: boolean;
+}
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+export interface FieldSelectProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: SelectOption[];
+  error?: string;
+  disabled?: boolean;
+  required?: boolean;
+  className?: string;
+  placeholder?: string;
+  isClearable?: boolean;
 }

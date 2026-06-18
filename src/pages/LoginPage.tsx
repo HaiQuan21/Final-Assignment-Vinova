@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Bounce } from "react-toastify";
 import logo from "../assets/logo.svg";
-import Form, { type FieldConfig, type FormValues } from "../components/Form";
+import Form from "../components/Form";
+import { type FieldConfig,type FormValues } from "../constants/formTypes"; 
 import { postLogin } from "../api/apiService";
 
 const loginFields: FieldConfig[] = [
