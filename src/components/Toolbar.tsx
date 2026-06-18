@@ -1,9 +1,29 @@
+import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import SlideOver from "./SlideOver";
+import CreateArticleForm from "../modules/CreateArticleForm";
+import CreateVoucherForm from "../modules/CreateVoucherForm";
+import type { FormType } from "../constants/navigation";
+
 interface ToolbarProps {
     title: string;
+    formType?: FormType;
   }
-export default function Toolbar({title}:ToolbarProps) {
+export default function Toolbar({title,formType}:ToolbarProps) {
+  const [isOpen,setIsOpen] = useState(false);
+
+  const handleCreated = (value: unknown)=>{
+    setIsOpen(false);
+  }
+
+  const renderForm = () =>{
+    if(formType === "article") return <CreateArticleForm/>
+    if(formType === 'voucher') return <CreateVoucherForm onSubmit={handleCreated}/>
+    return <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>;
+  };
+
   return (
+    <>
     <div className="flex w-full items-center justify-between gap-4 bg-white px-6 py-4 border-b-2">
       {/* Title */}
       <span className="whitespace-nowrap text-gray-900 text-xl">{title}</span>
@@ -29,5 +49,9 @@ export default function Toolbar({title}:ToolbarProps) {
         Create {title}
       </button>
     </div>
+      <SlideOver isOpen={isOpen} onClose={()=>setIsOpen(false)} title={`Create ${title}`}>
+        {renderForm()}
+      </SlideOver>
+    </>
   );
 }

@@ -10,11 +10,13 @@ import {
     HiOutlineSearchCircle,
   } from "react-icons/hi";
   import type { IconType } from "react-icons";
-  
+  export type FormType = "article" | "voucher";
+
   export interface NavItem {
     label: string;
     path: string;
     icon: IconType;
+    formType?: FormType;
   }
   
   export const navItems: NavItem[] = [
