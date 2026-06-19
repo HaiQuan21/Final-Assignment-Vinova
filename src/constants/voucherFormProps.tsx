@@ -6,7 +6,7 @@ export const couponTypeOptions = [
 
 export const voucherFields: FieldConfig[] = [
   { name: "code", label: "Code", type: "text", required: true, maxLength: 50 },
-  { name: "description", label: "Description", type: "textarea", rows: 3 },
+  { name: "description", label: "Description", type: "textarea", rows: 3,required: true },
   { name: "startDate", label: "Start Date", type: "date", width: "half" },
   { name: "endDate", label: "End Date", type: "date", width: "half" },
   { name: "quantity", label: "Quantity", type: "number", required: true },
@@ -48,6 +48,7 @@ export const requiredFields = [
   "amount",
   "condition",
   "conditionMaxDiscount",
+  "description"
 ];
 
 export interface VoucherFormValues {

@@ -8,7 +8,7 @@ function MainLayout() {
 
   const allItems = [...navItems, accountItem];
   const currentItem = allItems.find((item) => pathname.startsWith(item.path));
-  const title = currentItem?.label ?? "Dashboard";
+  const title = currentItem?.label ?? "None";
 
   return (
     <div className="flex min-h-screen font-[Montserrat]">

@@ -38,7 +38,7 @@ function SlideOver({ isOpen, onClose, title, children }: SlideOverProps) {
           </button>
         </div>
 
-        {/* Body scroll, nút Create sticky bottom-0 bên trong sẽ "dính" theo div này */}
+        {/* Body scroll, nút Create sticky bottom-0 bên trong sẽ đi theo */}
         <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
       </div>
     </>

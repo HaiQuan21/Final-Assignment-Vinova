@@ -13,7 +13,6 @@ function FieldSelect({
   error,
   disabled = false,
   required = false,
-  className = "",
   placeholder,
   isClearable = true,
 }: FieldSelectProps) {
@@ -46,7 +45,6 @@ function FieldSelect({
         placeholder={placeholder || `-- Chọn ${label.toLowerCase()} --`}
         noOptionsMessage={() => "Không có kết quả"}
         unstyled
-        className={className}
         classNames={{
           control: ({ isFocused }) =>
             `rounded-xl border-2 px-3 py-1.5 transition ${

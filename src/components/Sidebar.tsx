@@ -40,17 +40,6 @@ function Sidebar() {
   const displayName = getDisplayName(admin);
   const avatarLetter = getAvatarLetter(admin);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setUserMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const handleLogout = () => {
     localStorage.clear();
     setUserMenuOpen(false);
