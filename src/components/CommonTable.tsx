@@ -1,47 +1,79 @@
 import {
-    useReactTable,
-    getCoreRowModel,
-    getSortedRowModel,
-    flexRender,
-    type ColumnDef,
-    type SortingState,
-  } from "@tanstack/react-table";
-  import { HiSelector, HiChevronUp, HiChevronDown } from "react-icons/hi";
-  
-  interface CommonTableProps<T> {
-    data: T[];
-    columns: ColumnDef<T, any>[];
-    sorting: SortingState;
-    onSortingChange: (sorting: SortingState) => void;
-    // true khi sort được xử lý ở server (đổi sort -> gọi lại API), false thì TanStack tự sort client-side
-    manualSorting?: boolean;
-    isLoading?: boolean;
-    emptyMessage?: string;
-  }
-  
-  function CommonTable<T>({
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  getPaginationRowModel,
+  flexRender,
+  type ColumnDef,
+  type SortingState,
+  type PaginationState,
+} from "@tanstack/react-table";
+import { HiSelector, HiChevronUp, HiChevronDown, HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { getPaginationRange } from "../lib/pagination";
+
+interface CommonTableProps<T> {
+  data: T[];
+  columns: ColumnDef<T, any>[];
+  sorting: SortingState;
+  onSortingChange: (sorting: SortingState) => void;
+  manualSorting?: boolean;
+  isLoading?: boolean;
+  emptyMessage?: string;
+
+  pagination: PaginationState;
+  onPaginationChange: (pagination: PaginationState) => void;
+  // true (mặc định): data trả về từ API đã được phân trang sẵn (vd 25 dòng/lần),
+  // cần truyền totalEntries để tính số trang. false: data đầy đủ, TanStack tự cắt trang.
+  manualPagination?: boolean;
+  totalEntries?: number;
+  pageSizeOptions?: number[];
+}
+
+function CommonTable<T>({
+  data,
+  columns,
+  sorting,
+  onSortingChange,
+  manualSorting = false,
+  isLoading = false,
+  emptyMessage = "No data available",
+  pagination,
+  onPaginationChange,
+  manualPagination = true,
+  totalEntries,
+  pageSizeOptions = [10, 25, 50, 100],
+}: CommonTableProps<T>) {
+  const resolvedTotalEntries = manualPagination ? totalEntries ?? 0 : data.length;
+  const pageCount = Math.max(1, Math.ceil(resolvedTotalEntries / pagination.pageSize));
+
+  const table = useReactTable({
     data,
     columns,
-    sorting,
-    onSortingChange,
-    manualSorting = false,
-    isLoading = false,
-    emptyMessage = "No data available",
-  }: CommonTableProps<T>) {
-    const table = useReactTable({
-      data,
-      columns,
-      state: { sorting },
-      onSortingChange: (updater) => {
-        const next = typeof updater === "function" ? updater(sorting) : updater;
-        onSortingChange(next);
-      },
-      getCoreRowModel: getCoreRowModel(),
-      manualSorting,
-      ...(manualSorting ? {} : { getSortedRowModel: getSortedRowModel() }),
-    });
-  
-    return (
+    state: { sorting, pagination },
+    onSortingChange: (updater) => {
+      const next = typeof updater === "function" ? updater(sorting) : updater;
+      onSortingChange(next);
+    },
+    onPaginationChange: (updater) => {
+      const next = typeof updater === "function" ? updater(pagination) : updater;
+      onPaginationChange(next);
+    },
+    getCoreRowModel: getCoreRowModel(),
+    manualSorting,
+    manualPagination,
+    pageCount,
+    ...(manualSorting ? {} : { getSortedRowModel: getSortedRowModel() }),
+    // manualPagination=true: data truyền vào đã là đúng 1 trang sẵn từ API, không cần cắt lại
+    ...(manualPagination ? {} : { getPaginationRowModel: getPaginationRowModel() }),
+  });
+
+  const currentPage = table.getState().pagination.pageIndex + 1; // hiển thị 1-based
+  const startEntry = resolvedTotalEntries === 0 ? 0 : (currentPage - 1) * pagination.pageSize + 1;
+  const endEntry = Math.min(currentPage * pagination.pageSize, resolvedTotalEntries);
+  const pageItems = getPaginationRange(currentPage, pageCount);
+
+  return (
+    <div className="flex flex-col gap-2">
       <div className="w-full overflow-x-auto rounded-lg border border-gray-200">
         <table className="w-full min-w-max border-collapse text-left text-sm">
           <thead>
@@ -50,7 +82,7 @@ import {
                 {headerGroup.headers.map((header) => {
                   const canSort = header.column.getCanSort();
                   const sortDir = header.column.getIsSorted();
-  
+
                   return (
                     <th
                       key={header.id}
@@ -76,7 +108,7 @@ import {
               </tr>
             ))}
           </thead>
-  
+
           <tbody>
             {isLoading ? (
               <tr>
@@ -109,7 +141,80 @@ import {
           </tbody>
         </table>
       </div>
-    );
-  }
-  
-  export default CommonTable;
+
+      {/* Pagination footer — toàn bộ điều khiển trang lấy từ table instance của TanStack */}
+      <div className="flex flex-wrap items-center justify-between gap-4 px-1 py-4 text-sm text-gray-500">
+        <span>
+          showing {startEntry} to {endEntry} of {resolvedTotalEntries} entries.
+        </span>
+
+        <div className="flex items-center gap-4">
+          {/* Per page select */}
+          <div className="relative">
+            <select
+              value={pagination.pageSize}
+              onChange={(e) => table.setPageSize(Number(e.target.value))}
+              className="appearance-none rounded-md border border-gray-200 bg-white py-2 pl-3 pr-9 text-sm text-gray-700 outline-none transition focus:border-gray-400"
+            >
+              {pageSizeOptions.map((size) => (
+                <option key={size} value={size}>
+                  {size} per page
+                </option>
+              ))}
+            </select>
+            <HiChevronDown
+              className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+              size={16}
+            />
+          </div>
+
+          {/* Page numbers */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Previous page"
+            >
+              <HiChevronLeft size={16} />
+            </button>
+
+            {pageItems.map((item, idx) =>
+              item === "ellipsis" ? (
+                <span key={`ellipsis-${idx}`} className="flex h-8 w-8 items-center justify-center text-gray-400">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => table.setPageIndex(item - 1)}
+                  className={`flex h-8 w-8 items-center justify-center rounded-md transition ${
+                    item === currentPage
+                      ? "bg-[#3A0099] text-white"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  {item}
+                </button>
+              )
+            )}
+
+            <button
+              type="button"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Next page"
+            >
+              <HiChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CommonTable;

@@ -34,7 +34,7 @@ export default function App() {
 
   const Subscriptions = lazy(()=>import("./modules/Subscriptions"));
 
-  const Voucher = lazy(()=>import("./modules/Voucher"));
+  const Voucher = lazy(()=>import("./modules/VoucherTable"));
   
   return (
     <BrowserRouter>

@@ -1,71 +1,22 @@
 import axiosInstance from "./axiosInstance";
+import {
+  type LoginPayload,
+  type RefreshTokenPayload,
+  type ArticlePayload,
+  type ArticleIndexPayload,
+  type ArticleNoAuthorPayload,
+  type VoucherNoQuantityPayload,
+  type VoucherPayload,
+} from "../constants/payloadAPI";
+import { type LoginResponse } from "../constants/responseAPI";
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
-export interface LoginPayload {
-  username: string;
-  password: string;
-}
-
-export interface Admin {
-  id: string;
-  username: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  status: string;
-  email: string;
-  picture: string | null;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-}
-
-export interface LoginResponse {
-  message: string;
-  data: {
-    admin: Admin;
-    tokens: {
-      accessToken: string;
-      refreshToken: string;
-    };
-  };
-}
-
-export interface RefreshTokenPayload {
-  refreshToken: string;
-}
-
 export const postLogin = (data: LoginPayload) =>
   axiosInstance.post<LoginResponse>("/auth/login", data);
 export const refreshToken = (data: RefreshTokenPayload) =>
   axiosInstance.post("/auth/refresh-access-token", data);
 
 // ─── Articles ─────────────────────────────────────────────────────────────────
-export interface ArticlePayload {
-  title: string;
-  content: string;
-  picture: string;
-  status: string;
-  type: string;
-  timeToRead: number;
-  categoryId: string;
-  author: string;
-}
-
-export interface ArticleIndexPayload {
-  id: string;
-  index: string;
-}
-
-export interface ArticleNoAuthorPayload {
-  title: string;
-  content: string;
-  picture: string;
-  status: string;
-  type: string;
-  timeToRead: number;
-  categoryId: string;
-}
 export const getAllArticles = () =>
   axiosInstance.get("/articles?page=1&limit=2&sort=");
 export const getArticlesById = (id: string) =>
@@ -84,30 +35,7 @@ export const deleteMultipleArticles = (ids: string[]) =>
   });
 
 // ─── Vouchers ───────────────────────────────────────────────────────────────────
-export interface VoucherPayload {
-  code: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  type: string;
-  amount: number;
-  quantityUse: number;
-  minPayAmount: number;
-  maxDiscountAmount: number;
-}
 
-export interface VoucherNoQuantityPayload {
-  code: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  type: string;
-  amount: number;
-  minPayAmount: number;
-  maxDiscountAmount: number;
-}
 export const getVouchers = () => axiosInstance.get("/vouchers");
 export const getVouchersByCode = (code: string) =>
   axiosInstance.get(`/vouchers/by-code/:${code}`);

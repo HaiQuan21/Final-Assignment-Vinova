@@ -1,9 +1,9 @@
 import { type FieldConfig } from "./formTypes";
 
 export const statusOptions = [
-  { value: "draft", label: "Draft" },
   { value: "published", label: "Published" },
-  { value: "archived", label: "Archived" },
+  { value: "unpublished", label: "Unpublished" },
+  { value: "draft", label: "Draft" },
 ];
 
 export const categoryOptions = [
