@@ -149,24 +149,6 @@ function CommonTable<T>({
         </span>
 
         <div className="flex items-center gap-4">
-          {/* Per page select */}
-          <div className="relative">
-            <select
-              value={pagination.pageSize}
-              onChange={(e) => table.setPageSize(Number(e.target.value))}
-              className="appearance-none rounded-md border border-gray-200 bg-white py-2 pl-3 pr-9 text-sm text-gray-700 outline-none transition focus:border-gray-400"
-            >
-              {pageSizeOptions.map((size) => (
-                <option key={size} value={size}>
-                  {size} per page
-                </option>
-              ))}
-            </select>
-            <HiChevronDown
-              className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
-              size={16}
-            />
-          </div>
 
           {/* Page numbers */}
           <div className="flex items-center gap-1">

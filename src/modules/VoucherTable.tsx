@@ -1,54 +1,34 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import CommonTable from "../components/CommonTable";
 import StatusBadge from "../components/StatusBadge";
 import ActionButtons from "../components/ActionButtons";
 import { usePagination } from "../hooks/usePagination";
-
-interface Voucher {
-  id: string;
-  code: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  type: string,
-  amount: string,
-  quantityUse: number,
-  minPayAmount: string,
-  maxDiscountAmount: string,
-  stripeCouponId: string,
-  createdBy: string,
-  updatedBy: string,
-  createdAt: string,
-  updatedAt: string,
-  totalDoulas: string
-}
-
-const mockVouchers: Voucher[] = [
-  {
-    id: "d3d4d1f2-70bd-4ea5-b70e-1ddc311a43dc",
-    code: "OTIS7",
-    status: "Active",
-    startDate: "16/10/2024 07:00",
-    endDate: "12/10/2026 07:00",
-    numberOfUse: "6/100",
-  },
-  {
-    id: "295a0b80-dc8d-464e-b11b-4dfc49f58927",
-    code: "VOUCHERTEST12345678",
-    status: "Expired",
-    startDate: "12/08/2024 07:00",
-    endDate: "13/08/2024 07:00",
-    numberOfUse: "0/1",
-  },
-];
+import { getVouchers } from "../api/apiService";
+import { type Voucher } from "../constants/MainObjectClass";
 
 function VoucherTable() {
+  const [data,setData] = useState<Voucher[]>([]);
+  const [totalEntries,setTotalEntries] = useState(0);
+  const [isLoading,setIsLoading] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const { pagination, setPagination } = usePagination(25);
-
-  // Trong thực tế lấy từ response API (vd: response.totalElements)
-  const totalEntries = 122;
+  const { pagination, setPagination } = usePagination(8);
+  console.log("Data Voucher trả về",data);
+  useEffect(() => {
+    setIsLoading(true);
+    getVouchers({
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      offset: pagination.pageIndex * pagination.pageSize,
+      sort: sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
+    })
+    .then(({data: res})=>{
+      setData(res.data);
+      setTotalEntries(res.metadata.totalCount);
+    })
+    .finally(()=>setIsLoading(false));
+  }, [pagination.pageIndex,pagination.pageSize,sorting])
+  
 
   const columns = useMemo<ColumnDef<Voucher>[]>(
     () => [
@@ -69,7 +49,8 @@ function VoucherTable() {
       },
       { accessorKey: "startDate", header: "Start Date" },
       { accessorKey: "endDate", header: "End Date" },
-      { accessorKey: "numberOfUse", header: "Number Of Use" },
+      { cell: ({ row }) =>
+        `${row.original.numOfUsed}/${row.original.quantityUse}`, header: "Number Of Use", enableSorting: false },
       {
         id: "action",
         header: "Action",
@@ -88,15 +69,19 @@ function VoucherTable() {
   return (
     <div className="p-6">
       <CommonTable
-        data={mockVouchers}
+        data={data}
         columns={columns}
         sorting={sorting}
-        onSortingChange={setSorting}
+        onSortingChange={(newSorting) => {
+          setSorting(newSorting);
+          setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+        }}
         manualSorting
         pagination={pagination}
         onPaginationChange={setPagination}
         manualPagination
         totalEntries={totalEntries}
+        isLoading={isLoading}
       />
     </div>
   );

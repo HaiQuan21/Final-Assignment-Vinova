@@ -2,11 +2,10 @@ import axiosInstance from "./axiosInstance";
 import {
   type LoginPayload,
   type RefreshTokenPayload,
-  type ArticlePayload,
-  type ArticleIndexPayload,
-  type ArticleNoAuthorPayload,
-  type VoucherNoQuantityPayload,
+  type CreateArticlePayload,
+  type UpdateArticlePayload,
   type VoucherPayload,
+  type GetVouchersParams
 } from "../constants/payloadAPI";
 import { type LoginResponse } from "../constants/responseAPI";
 
@@ -23,11 +22,9 @@ export const getArticlesById = (id: string) =>
   axiosInstance.get(`/articles/:${id}`);
 export const getArticlesBySlug = () =>
   axiosInstance.get("/articles/by-slug/nick-9999");
-export const createArticles = (data: ArticlePayload) =>
+export const createArticles = (data: CreateArticlePayload) =>
   axiosInstance.post("/articles", data);
-export const editArticlesIndex = (index: string, data: ArticleIndexPayload) =>
-  axiosInstance.put(`/articles/${index}`, data);
-export const updateArticle = (id: string, data: ArticleNoAuthorPayload) =>
+export const updateArticle = (id: string, data: UpdateArticlePayload) =>
   axiosInstance.put(`/articles/:${id}`, data);
 export const deleteMultipleArticles = (ids: string[]) =>
   axiosInstance.delete("/articles", {
@@ -36,15 +33,13 @@ export const deleteMultipleArticles = (ids: string[]) =>
 
 // ─── Vouchers ───────────────────────────────────────────────────────────────────
 
-export const getVouchers = () => axiosInstance.get("/vouchers");
+export const getVouchers = (params?: GetVouchersParams) => axiosInstance.get("/vouchers",{params});
 export const getVouchersByCode = (code: string) =>
   axiosInstance.get(`/vouchers/by-code/:${code}`);
 export const getVouchersById = (id: string) =>
   axiosInstance.get(`/vouchers/:${id}`);
 export const createVoucher = (data: VoucherPayload) =>
   axiosInstance.post("/vouchers", data);
-export const patchCareStatus = (id: string, data: VoucherNoQuantityPayload) =>
-  axiosInstance.put(`/vouchers/:${id}`, data);
 
 // ─── Doula Package ───────────────────────────────────────────────────────────────────
 export const getDoulaVouchers = () => axiosInstance.get("/doula-vouchers");

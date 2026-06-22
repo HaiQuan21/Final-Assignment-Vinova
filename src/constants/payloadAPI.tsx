@@ -43,3 +43,14 @@ export interface CreateArticlePayload {
     minPayAmount: number;
     maxDiscountAmount: number;
   }
+
+  export interface GetVouchersParams{
+    page?: number;
+    limit?: number;
+    offset?: number;
+    search?: number;
+    sort?: string;
+    f_code?: string;
+    f_status?: "active" | "inactive" | "expired";
+    f_type?: "fixed" | "percent";
+  }

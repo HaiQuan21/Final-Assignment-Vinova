@@ -29,32 +29,32 @@ export interface Article {
 }
 
 export interface Voucher {
-  id: string;
-  code: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  type: string;
   amount: string;
-  quantityUse: number;
-  minPayAmount: string;
-  maxDiscountAmount: string;
-  stripeCouponId: string | null;
-  createdBy: string;
-  updatedBy: string | null;
+  code: string;
   createdAt: string;
+  createdBy: string;
+  description: string;
+  endDate: string;
+  id: string;
+  maxDiscountAmount: string;
+  minPayAmount: string;
+  numOfUsed: string;
+  quantityUse: number;
+  startDate: string;
+  status: string;
+  stripeCouponId: null;
+  type: string;
   updatedAt: string;
-  totalDoulas: string;
+  updatedBy: string;
 }
 
-export interface Category{
-    id: string,
-    name: string,
-    title: string,
-    image: string,
-    status: string,
-    slug: string,
-    createdAt: string,
-    updatedAt: string
+export interface Category {
+  id: string;
+  name: string;
+  title: string;
+  image: string;
+  status: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
 }

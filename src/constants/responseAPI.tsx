@@ -71,7 +71,7 @@ export interface CreateVoucherResponse{
 }
 
 export interface GetVoucherResponse{
-  message: "Success",
+  message: string,
   data: [
     Voucher
   ]
@@ -85,6 +85,6 @@ export interface GetVoucherResponse{
 }
 
 export interface GetVoucherByIdResponse{
-  message: "Success",
+  message: string,
   data: Voucher
 }
