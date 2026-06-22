@@ -55,6 +55,7 @@ export interface FormProps {
   submitLabel?: string;
   className?: string;
   submitClassName?: string;
+  submitDisabled?: boolean;
 }
 
 export const widthClass: Record<

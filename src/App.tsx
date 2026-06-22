@@ -20,7 +20,7 @@ export default function App() {
 
   const Account = lazy(()=>import("./modules/Account"));
 
-  const Article = lazy(()=>import("./modules/Article"));
+  const Article = lazy(()=>import("./modules/ArticleTable"));
 
   const Category = lazy(()=>import("./modules/Category"));
 

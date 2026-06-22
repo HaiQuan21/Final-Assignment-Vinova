@@ -14,6 +14,7 @@ function Form({
   submitLabel = "Send",
   className = "",
   submitClassName = "mt-2 w-full rounded-xl bg-gray-800 px-4 py-3 font-medium text-white transition hover:bg-gray-700",
+  submitDisabled = false,
 }: FormProps) {
   return (
     <form onSubmit={onSubmit} className={`flex flex-col gap-5 ${className}`}>
@@ -88,7 +89,7 @@ function Form({
         })}
       </div>
 
-      <button type="submit" className={submitClassName}>
+      <button type="submit" disabled={submitDisabled}  className={submitClassName}>
         {submitLabel}
       </button>
     </form>

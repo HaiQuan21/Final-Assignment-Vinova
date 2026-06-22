@@ -54,3 +54,23 @@ export interface CreateArticlePayload {
     f_status?: "active" | "inactive" | "expired";
     f_type?: "fixed" | "percent";
   }
+
+  export interface GetArticlesParams{
+    page?: number;
+    limit?: number;
+    offset?: number;
+    search?: number;
+    sort?: string;
+    f_type?: "article" | "pd";
+    f_categoryId?: string,
+    f_status?: "published" | "unpublished" | "draft";
+  }
+
+  export interface GetCategoriesParams{
+    page?: number;
+    limit?: number;
+    offset?: number;
+    search?: number;
+    sort?: string;
+    f_name?: string;
+  }

@@ -1,24 +1,73 @@
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { toast } from "react-toastify";
 import SlideOver from "./SlideOver";
 import CreateArticleForm from "../modules/CreateArticleForm";
 import CreateVoucherForm from "../modules/CreateVoucherForm";
 import type { ToolbarProps } from "../constants/formTypes";
+import { createArticles,createVoucher } from "../api/apiService";
+import type { FormType } from  "../constants/navigation"
+import type { ArticleFormValues } from "../constants/articleFormProps";
+import type { VoucherFormValues } from "../constants/voucherFormProps";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting,setIsSubmitting] = useState(false);
 
-  const handleCreated = (values: unknown) => {
-    // TODO: thay console.log bằng gọi API tạo mới thực tế
-    console.log(`Create ${formType}:`, values);
-    setIsOpen(false);
+  const handleCreateArticle = (values: ArticleFormValues) => {
+    setIsSubmitting(true);
+
+    createArticles({
+      title: values.title,
+      content: values.content,
+      picture: values.image,
+      status: values.status,
+      author: values.author,
+      categoryId: values.category,
+      timeToRead: Number(values.duration) || 0, // "3" → 3, "3 mins" → 0
+      type: "article", 
+    })
+      .then((res) => {
+        toast.success(res.data.message);
+        setIsOpen(false);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message ?? "An error occurred Create Article, please try again.");
+      })
+      .finally(() => setIsSubmitting(false));
   };
+
+  const handleCreateVoucher = (values: VoucherFormValues) => {
+    setIsSubmitting(true);
+
+    createVoucher({
+      code: values.code,
+      description: values.description,
+      startDate: values.startDate,
+      endDate: values.endDate,
+      status: "active",
+      type: values.typeOfCoupon,
+      amount: Number(values.amount),
+      quantityUse: Number(values.quantity),
+      minPayAmount: Number(values.condition),
+      maxDiscountAmount: Number(values.conditionMaxDiscount),
+    })
+      .then((res) => {
+        toast.success(res.data.message);
+        setIsOpen(false);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message ?? "An error occurred Create Voucher, please try again.");
+      })
+      .finally(() => setIsSubmitting(false));
+  };
+
 
   const renderForm = () => {
     if (formType === "article")
-      return <CreateArticleForm onSubmit={handleCreated} />;
+      return <CreateArticleForm onSubmit={handleCreateArticle} isSubmitting={isSubmitting}/>;
     if (formType === "voucher")
-      return <CreateVoucherForm onSubmit={handleCreated} />;
+      return <CreateVoucherForm onSubmit={handleCreateVoucher} isSubmitting={isSubmitting}/>;
     return (
       <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>
     );

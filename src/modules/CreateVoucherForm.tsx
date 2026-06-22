@@ -9,7 +9,11 @@ import {
   voucherFields,
 } from "../constants/voucherFormProps";
 
-function CreateVoucherForm({ onSubmit }: CreateVoucherFormProps) {
+interface Props extends CreateVoucherFormProps {
+  isSubmitting?: boolean;
+}
+
+function CreateVoucherForm({ onSubmit,isSubmitting=false }: Props) {
   const [values, setValues] = useState<VoucherFormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -43,6 +47,7 @@ function CreateVoucherForm({ onSubmit }: CreateVoucherFormProps) {
       onSubmit={handleSubmit}
       submitLabel="Create"
       submitClassName="mt-2 w-full rounded-md bg-[#3A0099] px-4 py-3 font-semibold text-white transition hover:bg-[#2d0080]"
+      submitDisabled={isSubmitting}
     />
   );
 }

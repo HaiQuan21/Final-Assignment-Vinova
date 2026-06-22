@@ -4,6 +4,9 @@ interface StatusBadgeProps {
 
 const statusColorMap: Record<string, string> = {
   active: "bg-green-500",
+  published: "bg-green-500",
+  unpublished: "bg-red-500",
+  draft: "bg-yellow-500",
   inactive: "bg-yellow-500",
   expired: "bg-red-500",
 };
