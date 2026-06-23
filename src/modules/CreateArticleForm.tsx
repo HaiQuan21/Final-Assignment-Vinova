@@ -20,13 +20,16 @@ function CreateArticleForm({ onSubmit, isSubmitting = false }: Props) {
   const [errors, setErrors] = useState<FormErrors>({});
   const [categoryOptions, setCategoryOptions] = useState<{ value: string; label: string }[]>([]);
 
+
+
   useEffect(() => {
     getAllCategories()
       .then(({ data: res }) => {
-        const options = res.data.map((cat: { name: string }) => ({
-          value: cat.name,
+        const options = res.data.map((cat: { name: string, id :string }) => ({
+          value: cat.id,
           label: cat.name.charAt(0).toUpperCase() + cat.name.slice(1).toLowerCase(),
         }));
+        console.log("Categories Option trong Create Article Form",res)
         setCategoryOptions(options);
       })
       .catch((err) => {
@@ -71,7 +74,7 @@ function CreateArticleForm({ onSubmit, isSubmitting = false }: Props) {
       onChange={handleChange}
       onSubmit={handleSubmit}
       submitLabel="Create"
-      submitClassName="mt-2 w-full rounded-md bg-[#3A0099] px-4 py-3 font-semibold text-white transition hover:bg-[#2d0080]"
+      submitClassName="mt-2 w-full rounded-md bg-[#3A0099]  hover:bg-[#270165] focus:bg-[#1a0044]  px-4 py-3 font-semibold text-white transition "
       submitDisabled={isSubmitting}
     />
   );

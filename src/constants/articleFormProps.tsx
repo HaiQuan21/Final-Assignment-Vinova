@@ -37,11 +37,11 @@ export function articleFields(
   },
   {
     name: "duration",
-    label: "Duration (Ex: 3 mins)",
+    label: "Duration (Ex: '3' = 3 mins)",
     type: "text",
     required: true,
   },
-  { name: "image", label: "Image", type: "text" },
+  { name: "image", label: "Image", type: "image"},
   {
     name: "content",
     label: "Content",

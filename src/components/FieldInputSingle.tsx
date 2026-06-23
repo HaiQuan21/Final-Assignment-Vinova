@@ -27,6 +27,7 @@ function FieldInputSingle({
       <Label label={label} required={required} />
       {/* Input Wrapper */}
       <div className="relative">
+        {type === "image" ? <input type={inputType} src={value}/> :        
         <input
           type={inputType}
           placeholder={placeholder ?? label}
@@ -38,7 +39,7 @@ function FieldInputSingle({
           ${error ? "border-red-500" : ""}
           ${className}
           `}
-        />
+        />}
 
         {/* Password Toggle */}
         {type === "password" && (

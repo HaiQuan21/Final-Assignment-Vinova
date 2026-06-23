@@ -8,27 +8,29 @@ import { getVouchers } from "../api/apiService";
 import { type Voucher } from "../constants/MainObjectClass";
 
 function VoucherTable() {
-  const [data,setData] = useState<Voucher[]>([]);
-  const [totalEntries,setTotalEntries] = useState(0);
-  const [isLoading,setIsLoading] = useState(false);
+  const [data, setData] = useState<Voucher[]>([]);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(8);
-  console.log("Data Voucher trả về",data);
+
+  console.log("Data Voucher trả về", data);
+
   useEffect(() => {
     setIsLoading(true);
     getVouchers({
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
       offset: pagination.pageIndex * pagination.pageSize,
-      sort: sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
+      sort:
+        sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
     })
-    .then(({data: res})=>{
-      setData(res.data);
-      setTotalEntries(res.metadata.totalCount);
-    })
-    .finally(()=>setIsLoading(false));
-  }, [pagination.pageIndex,pagination.pageSize,sorting])
-  
+      .then(({ data: res }) => {
+        setData(res.data);
+        setTotalEntries(res.metadata.totalCount);
+      })
+      .finally(() => setIsLoading(false));
+  }, [pagination.pageIndex, pagination.pageSize, sorting]);
 
   const columns = useMemo<ColumnDef<Voucher>[]>(
     () => [
@@ -49,8 +51,12 @@ function VoucherTable() {
       },
       { accessorKey: "startDate", header: "Start Date" },
       { accessorKey: "endDate", header: "End Date" },
-      { cell: ({ row }) =>
-        `${row.original.numOfUsed}/${row.original.quantityUse}`, header: "Number Of Use", enableSorting: false },
+      {
+        cell: ({ row }) =>
+          `${row.original.numOfUsed}/${row.original.quantityUse}`,
+        header: "Number Of Use",
+        enableSorting: false,
+      },
       {
         id: "action",
         header: "Action",
@@ -63,7 +69,7 @@ function VoucherTable() {
         ),
       },
     ],
-    []
+    [],
   );
 
   return (

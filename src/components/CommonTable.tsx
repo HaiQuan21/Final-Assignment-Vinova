@@ -41,7 +41,6 @@ function CommonTable<T>({
   onPaginationChange,
   manualPagination = true,
   totalEntries,
-  pageSizeOptions = [10, 25, 50, 100],
 }: CommonTableProps<T>) {
   const resolvedTotalEntries = manualPagination ? totalEntries ?? 0 : data.length;
   const pageCount = Math.max(1, Math.ceil(resolvedTotalEntries / pagination.pageSize));

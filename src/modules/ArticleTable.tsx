@@ -13,7 +13,9 @@ function ArticleTable() {
   const [isLoading,setIsLoading] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(8);
+  
   console.log("Data Article trả về",data);
+
   useEffect(() => {
     setIsLoading(true);
     getAllArticles({
