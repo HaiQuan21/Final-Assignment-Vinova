@@ -1,28 +1,33 @@
 import { HiOutlineEye, HiOutlineTrash } from "react-icons/hi";
+import { CiEdit } from "react-icons/ci";
 
 interface ActionButtonsProps {
-  onView?: () => void;
+  onType?: string;
+  onAction?: () => void;
   onDelete?: () => void;
 }
 
-function ActionButtons({ onView, onDelete }: ActionButtonsProps) {
+function ActionButtons({ onType,onAction, onDelete }: ActionButtonsProps) {
   return (
     <div className="flex items-center gap-3 border-l border-gray-200 pl-4">
-      {onView && (
+      {onAction && (
         <button
           type="button"
-          onClick={onView}
-          className="text-[#E879A9] transition hover:text-[#d1437f]"
+          onClick={onAction}
+          className="text-[#E879A9] transition focus:text-[#d1437f]"
           aria-label="View"
-        >
-          <HiOutlineEye size={20} />
+          >
+          { onType === "article" && <CiEdit size={20}/> } 
+          { onType === "voucher" && <HiOutlineEye size={20}/> }
         </button>
       )}
+      
+
       {onDelete && (
         <button
           type="button"
           onClick={onDelete}
-          className="text-[#E879A9] transition hover:text-[#d1437f]"
+          className="text-[#A0A7AC] transition focus:text-[#62676a]"
           aria-label="Delete"
         >
           <HiOutlineTrash size={20} />

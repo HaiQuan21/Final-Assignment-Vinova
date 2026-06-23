@@ -1,4 +1,10 @@
-export type InputFieldType = "text" | "email" | "password" | "number" | "tel" | "image";
+export type InputFieldType =
+  | "text"
+  | "email"
+  | "password"
+  | "number"
+  | "tel"
+  | "image";
 
 export interface FieldInputSingleProps {
   label: string;

@@ -23,7 +23,7 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
       status: values.status,
       author: values.author,
       categoryId: values.category,
-      timeToRead: Number(values.duration) || 0, // "3" → 3, "3 mins" → 0
+      timeToRead: Number(values.duration), 
       type: "article", 
     })
       .then((res) => {

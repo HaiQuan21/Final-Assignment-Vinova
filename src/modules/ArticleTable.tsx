@@ -13,7 +13,7 @@ function ArticleTable() {
   const [isLoading,setIsLoading] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(8);
-  
+
   console.log("Data Article trả về",data);
 
   useEffect(() => {
@@ -58,7 +58,8 @@ function ArticleTable() {
         enableSorting: false,
         cell: ({ row }) => (
           <ActionButtons
-            onView={() => console.log("view", row.original.id)}
+            onType={"article"}
+            onAction={() => console.log("edit Article", row.original.id)}
             onDelete={() => console.log("delete", row.original.id)}
           />
         ),

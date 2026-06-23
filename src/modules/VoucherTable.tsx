@@ -63,7 +63,8 @@ function VoucherTable() {
         enableSorting: false,
         cell: ({ row }) => (
           <ActionButtons
-            onView={() => console.log("view", row.original.id)}
+            onType={"voucher"}
+            onAction={() => console.log("view Voucher", row.original.id)}
             onDelete={() => console.log("delete", row.original.id)}
           />
         ),
