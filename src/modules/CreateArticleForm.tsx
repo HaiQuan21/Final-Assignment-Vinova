@@ -1,80 +1,62 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import Form from "../components/Form";
-import { type FormErrors } from "../constants/formTypes";
 import {
   type CreateArticleFormProps,
   type ArticleFormValues,
   initialValues,
-  requiredFields,
   articleFields,
 } from "../constants/articleFormProps";
+import { articleSchema } from "../schemas/articleSchema";
 import { getAllCategories } from "../api/apiService";
-import { useEffect,useMemo } from "react";
-import {toast} from "react-toastify"
+
 interface Props extends CreateArticleFormProps {
   isSubmitting?: boolean;
 }
 
 function CreateArticleForm({ onSubmit, isSubmitting = false }: Props) {
-  const [values, setValues] = useState<ArticleFormValues>(initialValues);
-  const [errors, setErrors] = useState<FormErrors>({});
   const [categoryOptions, setCategoryOptions] = useState<{ value: string; label: string }[]>([]);
-
-
 
   useEffect(() => {
     getAllCategories()
       .then(({ data: res }) => {
-        const options = res.data.map((cat: { name: string, id :string }) => ({
+        const options = res.data.map((cat: { id: string; name: string }) => ({
           value: cat.id,
-          label: cat.name.charAt(0).toUpperCase() + cat.name.slice(1).toLowerCase(),
+          label:
+            cat.name.charAt(0).toUpperCase() +
+            cat.name.slice(1).toLowerCase(),
         }));
-        console.log("Categories Option trong Create Article Form",res)
         setCategoryOptions(options);
       })
       .catch((err) => {
         toast.error(
-          err?.response?.data?.message ?? "Failed to load list of lists."
+          err?.response?.data?.message ?? "Failed to load list of categories."
         );
       });
   }, []);
 
-  // Rebuild fields mỗi khi categoryOptions thay đổi
   const reBuildArticleFields = useMemo(
     () => articleFields(categoryOptions),
     [categoryOptions]
   );
 
-  const handleChange = (name: string, value: string) => {
-    setValues((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: undefined }));
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const nextErrors: FormErrors = {};
-    requiredFields.forEach((field) => {
-      if (!values[field].trim()) nextErrors[field] = "This field is required";
-    });
-
-    if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors);
-      return;
-    }
-
+  // onSubmit giờ nhận values trực tiếp từ RHF, không cần FormEvent nữa
+  const handleSubmit = (values: ArticleFormValues) => {
     onSubmit(values);
   };
 
   return (
     <Form
+      schema={articleSchema}
       fields={reBuildArticleFields}
-      values={values}
-      errors={errors}
-      onChange={handleChange}
+      defaultValues={initialValues}
       onSubmit={handleSubmit}
       submitLabel="Create"
-      submitClassName="mt-2 w-full rounded-md bg-[#3A0099]  hover:bg-[#270165] focus:bg-[#1a0044]  px-4 py-3 font-semibold text-white transition "
+      submitClassName={`mt-2 w-full rounded-md px-4 py-3 font-semibold text-white transition ${
+        isSubmitting
+          ? "bg-[#3A0099]/60 cursor-not-allowed"
+          : "bg-[#3A0099] hover:bg-[#270165]"
+      }`}
       submitDisabled={isSubmitting}
     />
   );

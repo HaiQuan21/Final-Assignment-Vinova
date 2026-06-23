@@ -1,6 +1,8 @@
 import { type InputFieldType, type SelectOption } from "./fieldProps";
 import { type FormEvent } from "react";
 import { type FormType } from "./navigation";
+import type { ReactNode } from "react";
+import type { ZodType } from "zod";
 
 export interface BaseFieldConfig {
   name: string;
@@ -10,6 +12,7 @@ export interface BaseFieldConfig {
   className?: string;
   // "half" dùng khi cần 2 field nằm chung 1 dòng, ví dụ Start Date / End Date
   width?: "full" | "half";
+  renderHint?: (value: string) => ReactNode;
 }
 
 export interface TextFieldConfig extends BaseFieldConfig {
@@ -46,18 +49,6 @@ export type FieldConfig =
 export type FormValues = Record<string, string>;
 export type FormErrors = Record<string, string | undefined>;
 
-export interface FormProps {
-  fields: FieldConfig[];
-  values: FormValues;
-  errors?: FormErrors;
-  onChange: (name: string, value: string) => void;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  submitLabel?: string;
-  className?: string;
-  submitClassName?: string;
-  submitDisabled?: boolean;
-}
-
 export const widthClass: Record<
   NonNullable<BaseFieldConfig["width"]>,
   string
@@ -76,4 +67,15 @@ export interface SlideOverProps {
 export interface ToolbarProps {
   title: string;
   formType?: FormType;
+}
+
+export interface FormProps<T extends FormValues = FormValues> {
+  schema: ZodType<T, any, any>;
+  fields: FieldConfig[];
+  defaultValues: T;
+  onSubmit: (values: T) => void | Promise<void>;
+  submitLabel?: string;
+  submitClassName?: string;
+  submitDisabled?: boolean;
+  className?: string;
 }
