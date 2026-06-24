@@ -21,10 +21,9 @@ export function articleFields(
     {
       name: "status",
       label: "Status",
-      type: "select",
+      type: "toggle",
       required: true,
       options: statusOptions,
-      placeholder: "Select Status",
     },
     {
       name: "category",

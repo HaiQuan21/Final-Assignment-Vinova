@@ -6,6 +6,7 @@ import FieldInputSingle from "./FieldInputSingle";
 import FieldSelect from "./FieldSelect";
 import FieldTextArea from "./FieldTextArea";
 import FieldDate from "./FieldDate";
+import FieldToggle from "./FieldToggle";
 import {
   type FieldConfig,
   type FormValues,
@@ -100,6 +101,21 @@ function Form<T extends FormValues>({
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 rhfField.onChange(e.target.value)
               }
+            />
+          )}
+        />
+      );
+    } else if (field.type === "toggle") {
+      fieldElement = (
+        <Controller
+          name={field.name as any}
+          control={control}
+          render={({ field: rhfField }) => (
+            <FieldToggle
+              {...commonProps}
+              options={field.options}
+              value={rhfField.value ?? ""}
+              onChange={(value) => rhfField.onChange(value)}
             />
           )}
         />
