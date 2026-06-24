@@ -27,7 +27,7 @@ export const getArticlesBySlug = () =>
 export const createArticles = (data: CreateArticlePayload) =>
   axiosInstance.post("/articles", data);
 export const updateArticle = (id: string, data: UpdateArticlePayload) =>
-  axiosInstance.put(`/articles/:${id}`, data);
+  axiosInstance.put(`/articles/${id}`, data);
 export const deleteMultipleArticles = (ids: string[]) =>
   axiosInstance.delete("/articles", {
     data: { ids },

@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
 import SlideOver from "./SlideOver";
-import CreateArticleForm from "../modules/CreateArticleForm";
+import ArticleForm from "../modules/ArticleForm";
 import CreateVoucherForm from "../modules/CreateVoucherForm";
 import type { ToolbarProps } from "../constants/formTypes";
-import { createArticles,createVoucher } from "../api/apiService";
+import { createArticles, createVoucher } from "../api/apiService";
 import type { ArticleFormValues } from "../constants/articleFormProps";
 import type { VoucherFormValues } from "../constants/voucherFormProps";
+import { useSearchParams } from "react-router-dom";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting,setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchParams,setSearchParams] = useSearchParams();
+  const [inputValue, setInputValue] = useState(
+    searchParams.get("search") ?? ""
+  );
+    // Debounce 1000mx — ghi vào URL sau khi user ngừng gõ
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setSearchParams(
+          (prev) => {
+            if (inputValue) {
+              prev.set("search", inputValue);
+            } else {
+              prev.delete("search");
+            }
+            prev.set("page", "1"); // reset trang khi search
+            return prev;
+          },
+          { replace: true }
+        );
+      }, 1000);
+      return ()=> clearTimeout(timer);
+    },[inputValue]);
 
   const handleCreateArticle = (values: ArticleFormValues) => {
     setIsSubmitting(true);
@@ -23,15 +46,18 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
       status: values.status,
       author: values.author,
       categoryId: values.category,
-      timeToRead: Number(values.duration), 
-      type: "article", 
+      timeToRead: Number(values.duration),
+      type: "article",
     })
       .then((res) => {
         toast.success(res.data.message);
         setIsOpen(false);
       })
       .catch((err) => {
-        toast.error(err?.response?.data?.message ?? "An error occurred Create Article, please try again.");
+        toast.error(
+          err?.response?.data?.message ??
+            "An error occurred Create Article, please try again.",
+        );
       })
       .finally(() => setIsSubmitting(false));
   };
@@ -56,17 +82,29 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
         setIsOpen(false);
       })
       .catch((err) => {
-        toast.error(err?.response?.data?.message ?? "An error occurred Create Voucher, please try again.");
+        toast.error(
+          err?.response?.data?.message ??
+            "An error occurred Create Voucher, please try again.",
+        );
       })
       .finally(() => setIsSubmitting(false));
   };
 
-
   const renderForm = () => {
     if (formType === "article")
-      return <CreateArticleForm onSubmit={handleCreateArticle} isSubmitting={isSubmitting}/>;
+      return (
+        <ArticleForm
+          onSubmit={handleCreateArticle}
+          isSubmitting={isSubmitting}
+        />
+      );
     if (formType === "voucher")
-      return <CreateVoucherForm onSubmit={handleCreateVoucher} isSubmitting={isSubmitting}/>;
+      return (
+        <CreateVoucherForm
+          onSubmit={handleCreateVoucher}
+          isSubmitting={isSubmitting}
+        />
+      );
     return (
       <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>
     );
@@ -81,7 +119,9 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
           <input
             type="text"
             placeholder="Search"
+            value={inputValue}
             className="w-full rounded-md border border-gray-200 bg-gray-50 py-2 pl-4 pr-10 text-sm text-gray-700 placeholder-gray-400 outline-none focus:border-gray-300 focus:ring-1 focus:ring-gray-300"
+            onChange={(e)=>setInputValue(e.target.value)}
           />
           <FaSearch
             className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"

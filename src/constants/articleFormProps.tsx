@@ -70,14 +70,15 @@ export interface ArticleFormValues {
   content: string;
 }
 
+export const DEFAULT_IMAGE_URL = "https://s3.ap-southeast-1.amazonaws.com/nurturewave-be-dev/uploads%2Fimages%2F0b8821d6-1a35-4986-af30-232f74a04b51_download+(2).jpeg";
+
 export const initialValues: ArticleFormValues = {
   title: "",
   author: "",
   status: "",
   category: "",
   duration: "0",
-  image:
-    "https://s3.ap-southeast-1.amazonaws.com/nurturewave-be-dev/uploads%2Fimages%2F0b8821d6-1a35-4986-af30-232f74a04b51_download+(2).jpeg", // mặc định theo yêu cầu, thay cho upload file thật
+  image: DEFAULT_IMAGE_URL,
   content: "",
 };
 

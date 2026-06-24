@@ -16,7 +16,10 @@ export interface Article {
   id: string;
   slug: string;
   title: string;
-  picture: string;
+  picture: {
+    id: string;
+    uri: string;
+  } | null;
   content: string;
   status: string;
   type: string;

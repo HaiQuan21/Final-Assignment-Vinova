@@ -48,7 +48,7 @@ export interface CreateArticlePayload {
     page?: number;
     limit?: number;
     offset?: number;
-    search?: number;
+    search?: string;
     sort?: string;
     f_code?: string;
     f_status?: "active" | "inactive" | "expired";
@@ -59,7 +59,7 @@ export interface CreateArticlePayload {
     page?: number;
     limit?: number;
     offset?: number;
-    search?: number;
+    search?: string;
     sort?: string;
     f_type?: "article" | "pd";
     f_categoryId?: string,

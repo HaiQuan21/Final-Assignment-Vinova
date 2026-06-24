@@ -6,6 +6,7 @@ import ActionButtons from "../components/ActionButtons";
 import { usePagination } from "../hooks/usePagination";
 import { getVouchers } from "../api/apiService";
 import { type Voucher } from "../constants/MainObjectClass";
+import { useSearchParams } from "react-router-dom";
 
 function VoucherTable() {
   const [data, setData] = useState<Voucher[]>([]);
@@ -13,6 +14,9 @@ function VoucherTable() {
   const [isLoading, setIsLoading] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(8);
+  
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") ?? "";
 
   console.log("Data Voucher trả về", data);
 
@@ -22,6 +26,7 @@ function VoucherTable() {
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
       offset: pagination.pageIndex * pagination.pageSize,
+      search: search || undefined,
       sort:
         sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
     })
@@ -30,7 +35,7 @@ function VoucherTable() {
         setTotalEntries(res.metadata.totalCount);
       })
       .finally(() => setIsLoading(false));
-  }, [pagination.pageIndex, pagination.pageSize, sorting]);
+  }, [pagination.pageIndex, pagination.pageSize, sorting,search]);
 
   const columns = useMemo<ColumnDef<Voucher>[]>(
     () => [
