@@ -1,13 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import Form from "../components/Form";
-import {
-  type ArticleFormValues,
-  initialValues,
-  articleFields,
-} from "../constants/articleFormProps";
-import { articleSchema } from "../schemas/articleSchema";
-import { getAllCategories } from "../api/apiService";
+import Form from "../../components/Form";
+
+import { type ArticleFormValues,initialValues,articleFields } from "./articleFormProps";
+import { articleSchema } from "../../schemas/articleSchema";
+import { getAllCategories } from "../../api/apiService";
 
 interface ArticleFormProps {
   onSubmit: (values: ArticleFormValues) => void;

@@ -1,4 +1,4 @@
-import { type FieldConfig } from "./formTypes";
+import { type FieldConfig } from "../../constants/formTypes";
 export const couponTypeOptions = [
   { value: "percentage", label: "Percentage" },
   { value: "fixed", label: "Fixed Amount" },

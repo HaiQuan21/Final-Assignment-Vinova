@@ -18,23 +18,23 @@ export default function App() {
 
   const NotFound = lazy(()=> import("./pages/NotFoundPage"))
 
-  const Account = lazy(()=>import("./modules/Account"));
+  const Account = lazy(()=>import("./modules/Account/Account"));
 
-  const Article = lazy(()=>import("./modules/ArticleTable"));
+  const Article = lazy(()=>import("./modules/Article/ArticleTable"));
 
-  const Category = lazy(()=>import("./modules/Category"));
+  const Category = lazy(()=>import("./modules/Category/Category"));
 
-  const HelpDocuments = lazy(()=>import("./modules/HelpDocuments"));
+  const HelpDocuments = lazy(()=>import("./modules/HelpDocuments/HelpDocuments"));
 
-  const PDSession = lazy(()=>import("./modules/PDSession"));
+  const PDSession = lazy(()=>import("./modules/PDSession/PDSession"));
 
-  const SearchSetting = lazy(()=>import("./modules/SearchSettings"));
+  const SearchSetting = lazy(()=>import("./modules/SearchSetting/SearchSettings"));
 
-  const StaticContent = lazy(()=>import("./modules/StaticContent"));
+  const StaticContent = lazy(()=>import("./modules/StaticContent/StaticContent"));
 
-  const Subscriptions = lazy(()=>import("./modules/Subscriptions"));
+  const Subscriptions = lazy(()=>import("./modules/Subscription/Subscriptions"));
 
-  const Voucher = lazy(()=>import("./modules/VoucherTable"));
+  const Voucher = lazy(()=>import("./modules/Voucher/VoucherTable"));
   
   return (
     <BrowserRouter>

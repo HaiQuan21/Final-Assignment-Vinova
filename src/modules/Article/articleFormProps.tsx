@@ -1,4 +1,4 @@
-import { type FieldConfig } from "./formTypes";
+import { type FieldConfig } from "../../constants/formTypes";
 
 export const statusOptions = [
   { value: "published", label: "Published" },

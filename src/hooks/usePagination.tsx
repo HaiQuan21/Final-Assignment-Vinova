@@ -18,11 +18,11 @@ export function usePagination(initialPageSize = 8) {
 
     setSearchParams(
       (prev) => {
-        prev.set("page", String(next.pageIndex + 1)); // lưu 1-based vào URL
+        prev.set("page", String(next.pageIndex + 1)); 
         prev.set("limit", String(next.pageSize));
         return prev;
       },
-      { replace: true }, // replace thay vì push để không spam history
+      { replace: true }, 
     );
   };
 
@@ -34,7 +34,7 @@ export function usePagination(initialPageSize = 8) {
         } else {
           prev.delete("search");
         }
-        prev.set("page", "1"); // reset về trang 1 khi search
+        prev.set("page", "1"); 
         return prev;
       },
       { replace: true }

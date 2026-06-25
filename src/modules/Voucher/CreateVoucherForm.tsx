@@ -1,11 +1,11 @@
-import Form from "../components/Form";
+import Form from "../../components/Form";
 import {
   type CreateVoucherFormProps,
   type VoucherFormValues,
   initialValues,
   voucherFields,
-} from "../constants/voucherFormProps";
-import { voucherSchema } from "../schemas/voucherSchema";
+} from "./voucherFormProps";
+import { voucherSchema } from "../../schemas/voucherSchema";
 
 interface Props extends CreateVoucherFormProps {
   isSubmitting?: boolean;

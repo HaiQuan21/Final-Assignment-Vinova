@@ -1,113 +1,52 @@
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { toast } from "react-toastify";
 import SlideOver from "./SlideOver";
-import ArticleForm from "../modules/ArticleForm";
-import CreateVoucherForm from "../modules/CreateVoucherForm";
+import ArticleForm from "../modules/Article/ArticleForm";
+import CreateVoucherForm from "../modules/Voucher/CreateVoucherForm";
 import type { ToolbarProps } from "../constants/formTypes";
-import { createArticles, createVoucher } from "../api/apiService";
-import type { ArticleFormValues } from "../constants/articleFormProps";
-import type { VoucherFormValues } from "../constants/voucherFormProps";
 import { useSearchParams } from "react-router-dom";
+import { useCreateArticle } from "../modules/Article/hooks/useCreateArticle";
+import { useCreateVoucher } from "../modules/Voucher/hooks/useCreateVoucher";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchParams,setSearchParams] = useSearchParams();
   const [inputValue, setInputValue] = useState(
     searchParams.get("search") ?? ""
   );
-    // Debounce 1000mx — ghi vào URL sau khi user ngừng gõ
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setSearchParams(
-          (prev) => {
-            if (inputValue) {
-              prev.set("search", inputValue);
-            } else {
-              prev.delete("search");
-            }
-            prev.set("page", "1"); // reset trang khi search
-            return prev;
-          },
-          { replace: true }
-        );
-      }, 1000);
-      return ()=> clearTimeout(timer);
-    },[inputValue]);
 
-  const handleCreateArticle = (values: ArticleFormValues) => {
-    setIsSubmitting(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchParams(
+        (prev) => {
+          if (inputValue) {
+            prev.set("search", inputValue);
+          } else {
+            prev.delete("search");
+          }
+          prev.set("page", "1");
+          return prev;
+        },
+        { replace: true }
+      );
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [inputValue]);
 
-    createArticles({
-      title: values.title,
-      content: values.content,
-      picture: values.image,
-      status: values.status,
-      author: values.author,
-      categoryId: values.category,
-      timeToRead: Number(values.duration),
-      type: "article",
-    })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsOpen(false);
-      })
-      .catch((err) => {
-        toast.error(
-          err?.response?.data?.message ??
-            "An error occurred Create Article, please try again.",
-        );
-      })
-      .finally(() => setIsSubmitting(false));
-  };
+  const { handleCreate: handleCreateArticle, isSubmitting: isCreatingArticle } =
+    useCreateArticle(() => setIsOpen(false)); // onSuccess đóng SlideOver
 
-  const handleCreateVoucher = (values: VoucherFormValues) => {
-    setIsSubmitting(true);
+  const { handleCreate: handleCreateVoucher, isSubmitting: isCreatingVoucher } =
+    useCreateVoucher(() => setIsOpen(false));
 
-    createVoucher({
-      code: values.code,
-      description: values.description,
-      startDate: values.startDate,
-      endDate: values.endDate,
-      status: "active",
-      type: values.typeOfCoupon,
-      amount: Number(values.amount),
-      quantityUse: Number(values.quantity),
-      minPayAmount: Number(values.condition),
-      maxDiscountAmount: Number(values.conditionMaxDiscount),
-    })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsOpen(false);
-      })
-      .catch((err) => {
-        toast.error(
-          err?.response?.data?.message ??
-            "An error occurred Create Voucher, please try again.",
-        );
-      })
-      .finally(() => setIsSubmitting(false));
-  };
+  const isSubmitting = isCreatingArticle || isCreatingVoucher;
 
   const renderForm = () => {
     if (formType === "article")
-      return (
-        <ArticleForm
-          onSubmit={handleCreateArticle}
-          isSubmitting={isSubmitting}
-        />
-      );
+      return <ArticleForm onSubmit={handleCreateArticle} isSubmitting={isSubmitting} />;
     if (formType === "voucher")
-      return (
-        <CreateVoucherForm
-          onSubmit={handleCreateVoucher}
-          isSubmitting={isSubmitting}
-        />
-      );
-    return (
-      <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>
-    );
+      return <CreateVoucherForm onSubmit={handleCreateVoucher} isSubmitting={isSubmitting} />;
+    return <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>;
   };
 
   return (
@@ -143,7 +82,7 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
         onClose={() => setIsOpen(false)}
         title={`Create ${title}`}
       >
-        {renderForm()}
+        {isOpen && renderForm()}
       </SlideOver>
     </>
   );

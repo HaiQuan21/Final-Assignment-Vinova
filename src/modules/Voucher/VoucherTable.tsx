@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
-import CommonTable from "../components/CommonTable";
-import StatusBadge from "../components/StatusBadge";
-import ActionButtons from "../components/ActionButtons";
-import { usePagination } from "../hooks/usePagination";
-import { getVouchers } from "../api/apiService";
-import { type Voucher } from "../constants/MainObjectClass";
+import CommonTable from "../../components/CommonTable";
+import StatusBadge from "../../components/StatusBadge";
+import ActionButtons from "../../components/ActionButtons";
+import { usePagination } from "../../hooks/usePagination";
+import { getVouchers } from "./api/apiVoucher";
+import { type Voucher } from "../../constants/MainObjectClass";
 import { useSearchParams } from "react-router-dom";
 
 function VoucherTable() {
