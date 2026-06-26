@@ -26,7 +26,7 @@ export interface CreateArticlePayload {
     offset?: number;
     search?: string;
     sort?: string;
-    f_type?: "article" | "pd";
+    f_type?: "article" | "pd"
     f_categoryId?: string,
     f_status?: "published" | "unpublished" | "draft";
   }

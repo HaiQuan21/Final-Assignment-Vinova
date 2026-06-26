@@ -4,16 +4,30 @@ import SlideOver from "./SlideOver";
 import ArticleForm from "../modules/Article/ArticleForm";
 import CreateVoucherForm from "../modules/Voucher/CreateVoucherForm";
 import type { ToolbarProps } from "../constants/formTypes";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useCreateArticle } from "../modules/Article/hooks/useCreateArticle";
 import { useCreateVoucher } from "../modules/Voucher/hooks/useCreateVoucher";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
+  const {pathname} = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [searchParams,setSearchParams] = useSearchParams();
   const [inputValue, setInputValue] = useState(
     searchParams.get("search") ?? ""
   );
+
+  //reset string trên searchbar khi qua một trang khác
+  useEffect(()=>{
+    setInputValue("");
+    setSearchParams(
+      (prev) => {
+        prev.delete("search");
+        prev.set("page", "1");
+        return prev;
+      },
+      {replace: true}
+    );
+  },[pathname])
 
   useEffect(() => {
     const timer = setTimeout(() => {

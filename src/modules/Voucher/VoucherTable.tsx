@@ -7,6 +7,7 @@ import { usePagination } from "../../hooks/usePagination";
 import { getVouchers } from "./api/apiVoucher";
 import { type Voucher } from "../../constants/MainObjectClass";
 import { useSearchParams } from "react-router-dom";
+import { size } from "zod";
 
 function VoucherTable() {
   const [data, setData] = useState<Voucher[]>([]);
@@ -46,21 +47,23 @@ function VoucherTable() {
           <span className="block max-w-[220px] break-words text-gray-500">
             {info.getValue<string>()}
           </span>
-        ),
+        ),size:170
       },
-      { accessorKey: "code", header: "Code" },
+      { accessorKey: "code", header: "Code" ,size:170},
       {
         accessorKey: "status",
         header: "Status",
         cell: (info) => <StatusBadge status={info.getValue<string>()} />,
+        size:170
       },
-      { accessorKey: "startDate", header: "Start Date" },
-      { accessorKey: "endDate", header: "End Date" },
+      { accessorKey: "startDate", header: "Start Date" ,size:170},
+      { accessorKey: "endDate", header: "End Date" ,size:170},
       {
         cell: ({ row }) =>
           `${row.original.numOfUsed}/${row.original.quantityUse}`,
         header: "Number Of Use",
         enableSorting: false,
+        size:170
       },
       {
         id: "action",
@@ -73,6 +76,7 @@ function VoucherTable() {
             onDelete={() => console.log("delete", row.original.id)}
           />
         ),
+        size:170
       },
     ],
     [],
@@ -93,6 +97,7 @@ function VoucherTable() {
         onPaginationChange={setPagination}
         manualPagination
         totalEntries={totalEntries}
+        pageSizeOptions={[8, 25, 50, 100]}
         isLoading={isLoading}
       />
     </div>

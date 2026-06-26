@@ -26,16 +26,17 @@ function ArticleTable() {
           <span className="block max-w-[220px] break-words text-gray-500">
             {info.getValue<string>()}
           </span>
-        ),
+        ),size:170
       },
-      { accessorKey: "title", header: "Title" },
-      { accessorKey: "author", header: "Author" },
-      { accessorKey: "category.name", header: "Category" },
-      { accessorKey: "createdAt", header: "Create Date" },
+      { accessorKey: "title", header: "Title",size:170 },
+      { accessorKey: "author", header: "Author",size:170 },
+      { accessorKey: "category.name", header: "Category",size:170 },
+      { accessorKey: "createdAt", header: "Create Date",size:170 },
       {
         accessorKey: "status",
         header: "Status",
         cell: (info) => <StatusBadge status={info.getValue<string>()} />,
+        size:170
       },
       {
         id: "action",
@@ -48,6 +49,7 @@ function ArticleTable() {
             onDelete={() => handleDeleteClick(row.original)}
           />
         ),
+        size:170
       },
     ],
     []
@@ -65,6 +67,7 @@ function ArticleTable() {
         onPaginationChange={setPagination}
         manualPagination
         totalEntries={totalEntries}
+        pageSizeOptions={[8, 25, 50, 100]}
         isLoading={isLoading}
       />
 

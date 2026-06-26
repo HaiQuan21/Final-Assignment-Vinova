@@ -7,6 +7,7 @@ import {
   type ColumnDef,
   type SortingState,
   type PaginationState,
+  type RowSelectionState,
 } from "@tanstack/react-table";
 import {
   HiSelector,
@@ -16,8 +17,9 @@ import {
   HiChevronRight,
 } from "react-icons/hi";
 import { getPaginationRange } from "../lib/pagination";
+
 const FIXED_ROW_COUNT = 8;
-const ROW_HEIGHT = "h-[72px]";
+const ROW_HEIGHT = 72; // px — dùng số để tính height container
 
 interface CommonTableProps<T> {
   data: T[];
@@ -27,14 +29,14 @@ interface CommonTableProps<T> {
   manualSorting?: boolean;
   isLoading?: boolean;
   emptyMessage?: string;
-
   pagination: PaginationState;
   onPaginationChange: (pagination: PaginationState) => void;
-  // true (mặc định): data trả về từ API đã được phân trang sẵn (vd 25 dòng/lần),
-  // cần truyền totalEntries để tính số trang. false: data đầy đủ, TanStack tự cắt trang.
   manualPagination?: boolean;
   totalEntries?: number;
+  // Hiện dropdown "n per page" — truyền mảng thì hiện, không truyền thì ẩn
   pageSizeOptions?: number[];
+  rowSelection?: RowSelectionState;
+  onRowSelectionChange?: (selection: RowSelectionState) => void;
 }
 
 function CommonTable<T>({
@@ -49,6 +51,9 @@ function CommonTable<T>({
   onPaginationChange,
   manualPagination = true,
   totalEntries,
+  pageSizeOptions,
+  rowSelection = {},
+  onRowSelectionChange,
 }: CommonTableProps<T>) {
   const resolvedTotalEntries = manualPagination
     ? (totalEntries ?? 0)
@@ -61,7 +66,7 @@ function CommonTable<T>({
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, pagination },
+    state: { sorting, pagination, rowSelection },
     onSortingChange: (updater) => {
       const next = typeof updater === "function" ? updater(sorting) : updater;
       onSortingChange(next);
@@ -71,18 +76,24 @@ function CommonTable<T>({
         typeof updater === "function" ? updater(pagination) : updater;
       onPaginationChange(next);
     },
+    onRowSelectionChange: (updater) => {
+      const next =
+        typeof updater === "function" ? updater(rowSelection) : updater;
+      onRowSelectionChange?.(next);
+    },
     getCoreRowModel: getCoreRowModel(),
     manualSorting,
     manualPagination,
     pageCount,
+    enableRowSelection: !!onRowSelectionChange,
     ...(manualSorting ? {} : { getSortedRowModel: getSortedRowModel() }),
-    // manualPagination=true: data truyền vào đã là đúng 1 trang sẵn từ API, không cần cắt lại
     ...(manualPagination
       ? {}
       : { getPaginationRowModel: getPaginationRowModel() }),
+    columnResizeMode: "onChange",
   });
 
-  const currentPage = table.getState().pagination.pageIndex + 1; // hiển thị 1-based
+  const currentPage = table.getState().pagination.pageIndex + 1;
   const startEntry =
     resolvedTotalEntries === 0
       ? 0
@@ -93,15 +104,31 @@ function CommonTable<T>({
   );
   const pageItems = getPaginationRange(currentPage, pageCount);
 
+  // Chiều cao cố định: header ~52px + 8 rows × 72px = 628px
+  const HEADER_HEIGHT = 52;
+  const TABLE_BODY_HEIGHT = FIXED_ROW_COUNT * ROW_HEIGHT;
+  const CONTAINER_HEIGHT = HEADER_HEIGHT + TABLE_BODY_HEIGHT;
+
+  const rows = table.getRowModel().rows;
+  const fillerCount = Math.max(0, FIXED_ROW_COUNT - rows.length);
+
+  const allColumns = table.getAllColumns();
+
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-full overflow-x-auto rounded-lg border border-gray-200">
+      {/* Container cố định chiều cao — scroll dọc bên trong, scroll ngang toàn bộ */}
+      <div
+        className="w-full overflow-x-auto rounded-lg border border-gray-200"
+        style={{ height: `${CONTAINER_HEIGHT}px` }}
+      >
         <table className="w-full min-w-max border-collapse text-left text-sm">
-          <thead>
+          {/* Header sticky để không bị cuộn khi scroll dọc */}
+          <thead className="sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
                 className="border-b border-gray-200 bg-white"
+                style={{ height: `${HEADER_HEIGHT}px` }}
               >
                 {headerGroup.headers.map((header) => {
                   const canSort = header.column.getCanSort();
@@ -111,12 +138,13 @@ function CommonTable<T>({
                   return (
                     <th
                       key={header.id}
+                      style={{ width: header.getSize() }}
                       onClick={
                         canSort
                           ? header.column.getToggleSortingHandler()
                           : undefined
                       }
-                      className={`whitespace-nowrap px-5 py-4 font-semibold text-gray-700 
+                      className={`whitespace-nowrap px-5 py-4 font-semibold text-gray-700
                         ${canSort ? "cursor-pointer select-none" : ""}
                         ${isAction ? "sticky right-0 bg-white shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)]" : ""}
                       `}
@@ -147,83 +175,148 @@ function CommonTable<T>({
 
           <tbody>
             {isLoading ? (
-    Array.from({ length: FIXED_ROW_COUNT }).map((_, index) => (
-      <tr
-        key={`skeleton-${index}`}
-        className={`border-b border-gray-100 ${ROW_HEIGHT} ${
-          index % 2 === 1 ? "bg-gray-50" : "bg-white"
-        }`}
-      >
-        {columns.map((_, colIdx) => (
-          <td key={colIdx} className="px-5 py-4">
-            <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
-          </td>
-        ))}
-      </tr>
-    ))
-  ) : table.getRowModel().rows.length === 0 ? (
-    <>
-      <tr className={`border-b border-gray-100 bg-white ${ROW_HEIGHT}`}>
-        <td
-          colSpan={columns.length}
-          className="px-5 py-4 text-center text-gray-400"
-        >
-          {emptyMessage}
-        </td>
-      </tr>
-      {Array.from({ length: FIXED_ROW_COUNT - 1 }).map((_, index) => (
-        <tr
-          key={`empty-${index}`}
-          className={`border-b border-gray-100 last:border-0 ${ROW_HEIGHT} ${
-            (index + 1) % 2 === 1 ? "bg-gray-50" : "bg-white"
-          }`}
-        >
-          <td colSpan={columns.length} />
-        </tr>
-      ))}
-    </>
-  ) : (
-              table.getRowModel().rows.map((row, index) => (
+              Array.from({ length: FIXED_ROW_COUNT }).map((_, index) => (
                 <tr
-                  key={row.id}
-                  className={`border-b border-gray-100 last:border-0 ${ROW_HEIGHT} ${index % 2 === 1 ? "bg-gray-50" : "bg-white"
-                    }`}
+                  key={`skeleton-${index}`}
+                  style={{ height: `${ROW_HEIGHT}px` }}
+                  className={`border-b border-gray-100 ${
+                    index % 2 === 1 ? "bg-gray-50" : "bg-white"
+                  }`}
                 >
-                  {row.getVisibleCells().map((cell) => {
-                    const isAction = cell.column.id === "action"; // ← thêm
-
-                    return (
-                      <td
-                        key={cell.id}
-                        className={`px-5 py-4 align-top text-gray-700
-                          ${isAction
-                            ? `sticky right-0 shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)] ${index % 2 === 1 ? "bg-gray-50" : "bg-white"
-                            }`
-                            : ""
-                          }
-                        `}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    );
-                  })}
+                  {allColumns.map((col) => (
+                    <td key={col.id} style={{ width: col.getSize() }}>
+                      <div className="h-4 animate-pulse rounded bg-gray-200" style={{width: `${60 + ((allColumns.indexOf(col) * 17) % 25)}%`}} />
+                    </td>
+                  ))}
                 </tr>
               ))
+            ) : rows.length === 0 ? (
+              <>
+                <tr
+                  style={{ height: `${ROW_HEIGHT}px` }}
+                  className="border-b border-gray-100 bg-white"
+                >
+                  <td
+                    colSpan={columns.length}
+                    className="px-5 py-4 text-center text-gray-400"
+                  >
+                    {emptyMessage}
+                  </td>
+                </tr>
+                {Array.from({ length: FIXED_ROW_COUNT - 1 }).map((_, index) => (
+                  <tr
+                    key={`empty-${index}`}
+                    style={{ height: `${ROW_HEIGHT}px` }}
+                    className={`border-b border-gray-100 last:border-0 ${
+                      (index + 1) % 2 === 1 ? "bg-gray-50" : "bg-white"
+                    }`}
+                  >
+                    <td colSpan={columns.length} />
+                  </tr>
+                ))}
+              </>
+            ) : (
+              <>
+                {rows.map((row, index) => (
+                  <tr
+                    key={row.id}
+                    style={{ height: `${ROW_HEIGHT}px` }}
+                    className={`border-b border-gray-100 last:border-0 ${
+                      row.getIsSelected()
+                        ? "bg-purple-50"
+                        : index % 2 === 1
+                          ? "bg-gray-50"
+                          : "bg-white"
+                    }`}
+                  >
+                    {row.getVisibleCells().map((cell) => {
+                      const isAction = cell.column.id === "action";
+                      return (
+                        <td
+                          key={cell.id}
+                          style={{ width: cell.column.getSize() }}
+                          className={`px-5 py-4 align-middle text-gray-700 ${
+                            isAction
+                              ? `sticky right-0 shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)] ${
+                                  row.getIsSelected()
+                                    ? "bg-purple-50"
+                                    : index % 2 === 1
+                                      ? "bg-gray-50"
+                                      : "bg-white"
+                                }`
+                              : ""
+                          }`}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+
+                {/* Filler rows giữ đủ 8 dòng */}
+                {Array.from({ length: fillerCount }).map((_, index) => {
+                  const rowIndex = rows.length + index;
+                  return (
+                    <tr
+                      key={`filler-${index}`}
+                      style={{ height: `${ROW_HEIGHT}px` }}
+                      className={`border-b border-gray-100 last:border-0 ${
+                        rowIndex % 2 === 1 ? "bg-gray-50" : "bg-white"
+                      }`}
+                    >
+                      {columns.map((col, colIdx) => {
+                        const isAction =
+                          "id" in col ? col.id === "action" : false;
+                        return (
+                          <td
+                            key={colIdx}
+                            className={
+                              isAction
+                                ? `sticky right-0 shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)] ${
+                                    rowIndex % 2 === 1
+                                      ? "bg-gray-50"
+                                      : "bg-white"
+                                  }`
+                                : ""
+                            }
+                          />
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </>
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Pagination footer — toàn bộ điều khiển trang lấy từ table instance của TanStack */}
+      {/* Pagination footer */}
       <div className="flex flex-wrap items-center justify-between gap-4 px-1 py-4 text-sm text-gray-500">
         <span>
           showing {startEntry} to {endEntry} of {resolvedTotalEntries} entries.
         </span>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          {/* Per-page dropdown — chỉ hiện khi truyền pageSizeOptions */}
+          {pageSizeOptions && (
+            <select
+              value={pagination.pageSize}
+              onChange={(e) => table.setPageSize(Number(e.target.value))}
+              className="rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 outline-none transition focus:border-gray-400"
+            >
+              {pageSizeOptions.map((size) => (
+                <option key={size} value={size}>
+                  {size} per page
+                </option>
+              ))}
+            </select>
+          )}
+
           {/* Page numbers */}
           <div className="flex items-center gap-1">
             <button
@@ -231,7 +324,6 @@ function CommonTable<T>({
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
               className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Previous page"
             >
               <HiChevronLeft size={16} />
             </button>
@@ -249,10 +341,11 @@ function CommonTable<T>({
                   key={item}
                   type="button"
                   onClick={() => table.setPageIndex(item - 1)}
-                  className={`flex h-8 w-8 items-center justify-center rounded-md transition ${item === currentPage
+                  className={`flex h-8 w-8 items-center justify-center rounded-md transition ${
+                    item === currentPage
                       ? "bg-[#3A0099] text-white"
                       : "text-gray-600 hover:bg-gray-100"
-                    }`}
+                  }`}
                 >
                   {item}
                 </button>
@@ -264,7 +357,6 @@ function CommonTable<T>({
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
               className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Next page"
             >
               <HiChevronRight size={16} />
             </button>

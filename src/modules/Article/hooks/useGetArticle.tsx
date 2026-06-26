@@ -17,7 +17,7 @@ export function useGetArticles({ pagination, sorting, refetchKey = 0 }: UseGetAr
 
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search") ?? "";
-
+ 
   useEffect(() => {
     setIsLoading(true);
     getAllArticles({
@@ -26,10 +26,12 @@ export function useGetArticles({ pagination, sorting, refetchKey = 0 }: UseGetAr
       offset: pagination.pageIndex * pagination.pageSize,
       search: search || undefined,
       sort: sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
+      f_type:"article",
     })
       .then(({ data: res }) => {
         setData(res.data);
         setTotalEntries(res.metadata.totalCount);
+        console.log("Data Article trả về",res);
       })
       .finally(() => setIsLoading(false));
   }, [pagination.pageIndex, pagination.pageSize, sorting, search, refetchKey]);
