@@ -8,6 +8,7 @@ import { getVouchers } from "./api/apiVoucher";
 import { type Voucher } from "../../constants/MainObjectClass";
 import { useSearchParams } from "react-router-dom";
 import { size } from "zod";
+import { useNavigate } from "react-router-dom";
 
 function VoucherTable() {
   const [data, setData] = useState<Voucher[]>([]);
@@ -15,7 +16,8 @@ function VoucherTable() {
   const [isLoading, setIsLoading] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(8);
-  
+  const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search") ?? "";
 
@@ -72,7 +74,7 @@ function VoucherTable() {
         cell: ({ row }) => (
           <ActionButtons
             onType={"voucher"}
-            onAction={() => console.log("view Voucher", row.original.id)}
+            onAction={() => navigate(`/vouchers/${row.original.id}`)}
             onDelete={() => console.log("delete", row.original.id)}
           />
         ),

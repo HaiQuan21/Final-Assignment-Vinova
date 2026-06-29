@@ -12,7 +12,7 @@ export const categoryOptions = [
   { value: "fitness", label: "Fitness" },
 ];
 
-export function articleFields(
+export function articlepdFields(
   categoryOptions: { value: string; label: string }[],
 ): FieldConfig[] {
   return [
@@ -59,7 +59,7 @@ export const requiredFields = [
   "content",
 ];
 
-export interface ArticleFormValues {
+export interface ArticlePDFormValues {
   [key: string]: string;
   title: string;
   author: string;
@@ -72,7 +72,7 @@ export interface ArticleFormValues {
 
 export const DEFAULT_IMAGE_URL = "https://s3.ap-southeast-1.amazonaws.com/nurturewave-be-dev/uploads%2Fimages%2F0b8821d6-1a35-4986-af30-232f74a04b51_download+(2).jpeg";
 
-export const initialValues: ArticleFormValues = {
+export const initialValues: ArticlePDFormValues = {
   title: "",
   author: "",
   status: "",
@@ -82,7 +82,7 @@ export const initialValues: ArticleFormValues = {
   content: "",
 };
 
-export interface CreateArticleFormProps {
-  onSubmit: (values: ArticleFormValues) => void;
+export interface CreateArticlePDFormProps {
+  onSubmit: (values: ArticlePDFormValues) => void;
   isSubmitting?: boolean;
 }

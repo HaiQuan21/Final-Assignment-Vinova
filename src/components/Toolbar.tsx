@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import SlideOver from "./SlideOver";
-import ArticleForm from "../modules/Article/ArticleForm";
+import ArticlePDForm from "../modules/ArticlePD/ArticlePDForm";
 import CreateVoucherForm from "../modules/Voucher/CreateVoucherForm";
 import type { ToolbarProps } from "../constants/formTypes";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { useCreateArticle } from "../modules/Article/hooks/useCreateArticle";
+import { useCreateArticlePD } from "../modules/ArticlePD/hooks/useCreateArticlePD";
 import { useCreateVoucher } from "../modules/Voucher/hooks/useCreateVoucher";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
@@ -46,21 +46,34 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
     }, 400);
     return () => clearTimeout(timer);
   }, [inputValue]);
-
+  //Create Article
   const { handleCreate: handleCreateArticle, isSubmitting: isCreatingArticle } =
-    useCreateArticle(() => setIsOpen(false)); // onSuccess đóng SlideOver
+  useCreateArticlePD("article",() => setIsOpen(false)); 
+
+  //Create PD
+  const { handleCreate: handleCreatePD, isSubmitting: isCreatingPD } =
+  useCreateArticlePD("pd",() => setIsOpen(false));
 
   const { handleCreate: handleCreateVoucher, isSubmitting: isCreatingVoucher } =
     useCreateVoucher(() => setIsOpen(false));
 
-  const isSubmitting = isCreatingArticle || isCreatingVoucher;
+  const isSubmitting = isCreatingArticle || isCreatingVoucher || isCreatingPD;
 
   const renderForm = () => {
-    if (formType === "article")
-      return <ArticleForm onSubmit={handleCreateArticle} isSubmitting={isSubmitting} />;
-    if (formType === "voucher")
-      return <CreateVoucherForm onSubmit={handleCreateVoucher} isSubmitting={isSubmitting} />;
-    return <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>;
+    switch (formType) {
+      case "article":
+        return <ArticlePDForm onSubmit={handleCreateArticle} isSubmitting={isSubmitting} />;
+        break;
+      case "voucher":
+        return <CreateVoucherForm onSubmit={handleCreateVoucher} isSubmitting={isSubmitting} />;
+        break;
+      case "pd":
+        return <ArticlePDForm onSubmit={handleCreatePD} isSubmitting={isSubmitting} />;
+        break;
+      default:
+        return <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>;
+        break;
+    }
   };
 
   return (

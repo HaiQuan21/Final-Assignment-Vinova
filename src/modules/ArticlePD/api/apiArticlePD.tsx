@@ -1,17 +1,15 @@
 import axiosInstance from "../../../api/axiosInstance";
-import { type GetArticlesParams, type CreateArticlePayload,type UpdateArticlePayload } from "./payloadAPIArticle";
+import { type GetArticlesPDParams, type CreateArticlePDPayload,type UpdateArticlePDPayload } from "./payloadAPIArticlePD";
 // ─── Articles ─────────────────────────────────────────────────────────────────
-export const getAllArticles = (params?: GetArticlesParams) =>
+export const getAllArticlePD = (params?: GetArticlesPDParams) =>
     axiosInstance.get("/articles",{params});
-  export const getArticlesById = (id: string) =>
+  export const getArticlePDById = (id: string) =>
     axiosInstance.get(`/articles/:${id}`);
-  export const getArticlesBySlug = () =>
-    axiosInstance.get("/articles/by-slug/nick-9999");
-  export const createArticles = (data: CreateArticlePayload) =>
+  export const createArticlePD = (data: CreateArticlePDPayload) =>
     axiosInstance.post("/articles", data);
-  export const updateArticle = (id: string, data: UpdateArticlePayload) =>
+  export const updateArticlePD = (id: string, data: UpdateArticlePDPayload) =>
     axiosInstance.put(`/articles/${id}`, data);
-  export const deleteMultipleArticles = (ids: string[]) =>
+  export const deleteMultipleArticlePD = (ids: string[]) =>
     axiosInstance.delete("/articles", {
       data: { ids },
     });

@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { updateArticle } from "../api/apiArticle";
-import type { Article } from "../../../constants/MainObjectClass";
-import type { ArticleFormValues } from "../articleFormProps";
-import { DEFAULT_IMAGE_URL } from "../articleFormProps";
+import { updateArticlePD } from "../api/apiArticlePD";
+import type { ArticlePD } from "../../../constants/MainObjectClass";
+import type { ArticlePDFormValues } from "../articlepdFormProps";
+import { DEFAULT_IMAGE_URL } from "../articlepdFormProps";
 
-export function useEditArticle(onSuccess?: () => void) {
+export function useEditArticlePD(type:"article" | "pd",onSuccess?: () => void) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [editingArticle, setEditingArticle] = useState<Article | null>(null);
+  const [editingArticle, setEditingArticle] = useState<ArticlePD | null>(null);
 
-  const toFormValues = (article: Article): ArticleFormValues => ({
+  const toFormValues = (article: ArticlePD): ArticlePDFormValues => ({
     title: article.title ?? "",
     author: article.author ?? "",
     status: article.status ?? "",
@@ -20,22 +20,22 @@ export function useEditArticle(onSuccess?: () => void) {
     content: article.content ?? "",
   });
 
-  const handleEditClick = (article: Article) => {
+  const handleEditClick = (article: ArticlePD) => {
     setEditingArticle(article);
     setEditOpen(true);
   };
 
-  const handleEditSubmit = (values: ArticleFormValues) => {
+  const handleEditSubmit = (values: ArticlePDFormValues) => {
     if (!editingArticle) return;
     setIsSubmitting(true);
-    updateArticle(editingArticle.id, {
+    updateArticlePD(editingArticle.id, {
       title: values.title,
       content: values.content,
       picture: values.image,
       status: values.status,
       categoryId: values.category,
       timeToRead: Number(values.duration),
-      type: "article",
+      type: type,
     })
       .then((res) => {
         toast.success(res.data.message);

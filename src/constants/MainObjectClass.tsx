@@ -12,7 +12,7 @@ export interface Admin {
   deletedAt: string | null;
 }
 
-export interface Article {
+export interface ArticlePD {
   id: string;
   slug: string;
   title: string;
@@ -49,6 +49,23 @@ export interface Voucher {
   type: string;
   updatedAt: string;
   updatedBy: string;
+}
+
+export interface VoucherDoula{
+  id: string,
+  doulaId: string,
+  voucherId: string,
+  status: string,
+  createdAt: string,
+  updatedAt: string,
+  doulaUser: {
+    fullName: string,
+    id: string,
+    firstName: string,
+    middleName: string | null,
+    lastName: string,
+    picture: string | null
+  }
 }
 
 export interface Category {

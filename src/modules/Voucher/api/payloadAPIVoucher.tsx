@@ -23,3 +23,12 @@ export interface VoucherPayload {
     f_type?: "fixed" | "percent";
   }
 
+  export interface ListDoulaVoucherParams{
+    f_doulaId?: string;
+    f_voucherId?: string;
+    page?: number;
+    limit?: number;
+    offset?: number;
+    sort?: string;
+    search?: string;
+  }

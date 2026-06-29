@@ -17,9 +17,6 @@ export const getAllCategories =  (params?: GetCategoriesParams) =>
   axiosInstance.get("/categories",{params});
 
 // ─── Doula Package ───────────────────────────────────────────────────────────────────
-export const getDoulaVouchers = () => axiosInstance.get("/doula-vouchers");
-
-// ─── Doula Package ───────────────────────────────────────────────────────────────────
 export const getPackageList = () =>
   axiosInstance.get(
     "/doula-packages?f_doulaId=0300bc8f-2d85-4dda-92fe-cc522647789d&page=1&limit=25",

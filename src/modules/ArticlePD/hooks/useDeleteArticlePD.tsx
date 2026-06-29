@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { deleteMultipleArticles } from "../api/apiArticle";
-import type { Article } from "../../../constants/MainObjectClass";
+import { deleteMultipleArticlePD } from "../api/apiArticlePD";
+import type { ArticlePD } from "../../../constants/MainObjectClass";
 
-export function useDeleteArticle(onSuccess?: () => void) {
+export function useDeleteArticlePD(onSuccess?: () => void) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deletingArticle, setDeletingArticle] = useState<Article | null>(null);
+  const [deletingArticle, setDeletingArticle] = useState<ArticlePD | null>(null);
 
-  const handleDeleteClick = (article: Article) => {
+  const handleDeleteClick = (article: ArticlePD) => {
     setDeletingArticle(article);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteConfirm = () => {
     if (!deletingArticle) return;
-    deleteMultipleArticles([deletingArticle.id])
+    deleteMultipleArticlePD([deletingArticle.id])
       .then((res) => {
         toast.success(res.data.message ?? "Deleted successfully.");
         setDeleteModalOpen(false);

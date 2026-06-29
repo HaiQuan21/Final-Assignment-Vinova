@@ -1,24 +1,18 @@
 import { useState } from "react";
 import type { SortingState, PaginationState } from "@tanstack/react-table";
-import { useGetArticles } from "./useGetArticle";
-import { useCreateArticle } from "./useCreateArticle";
-import { useEditArticle } from "./useEditArticle";
-import { useDeleteArticle } from "./useDeleteArticle";
+import { useGetArticlePD } from "./useGetArticlePD";
+import { useCreateArticlePD } from "./useCreateArticlePD";
+import { useEditArticlePD } from "./useEditArticlePD";
+import { useDeleteArticlePD } from "./useDeleteArticlePD";
 import { usePagination } from "../../../hooks/usePagination";
 
-export function useArticle() {
+export function useArticlePD(type:"article" | "pd") {
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(8);
-  const [refetchKey, setRefetchKey] = useState(0);
-  const refetch = () => setRefetchKey((prev) => prev + 1);
 
-  const { data, totalEntries, isLoading } = useGetArticles({
-    pagination,
-    sorting,
-    refetchKey,
-  });
+  const { data, totalEntries, isLoading,fetchArticlePD  } = useGetArticlePD({ pagination, sorting, type });
 
-  const { handleCreate, isSubmitting: isCreating } = useCreateArticle(refetch);
+  const { handleCreate, isSubmitting: isCreating } = useCreateArticlePD(type,fetchArticlePD);
 
   const {
     editOpen,
@@ -28,7 +22,7 @@ export function useArticle() {
     handleEditClick,
     handleEditSubmit,
     handleEditClose,
-  } = useEditArticle(refetch);
+  } = useEditArticlePD(type,fetchArticlePD);
 
   const {
     deleteModalOpen,
@@ -36,7 +30,7 @@ export function useArticle() {
     handleDeleteClick,
     handleDeleteConfirm,
     handleDeleteCancel,
-  } = useDeleteArticle(refetch);
+  } = useDeleteArticlePD(fetchArticlePD);
 
   return {
     // Data

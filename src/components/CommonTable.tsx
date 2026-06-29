@@ -122,12 +122,12 @@ function CommonTable<T>({
         style={{ height: `${CONTAINER_HEIGHT}px` }}
       >
         <table className="w-full min-w-max border-collapse text-left text-sm">
-          {/* Header sticky để không bị cuộn khi scroll dọc */}
+          {/* Header sticky có thể cuộn xuống khi scroll dọc */}
           <thead className="sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="border-b border-gray-200 bg-white"
+                className=" border-b-black bg-[#F1F3F4] "
                 style={{ height: `${HEADER_HEIGHT}px` }}
               >
                 {headerGroup.headers.map((header) => {
@@ -146,7 +146,7 @@ function CommonTable<T>({
                       }
                       className={`whitespace-nowrap px-5 py-4 font-semibold text-gray-700
                         ${canSort ? "cursor-pointer select-none" : ""}
-                        ${isAction ? "sticky right-0 bg-white shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)]" : ""}
+                        ${isAction ? "sticky right-0 bg-[#F1F3F4] shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)]" : ""}
                       `}
                     >
                       <div className="flex items-center gap-1.5">
@@ -180,12 +180,12 @@ function CommonTable<T>({
                   key={`skeleton-${index}`}
                   style={{ height: `${ROW_HEIGHT}px` }}
                   className={`border-b border-gray-100 ${
-                    index % 2 === 1 ? "bg-gray-50" : "bg-white"
+                    index % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white"
                   }`}
                 >
                   {allColumns.map((col) => (
                     <td key={col.id} style={{ width: col.getSize() }}>
-                      <div className="h-4 animate-pulse rounded bg-gray-200" style={{width: `${60 + ((allColumns.indexOf(col) * 17) % 25)}%`}} />
+                      <div className="h-4 animate-pulse rounded bg-[#F1F3F4]" style={{width: `${60 + ((allColumns.indexOf(col) * 17) % 25)}%`}} />
                     </td>
                   ))}
                 </tr>
@@ -208,7 +208,7 @@ function CommonTable<T>({
                     key={`empty-${index}`}
                     style={{ height: `${ROW_HEIGHT}px` }}
                     className={`border-b border-gray-100 last:border-0 ${
-                      (index + 1) % 2 === 1 ? "bg-gray-50" : "bg-white"
+                      (index + 1) % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white"
                     }`}
                   >
                     <td colSpan={columns.length} />
@@ -225,7 +225,7 @@ function CommonTable<T>({
                       row.getIsSelected()
                         ? "bg-purple-50"
                         : index % 2 === 1
-                          ? "bg-gray-50"
+                          ? "bg-[#F1F3F4]"
                           : "bg-white"
                     }`}
                   >
@@ -241,7 +241,7 @@ function CommonTable<T>({
                                   row.getIsSelected()
                                     ? "bg-purple-50"
                                     : index % 2 === 1
-                                      ? "bg-gray-50"
+                                      ? "bg-[#F1F3F4]"
                                       : "bg-white"
                                 }`
                               : ""
@@ -265,7 +265,7 @@ function CommonTable<T>({
                       key={`filler-${index}`}
                       style={{ height: `${ROW_HEIGHT}px` }}
                       className={`border-b border-gray-100 last:border-0 ${
-                        rowIndex % 2 === 1 ? "bg-gray-50" : "bg-white"
+                        rowIndex % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white"
                       }`}
                     >
                       {columns.map((col, colIdx) => {
@@ -278,7 +278,7 @@ function CommonTable<T>({
                               isAction
                                 ? `sticky right-0 shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)] ${
                                     rowIndex % 2 === 1
-                                      ? "bg-gray-50"
+                                      ? "bg-[#F1F3F4]"
                                       : "bg-white"
                                   }`
                                 : ""

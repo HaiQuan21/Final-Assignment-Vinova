@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { createArticles } from "../api/apiArticle";
-import type { ArticleFormValues } from "../articleFormProps";
+import { createArticlePD } from "../api/apiArticlePD";
+import type { ArticlePDFormValues } from "../articlepdFormProps";
 
-export function useCreateArticle(onSuccess?: () => void) {
+export function useCreateArticlePD(type: "article" | "pd",onSuccess?: () => void) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleCreate = (values: ArticleFormValues) => {
+  const handleCreate = (values: ArticlePDFormValues) => {
     setIsSubmitting(true);
-    createArticles({
+    createArticlePD({
       title: values.title,
       content: values.content,
       picture: values.image,
@@ -16,7 +16,7 @@ export function useCreateArticle(onSuccess?: () => void) {
       author: values.author,
       categoryId: values.category,
       timeToRead: Number(values.duration),
-      type: "article",
+      type: type,
     })
       .then((res) => {
         toast.success(res.data.message);

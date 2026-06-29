@@ -10,7 +10,7 @@ import {
   HiOutlineSearchCircle,
 } from "react-icons/hi";
 import type { IconType } from "react-icons";
-export type FormType = "article" | "voucher";
+export type FormType = "article" | "voucher" | "pd";
 
 export interface NavItem {
   label: string;
@@ -31,7 +31,11 @@ export const navItems: NavItem[] = [
     icon: HiOutlineChatAlt2,
     formType: "article",
   },
-  { label: "PD Session", path: "/pd-session", icon: HiOutlineCalculator },
+  { label: "PD Session", 
+    path: "/pd-session", 
+    icon: HiOutlineCalculator, 
+    formType: "pd" 
+  },
   { label: "Category", path: "/category", icon: HiOutlineViewGrid },
   { label: "Subscriptions", path: "/subscriptions", icon: HiOutlineCube },
   {

@@ -2,17 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import Form from "../../components/Form";
 
-import { type ArticleFormValues,initialValues,articleFields } from "./articleFormProps";
+import { type ArticlePDFormValues,initialValues,articlepdFields } from "./articlepdFormProps";
 import { articleSchema } from "../../schemas/articleSchema";
 import { getAllCategories } from "../../api/apiService";
 
 interface ArticleFormProps {
-  onSubmit: (values: ArticleFormValues) => void;
+  onSubmit: (values: ArticlePDFormValues) => void;
   isSubmitting?: boolean;
-  defaultValues?: ArticleFormValues; // có → Edit mode, không có → Create mode
+  defaultValues?: ArticlePDFormValues; // có → Edit mode, không có → Create mode
 }
 
-function ArticleForm({
+function ArticleFormPD({
   onSubmit,
   isSubmitting = false,
   defaultValues,
@@ -42,7 +42,7 @@ function ArticleForm({
   }, []);
 
   const reBuildArticleFields = useMemo(
-    () => articleFields(categoryOptions),
+    () => articlepdFields(categoryOptions),
     [categoryOptions]
   );
 
@@ -63,4 +63,4 @@ function ArticleForm({
   );
 }
 
-export default ArticleForm;
+export default ArticleFormPD;

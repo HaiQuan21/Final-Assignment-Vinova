@@ -1,5 +1,5 @@
 // ─── Articles ─────────────────────────────────────────────────────────────────
-export interface CreateArticlePayload {
+export interface CreateArticlePDPayload {
     title: string;
     content: string;
     picture: string;
@@ -10,7 +10,7 @@ export interface CreateArticlePayload {
     author: string;
   }
   
-  export interface UpdateArticlePayload {
+  export interface UpdateArticlePDPayload {
     title: string;
     content: string;
     picture: string;
@@ -20,7 +20,7 @@ export interface CreateArticlePayload {
     categoryId: string;
   }
 
-  export interface GetArticlesParams{
+  export interface GetArticlesPDParams{
     page?: number;
     limit?: number;
     offset?: number;

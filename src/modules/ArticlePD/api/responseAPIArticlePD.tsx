@@ -1,12 +1,12 @@
-import { type Article } from "../../../constants/MainObjectClass";
-export interface CreateArticleResponse{
+import { type ArticlePD } from "../../../constants/MainObjectClass";
+export interface CreateArticlePDResponse{
     message: string;
-    data: Article
+    data: ArticlePD
 }
 
-export interface GetAllArticleResponse{
+export interface GetAllArticlePDResponse{
   message: string;
-  data: [Article],
+  data: [ArticlePD],
   metadata:{
     page: number,
     limit: number,
@@ -16,7 +16,7 @@ export interface GetAllArticleResponse{
   }
 }
 
-export interface GetArticleById{
+export interface GetArticlePDById{
   message: string,
   data: {
     id: string,

@@ -20,13 +20,11 @@ export default function App() {
 
   const Account = lazy(()=>import("./modules/Account/Account"));
 
-  const Article = lazy(()=>import("./modules/Article/ArticleTable"));
+  const ArticlePD = lazy(()=>import("./modules/ArticlePD/ArticlePDTable"));
 
   const Category = lazy(()=>import("./modules/Category/Category"));
 
   const HelpDocuments = lazy(()=>import("./modules/HelpDocuments/HelpDocuments"));
-
-  const PDSession = lazy(()=>import("./modules/PDSession/PDSession"));
 
   const SearchSetting = lazy(()=>import("./modules/SearchSetting/SearchSettings"));
 
@@ -36,6 +34,8 @@ export default function App() {
 
   const Voucher = lazy(()=>import("./modules/Voucher/VoucherTable"));
   
+  const VoucherDetail = lazy(() => import("./modules/Voucher/VoucherDetail"));
+
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
@@ -52,14 +52,16 @@ export default function App() {
           <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
               <Route path="/account" element={<Account />} />
-              <Route path="/articles" element={<Article />} />
+              <Route path="/articles" element={<ArticlePD key="article" type="article" />} />
               <Route path="/category" element={<Category />} />
               <Route path="/help-documents" element={<HelpDocuments />} />
-              <Route path="/pd-session" element={<PDSession />} />
+              <Route path="/pd-session" element={<ArticlePD key="pd" type="pd" />} />
               <Route path="/search-settings" element={<SearchSetting />} />
               <Route path="/static-content" element={<StaticContent />} />
               <Route path="/subscriptions" element={<Subscriptions />} />
+
               <Route path="/vouchers" element={<Voucher />} />
+              <Route path="/vouchers/:id" element={<VoucherDetail />} />
             </Route>
           </Route>
 

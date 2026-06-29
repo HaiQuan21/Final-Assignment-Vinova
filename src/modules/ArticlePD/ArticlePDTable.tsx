@@ -5,19 +5,23 @@ import StatusBadge from "../../components/StatusBadge";
 import ActionButtons from "../../components/ActionButtons";
 import SlideOver from "../../components/SlideOver";
 import ConfirmModal from "../../components/ConfirmModal";
-import ArticleForm from "./ArticleForm";
-import { useArticle } from "./hooks/useArticle";
-import type { Article } from "../../constants/MainObjectClass";
+import ArticlePDForm from "./ArticlePDForm";
+import { useArticlePD } from "./hooks/useArticlePD";
+import type { ArticlePD } from "../../constants/MainObjectClass";
 
-function ArticleTable() {
+interface ArticlePDProps {
+  type: "article" | "pd";
+}
+
+function ArticlePDTable({type}:ArticlePDProps) {
   const {
     data, totalEntries, isLoading,
     sorting, setSorting, pagination, setPagination,
     editOpen, editingArticle, isEditing, toFormValues, handleEditClick, handleEditSubmit, handleEditClose,
     deleteModalOpen, deletingArticle, handleDeleteClick, handleDeleteConfirm, handleDeleteCancel,
-  } = useArticle();
+  } = useArticlePD(type);
 
-  const columns = useMemo<ColumnDef<Article>[]>(
+  const columns = useMemo<ColumnDef<ArticlePD>[]>(
     () => [
       {
         accessorKey: "id",
@@ -73,7 +77,7 @@ function ArticleTable() {
 
       <SlideOver isOpen={editOpen} onClose={handleEditClose} title="Edit Article">
         {editingArticle && (
-          <ArticleForm
+          <ArticlePDForm
             onSubmit={handleEditSubmit}
             isSubmitting={isEditing}
             defaultValues={toFormValues(editingArticle)}
@@ -83,7 +87,7 @@ function ArticleTable() {
 
       <ConfirmModal
         isOpen={deleteModalOpen}
-        title="Delete Article?"
+        title={`Delete ${type==="article" ? "Article" : "PD Session"}?`}
         message={`Are you sure you want to delete "${deletingArticle?.title}"?`}
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
@@ -92,4 +96,4 @@ function ArticleTable() {
   );
 }
 
-export default ArticleTable;
+export default ArticlePDTable;

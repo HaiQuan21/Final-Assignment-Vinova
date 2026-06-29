@@ -7,16 +7,13 @@ import { usePagination } from "../../../hooks/usePagination";
 export function useVoucher() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(25);
-  const [refetchKey, setRefetchKey] = useState(0);
-  const refetch = () => setRefetchKey((prev) => prev + 1);
 
-  const { data, totalEntries, isLoading } = useGetVouchers({
+  const { data, totalEntries, isLoading,fetchVoucher } = useGetVouchers({
     pagination,
     sorting,
-    refetchKey,
   });
 
-  const { handleCreate, isSubmitting: isCreating } = useCreateVoucher(refetch);
+  const { handleCreate, isSubmitting: isCreating } = useCreateVoucher(fetchVoucher);
 
   return {
     // Data
