@@ -18,9 +18,6 @@ import {
 } from "react-icons/hi";
 import { getPaginationRange } from "../lib/pagination";
 
-const FIXED_ROW_COUNT = 8;
-const ROW_HEIGHT = 72; // px — dùng số để tính height container
-
 interface CommonTableProps<T> {
   data: T[];
   columns: ColumnDef<T, any>[];
@@ -37,7 +34,9 @@ interface CommonTableProps<T> {
   pageSizeOptions?: number[];
   rowSelection?: RowSelectionState;
   onRowSelectionChange?: (selection: RowSelectionState) => void;
+  FIXED_ROW_COUNT
 }
+
 
 function CommonTable<T>({
   data,
@@ -54,6 +53,7 @@ function CommonTable<T>({
   pageSizeOptions,
   rowSelection = {},
   onRowSelectionChange,
+  FIXED_ROW_COUNT
 }: CommonTableProps<T>) {
   const resolvedTotalEntries = manualPagination
     ? (totalEntries ?? 0)
@@ -62,6 +62,8 @@ function CommonTable<T>({
     1,
     Math.ceil(resolvedTotalEntries / pagination.pageSize),
   );
+
+  const ROW_HEIGHT = 72; // px — dùng số để tính height container
 
   const table = useReactTable({
     data,
@@ -121,7 +123,7 @@ function CommonTable<T>({
         className="w-full overflow-x-auto rounded-lg border border-gray-200"
         style={{ height: `${CONTAINER_HEIGHT}px` }}
       >
-        <table className="w-full min-w-max border-collapse text-left text-sm">
+        <table className="w-full border-collapse text-left text-sm" style={{ tableLayout: "auto" }}>
           {/* Header sticky có thể cuộn xuống khi scroll dọc */}
           <thead className="sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (

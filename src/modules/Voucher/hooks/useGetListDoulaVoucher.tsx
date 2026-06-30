@@ -23,6 +23,7 @@ export function useGetListDoulaVoucher({
   
     const [searchParams] = useSearchParams();
     const search = searchParams.get("search") ?? "";
+
     const fetchListDoulaVoucherDetail = () => {
       setIsLoading(true);
       getListDoulaVoucher({

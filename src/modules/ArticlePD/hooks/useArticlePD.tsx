@@ -6,13 +6,20 @@ import { useEditArticlePD } from "./useEditArticlePD";
 import { useDeleteArticlePD } from "./useDeleteArticlePD";
 import { usePagination } from "../../../hooks/usePagination";
 
-export function useArticlePD(type:"article" | "pd") {
+export function useArticlePD(type: "article" | "pd") {
   const [sorting, setSorting] = useState<SortingState>([]);
   const { pagination, setPagination } = usePagination(8);
 
-  const { data, totalEntries, isLoading,fetchArticlePD  } = useGetArticlePD({ pagination, sorting, type });
+  const { data, totalEntries, isLoading, fetchArticlePD } = useGetArticlePD({
+    pagination,
+    sorting,
+    type,
+  });
 
-  const { handleCreate, isSubmitting: isCreating } = useCreateArticlePD(type,fetchArticlePD);
+  const { handleCreate, isSubmitting: isCreating } = useCreateArticlePD(
+    type,
+    fetchArticlePD,
+  );
 
   const {
     editOpen,
@@ -22,7 +29,7 @@ export function useArticlePD(type:"article" | "pd") {
     handleEditClick,
     handleEditSubmit,
     handleEditClose,
-  } = useEditArticlePD(type,fetchArticlePD);
+  } = useEditArticlePD(type, fetchArticlePD);
 
   const {
     deleteModalOpen,

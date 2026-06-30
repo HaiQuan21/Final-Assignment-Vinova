@@ -73,6 +73,7 @@ function ArticlePDTable({type}:ArticlePDProps) {
         totalEntries={totalEntries}
         pageSizeOptions={[8, 25, 50, 100]}
         isLoading={isLoading}
+        FIXED_ROW_COUNT={8}
       />
 
       <SlideOver isOpen={editOpen} onClose={handleEditClose} title="Edit Article">

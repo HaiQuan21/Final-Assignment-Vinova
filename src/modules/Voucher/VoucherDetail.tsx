@@ -1,95 +1,49 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { HiArrowLeft } from "react-icons/hi";
-import { toast } from "react-toastify";
-import type { ColumnDef, SortingState } from "@tanstack/react-table";
-import { getListDoulaVoucher, getVouchersByCode, getVouchersById } from "./api/apiVoucher";
-import type { Voucher } from "../../constants/MainObjectClass";
+import type { ColumnDef } from "@tanstack/react-table";
 import CommonTable from "../../components/CommonTable";
-import { usePagination } from "../../hooks/usePagination";
+import { useVoucherDetail } from "./hooks/useVoucherDetail";
+import type { VoucherDoula } from "../../constants/MainObjectClass";
 
 // Interface cho usage history item
 interface VoucherUsage {
   id: string;
-  userName: string;
-  usedAt: string;
+  fullName: string;
+  updatedAt: string;
 }
 
 function VoucherDetail() {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [voucher, setVoucher] = useState<Voucher | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const { pagination, setPagination } = usePagination(8);
+  const {
+    vouchersDetail,
+    isVoucherDetailLoading,
+    doulaVouchersDetail,
+    pagination,
+    setPagination,
+    setSorting,
+    sorting,
+  } = useVoucherDetail();
 
-  // useEffect(() => {
-  //   if (!id) return;
-  //   setIsLoading(true);
-  //   getVouchersById(id)
-  //     .then(({ data: res }) => {
-  //       setVoucher(res.data);
-  //       console.log("Data voucher Id được trả về",res)
-  //     })
-  //     .catch((err) => {
-  //       toast.error(err?.response?.data?.message ?? "Failed to load voucher.");
-  //       navigate("/vouchers");
-  //     })
-  //     .finally(() => setIsLoading(false));
+  const usageData: VoucherDoula[] = doulaVouchersDetail ?? [];
 
-  // }, [id]);
 
-  // useEffect(() => {
-  //   if (!id) return;
-  //   setIsLoading(true);
-  //   getListDoulaVoucher({
-  //     f_voucherId: id;
-  //     page: pagination.pageIndex + 1,
-  //     limit: pagination.pageSize,
-  //     offset: pagination.pageIndex * pagination.pageSize,
-  //     search: search || undefined,
-  //     sort: 
-  //       sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
-  //   })
-  //     .then(({ data: res }) => {
-  //       setVoucher(res.data);
-  //       console.log("Data voucher Id được trả về",res)
-  //     })
-  //     .catch((err) => {
-  //       toast.error(err?.response?.data?.message ?? "Failed to load voucher.");
-  //       navigate("/vouchers");
-  //     })
-  //     .finally(() => setIsLoading(false));
-
-  // }, [id]);
-
-  // Usage history từ voucher data — tuỳ API trả về field gì
-  // const usageData: VoucherUsage[] = useMemo(
-  //   () => (voucher as any)?.usages ?? [],
-  //   [voucher]
-  // );
-
-  const usageData: VoucherUsage[] = (voucher as any)?.usages ?? [];
-
-  // const usageData = useMemo(() => {
-  //   return mockUsageData;
-  // }, []);
-
-  const usageColumns = useMemo<ColumnDef<VoucherUsage>[]>(
+  const usageColumns = useMemo<ColumnDef<VoucherDoula>[]>(
     () => [
       {
-        accessorKey: "userName",
+        accessorKey: "fullName",
         header: "Take by",
-        size: 500,
-        cell: (info) => (
-          <span>{info.getValue<string>() || "-"}</span>
+        size: 300,
+        cell: ({ row }) => (
+          <span>{row.original.doulaUser?.fullName || "-"}</span> 
         ),
       },
+
       {
-        accessorKey: "usedAt",
+        accessorKey: "updatedAt",
         header: "Date",
-        size: 500,
+        size: 200,
         cell: (info) => {
           const raw = info.getValue<string>();
           if (!raw) return "-";
@@ -97,7 +51,7 @@ function VoucherDetail() {
         },
       },
     ],
-    []
+    [],
   );
 
   const formatDate = (dateStr?: string) => {
@@ -105,9 +59,11 @@ function VoucherDetail() {
     return new Date(dateStr).toLocaleDateString("en-GB");
   };
 
-  const formatAmount = (amount?: string , type?: string) => {
+  const formatAmount = (amount?: string, type?: string) => {
     if (amount === undefined) return "-";
-    return type === "percentage" ? `%${amount}` : `$${Number(amount).toFixed(2)}`;
+    return type === "percentage"
+      ? `%${amount}`
+      : `$${Number(amount).toFixed(2)}`;
   };
 
   const formatMoney = (value?: string) => {
@@ -115,7 +71,7 @@ function VoucherDetail() {
     return `${Number(value).toFixed(2)}`;
   };
 
-  if (isLoading) {
+  if (isVoucherDetailLoading) {
     return (
       <div className="flex h-64 items-center justify-center text-gray-400">
         Loading...
@@ -123,10 +79,10 @@ function VoucherDetail() {
     );
   }
 
-  if (!voucher) return null;
+  if (!vouchersDetail) return null;
 
   return (
-    <div className="p-6">
+    <div className="w-full overflow-hidden p-6">
       {/* Back button */}
       <button
         type="button"
@@ -147,46 +103,46 @@ function VoucherDetail() {
         <div className="mb-4 flex flex-wrap gap-20">
           <div>
             <p className="text-xs text-gray-500">Code</p>
-            <p className="font-semibold text-gray-900">{voucher.code}</p>
+            <p className="font-semibold text-gray-900">{vouchersDetail.code}</p>
           </div>
           <div>
             <p className="text-xs text-gray-500">Start Date</p>
             <p className="font-semibold text-gray-900">
-              {formatDate(voucher.startDate)}
+              {formatDate(vouchersDetail.startDate)}
             </p>
           </div>
           <div>
             <p className="text-xs text-gray-500">End Date</p>
             <p className="font-semibold text-gray-900">
-              {formatDate(voucher.endDate)}
+              {formatDate(vouchersDetail.endDate)}
             </p>
           </div>
           <div>
             <p className="text-xs text-gray-500">Number Of Use</p>
             <p className="font-semibold text-gray-900">
-              {(voucher as any).numOfUsed ?? 0}/{voucher.quantityUse}
+              {(vouchersDetail as any).numOfUsed ?? 0}/{vouchersDetail.quantityUse}
             </p>
           </div>
           <div>
             <p className="text-xs text-gray-500">Type of coupon</p>
-            <p className="font-semibold text-gray-900">{voucher.type}</p>
+            <p className="font-semibold text-gray-900">{vouchersDetail.type}</p>
           </div>
           <div>
             <p className="text-xs text-gray-500">Amount</p>
             <p className="font-semibold text-gray-900">
-              {formatAmount(voucher.amount, voucher.type)}
+              {formatAmount(vouchersDetail.amount, vouchersDetail.type)}
             </p>
           </div>
           <div>
             <p className="text-xs text-gray-500">Condition</p>
             <p className="font-semibold text-gray-900">
-              ${formatMoney(voucher.minPayAmount)}
+              ${formatMoney(vouchersDetail.minPayAmount)}
             </p>
           </div>
           <div>
             <p className="text-xs text-gray-500">Max Discount Amount</p>
             <p className="font-semibold text-gray-900">
-              ${formatMoney(voucher.maxDiscountAmount)}
+              ${formatMoney(vouchersDetail.maxDiscountAmount)}
             </p>
           </div>
         </div>
@@ -195,7 +151,7 @@ function VoucherDetail() {
         <div>
           <p className="text-xs text-gray-500">Description</p>
           <p className="font-semibold text-gray-900">
-            {voucher.description || "-"}
+            {vouchersDetail.description || "-"}
           </p>
         </div>
       </div>
@@ -206,10 +162,11 @@ function VoucherDetail() {
         columns={usageColumns}
         sorting={sorting}
         onSortingChange={setSorting}
-        pagination={pagination}
+        pagination={{ pageIndex: 0, pageSize: 5 }}
         onPaginationChange={setPagination}
         manualPagination={false}
         emptyMessage="No usage history"
+        FIXED_ROW_COUNT={5}
       />
     </div>
   );

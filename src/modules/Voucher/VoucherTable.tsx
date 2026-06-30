@@ -7,7 +7,6 @@ import { usePagination } from "../../hooks/usePagination";
 import { getVouchers } from "./api/apiVoucher";
 import { type Voucher } from "../../constants/MainObjectClass";
 import { useSearchParams } from "react-router-dom";
-import { size } from "zod";
 import { useNavigate } from "react-router-dom";
 
 function VoucherTable() {
@@ -101,6 +100,7 @@ function VoucherTable() {
         totalEntries={totalEntries}
         pageSizeOptions={[8, 25, 50, 100]}
         isLoading={isLoading}
+        FIXED_ROW_COUNT={8}
       />
     </div>
   );
