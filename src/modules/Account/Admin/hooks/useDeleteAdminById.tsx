@@ -1,26 +1,26 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { deleteMultipleArticlePD } from "../api/apiArticlePD";
-import type { ArticlePD } from "../../../constants/MainObjectClass";
+import { deleteAdminById } from "../api/apiAdmin";
+import type { AdminItem } from "../../../../constants/MainObjectClass";
 
-export function useDeleteArticlePD(onSuccess?: () => void) {
+export function useDeleteAdminById(onSuccess?: () => void) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deletingArticle, setDeletingArticle] = useState<ArticlePD | null>(null);
+  const [deletingAdmin, setDeletingAdmin] = useState<AdminItem | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleDeleteClick = (article: ArticlePD) => {
-    setDeletingArticle(article);
+  
+  const handleDeleteClick = (admin: AdminItem) => {
+    setDeletingAdmin(admin);
     setDeleteModalOpen(true);
   };
 
   const handleDeleteConfirm = () => {
-    if (!deletingArticle) return;
+    if (!deletingAdmin) return;
     setIsDeleting(true);
-    deleteMultipleArticlePD([deletingArticle.id])
+    deleteAdminById(deletingAdmin.id)
       .then((res) => {
         toast.success(res.data.message ?? "Deleted successfully.");
         setDeleteModalOpen(false);
-        setDeletingArticle(null);
+        setDeletingAdmin(null);
         onSuccess?.();
       })
       .catch((err) => {
@@ -30,15 +30,11 @@ export function useDeleteArticlePD(onSuccess?: () => void) {
 
   const handleDeleteCancel = () => {
     setDeleteModalOpen(false);
-    setDeletingArticle(null);
+    setDeletingAdmin(null);
   };
 
   return {
-    deleteModalOpen,
-    deletingArticle,
-    isDeleting,
-    handleDeleteClick,
-    handleDeleteConfirm,
-    handleDeleteCancel,
+    deleteModalOpen, deletingAdmin,isDeleting,
+    handleDeleteClick, handleDeleteConfirm, handleDeleteCancel,
   };
 }

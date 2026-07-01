@@ -10,7 +10,18 @@ import {
   HiOutlineSearchCircle,
 } from "react-icons/hi";
 import type { IconType } from "react-icons";
-export type FormType = "article" | "voucher" | "pd";
+export type FormType =
+  | "article"
+  | "voucher"
+  | "pd"
+  | "admin"
+  | "doula"
+  | "client"
+  | "category"
+  | "subscriptions"
+  | "help-documents"
+  | "search-settings"
+  | "static-content"
 
 export interface NavItem {
   label: string;
@@ -24,6 +35,7 @@ export const navItems: NavItem[] = [
     label: "Static Content",
     path: "/static-content",
     icon: HiOutlineDesktopComputer,
+    formType: "static-content",
   },
   {
     label: "Article",
@@ -31,13 +43,14 @@ export const navItems: NavItem[] = [
     icon: HiOutlineChatAlt2,
     formType: "article",
   },
-  { label: "PD Session", 
-    path: "/pd-session", 
-    icon: HiOutlineCalculator, 
-    formType: "pd" 
+  {
+    label: "PD Session",
+    path: "/pd-session",
+    icon: HiOutlineCalculator,
+    formType: "pd",
   },
-  { label: "Category", path: "/category", icon: HiOutlineViewGrid },
-  { label: "Subscriptions", path: "/subscriptions", icon: HiOutlineCube },
+  { label: "Category", path: "/category", icon: HiOutlineViewGrid, formType: "category" },
+  { label: "Subscriptions", path: "/subscriptions", icon: HiOutlineCube, formType: "subscriptions" },
   {
     label: "Voucher",
     path: "/vouchers",
@@ -48,16 +61,28 @@ export const navItems: NavItem[] = [
     label: "Help Documents",
     path: "/help-documents",
     icon: HiOutlineDocumentText,
+    formType: "help-documents",
   },
   {
     label: "Search Settings",
     path: "/search-settings",
     icon: HiOutlineSearchCircle,
+    formType: "search-settings",
   },
 ];
 
-export const accountItem: NavItem = {
-  label: "Account",
-  path: "/account",
-  icon: HiOutlineUserGroup,
-};
+export interface SubNavItem {
+  label: string;
+  path: string;
+  formType?: FormType;
+}
+
+export const accountSubItems: SubNavItem[] = [
+  {
+    label: "Admin Management",
+    path: "/account/admin",
+    formType: "admin",
+  },
+  { label: "Doula Management", path: "/account/doula", formType:"doula" },
+  { label: "Client Management", path: "/account/client",formType:"client" },
+];

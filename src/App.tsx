@@ -18,8 +18,6 @@ export default function App() {
 
   const NotFound = lazy(()=> import("./pages/NotFoundPage"))
 
-  const Account = lazy(()=>import("./modules/Account/Account"));
-
   const ArticlePD = lazy(()=>import("./modules/ArticlePD/ArticlePDTable"));
 
   const Category = lazy(()=>import("./modules/Category/Category"));
@@ -36,6 +34,11 @@ export default function App() {
   
   const VoucherDetail = lazy(() => import("./modules/Voucher/VoucherDetail"));
 
+  const AdminAccount = lazy(() => import("./modules/Account/Admin/AdminTable"));
+
+  const DoulaAccount = lazy(() => import("./modules/Account/Doula/doulaAccount"));
+
+  const ClientAccount = lazy(() => import("./modules/Account/Client/clientAccount"));
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
@@ -51,7 +54,9 @@ export default function App() {
 
           <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
-              <Route path="/account" element={<Account />} />
+              <Route path="/account/admin" element={<AdminAccount />} />
+              <Route path="/account/doula" element={<DoulaAccount />} />
+              <Route path="/account/client" element={<ClientAccount />} />
               <Route path="/articles" element={<ArticlePD key="article" type="article" />} />
               <Route path="/category" element={<Category />} />
               <Route path="/help-documents" element={<HelpDocuments />} />

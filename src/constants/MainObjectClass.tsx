@@ -78,3 +78,16 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface AdminItem {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  status: string;
+  email: string;
+  picture: string;
+  createdAt: string;
+  updatedAt: string;
+}

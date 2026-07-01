@@ -4,10 +4,12 @@ import { updateArticlePD } from "../api/apiArticlePD";
 import type { ArticlePD } from "../../../constants/MainObjectClass";
 import type { ArticlePDFormValues } from "../articlepdFormProps";
 import { DEFAULT_IMAGE_URL } from "../articlepdFormProps";
+import { getArticlePDById } from "../api/apiArticlePD";
 
 export function useEditArticlePD(type:"article" | "pd",onSuccess?: () => void) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [editingArticle, setEditingArticle] = useState<ArticlePD | null>(null);
 
   const toFormValues = (article: ArticlePD): ArticlePDFormValues => ({
@@ -21,7 +23,17 @@ export function useEditArticlePD(type:"article" | "pd",onSuccess?: () => void) {
   });
 
   const handleEditClick = (article: ArticlePD) => {
-    setEditingArticle(article);
+    setIsFetching(true);
+    setEditOpen(true);
+    getArticlePDById(article.id)
+      .then(({ data: res }) => {
+        setEditingArticle(res.data);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message ?? "Failed to load article data.");
+        setEditOpen(false);
+      })
+      .finally(() => setIsFetching(false));
     setEditOpen(true);
   };
 
@@ -62,5 +74,6 @@ export function useEditArticlePD(type:"article" | "pd",onSuccess?: () => void) {
     handleEditClick,
     handleEditSubmit,
     handleEditClose,
+    isFetching
   };
 }

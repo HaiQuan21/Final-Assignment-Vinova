@@ -101,6 +101,7 @@ function VoucherTable() {
         pageSizeOptions={[8, 25, 50, 100]}
         isLoading={isLoading}
         FIXED_ROW_COUNT={8}
+        emptyMessage="No vouchers found"
       />
     </div>
   );

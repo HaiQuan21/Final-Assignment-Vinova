@@ -3,10 +3,12 @@ import { FaSearch } from "react-icons/fa";
 import SlideOver from "./SlideOver";
 import ArticlePDForm from "../modules/ArticlePD/ArticlePDForm";
 import CreateVoucherForm from "../modules/Voucher/CreateVoucherForm";
+import AdminForm from "../modules/Account/Admin/AdminForm";
 import type { ToolbarProps } from "../constants/formTypes";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { useCreateArticlePD } from "../modules/ArticlePD/hooks/useCreateArticlePD";
 import { useCreateVoucher } from "../modules/Voucher/hooks/useCreateVoucher";
+import { useCreateAdmin } from "../modules/Account/Admin/hooks/useCreateAdmin";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
   const {pathname} = useLocation();
@@ -53,7 +55,12 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
   //Create PD
   const { handleCreate: handleCreatePD, isSubmitting: isCreatingPD } =
   useCreateArticlePD("pd",() => setIsOpen(false));
-
+  //Create Admin
+  const { handleCreate: handleCreateAdmin, isSubmitting: isCreatingAdmin } =
+  useCreateAdmin(() => {
+    setIsOpen(false);
+  });
+  //Create Voucher
   const { handleCreate: handleCreateVoucher, isSubmitting: isCreatingVoucher } =
     useCreateVoucher(() => setIsOpen(false));
 
@@ -69,6 +76,9 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
         break;
       case "pd":
         return <ArticlePDForm onSubmit={handleCreatePD} isSubmitting={isSubmitting} />;
+        break;
+      case "admin":
+        return <AdminForm onSubmit={handleCreateAdmin} isSubmitting={isSubmitting} />;
         break;
       default:
         return <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>;

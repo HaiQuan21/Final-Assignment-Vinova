@@ -1,12 +1,12 @@
 import { Outlet, useLocation,useParams  } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Toolbar from "../components/Toolbar";
-import { navItems, accountItem } from "../constants/navigation";
+import { navItems,accountSubItems } from "../constants/navigation";
 
 function MainLayout() {
   const { pathname } = useLocation();
 
-  const allItems = [...navItems, accountItem];
+  const allItems = [...navItems, ...accountSubItems];
   const currentItem = allItems.find((item) => pathname.startsWith(item.path));
   const title = currentItem?.label ?? "None";
 

@@ -29,6 +29,7 @@ export function useArticlePD(type: "article" | "pd") {
     handleEditClick,
     handleEditSubmit,
     handleEditClose,
+    isFetching,
   } = useEditArticlePD(type, fetchArticlePD);
 
   const {
@@ -37,6 +38,7 @@ export function useArticlePD(type: "article" | "pd") {
     handleDeleteClick,
     handleDeleteConfirm,
     handleDeleteCancel,
+    isDeleting,
   } = useDeleteArticlePD(fetchArticlePD);
 
   return {
@@ -66,5 +68,6 @@ export function useArticlePD(type: "article" | "pd") {
     handleDeleteClick,
     handleDeleteConfirm,
     handleDeleteCancel,
+    isDeleting
   };
 }

@@ -51,8 +51,8 @@ function CommonTable<T>({
   manualPagination = true,
   totalEntries,
   pageSizeOptions,
-  rowSelection = {},
-  onRowSelectionChange,
+  // rowSelection = {},
+  // onRowSelectionChange,
   FIXED_ROW_COUNT
 }: CommonTableProps<T>) {
   const resolvedTotalEntries = manualPagination
@@ -68,7 +68,7 @@ function CommonTable<T>({
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, pagination, rowSelection },
+    state: { sorting, pagination, /*rowSelection*/ },
     onSortingChange: (updater) => {
       const next = typeof updater === "function" ? updater(sorting) : updater;
       onSortingChange(next);
@@ -78,16 +78,16 @@ function CommonTable<T>({
         typeof updater === "function" ? updater(pagination) : updater;
       onPaginationChange(next);
     },
-    onRowSelectionChange: (updater) => {
-      const next =
-        typeof updater === "function" ? updater(rowSelection) : updater;
-      onRowSelectionChange?.(next);
-    },
+    // onRowSelectionChange: (updater) => {
+    //   const next =
+    //     typeof updater === "function" ? updater(rowSelection) : updater;
+    //   onRowSelectionChange?.(next);
+    // },
     getCoreRowModel: getCoreRowModel(),
     manualSorting,
     manualPagination,
     pageCount,
-    enableRowSelection: !!onRowSelectionChange,
+    // enableRowSelection: !!onRowSelectionChange,
     ...(manualSorting ? {} : { getSortedRowModel: getSortedRowModel() }),
     ...(manualPagination
       ? {}
@@ -120,7 +120,7 @@ function CommonTable<T>({
     <div className="flex flex-col gap-2">
       {/* Container cố định chiều cao — scroll dọc bên trong, scroll ngang toàn bộ */}
       <div
-        className="w-full overflow-x-auto rounded-lg border border-gray-200"
+        className="w-full overflow-x-auto overflow-y-auto rounded-lg border border-gray-200"
         style={{ height: `${CONTAINER_HEIGHT}px` }}
       >
         <table className="w-full border-collapse text-left text-sm" style={{ tableLayout: "auto" }}>

@@ -4,6 +4,7 @@ interface ConfirmModalProps {
   title: string;
   message: string;
   confirmLabel?: string;
+  isDeleting?: boolean;
   cancelLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
@@ -17,6 +18,7 @@ function ConfirmModal({
   cancelLabel = "Cancel",
   onConfirm,
   onCancel,
+  isDeleting = false,
 }: ConfirmModalProps) {
   if (!isOpen) return null;
 
@@ -55,6 +57,7 @@ function ConfirmModal({
           <button
             type="button"
             onClick={onConfirm}
+            disabled={isDeleting}
             className="flex-1 rounded-xl bg-red-500 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
           >
             {confirmLabel}

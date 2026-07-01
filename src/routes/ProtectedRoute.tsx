@@ -9,7 +9,7 @@ function isAuthenticated() {
 
 export function PublicRoute() {
   return isAuthenticated() ? (
-    <Navigate to="/account" replace />
+    <Navigate to="/static-content" replace />
   ) : (
     <Outlet />
   );

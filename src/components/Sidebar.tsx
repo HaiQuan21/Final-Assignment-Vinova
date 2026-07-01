@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   HiMenu,
@@ -7,8 +7,8 @@ import {
   HiOutlineUserGroup,
   HiLogout,
 } from "react-icons/hi";
-import type { Admin } from "../api/apiService";
-import { navItems, accountItem } from "../constants/navigation";
+import type { Admin } from "../constants/MainObjectClass";
+import { navItems, accountSubItems } from "../constants/navigation"; // ← đổi accountItem thành accountSubItems
 
 function getCurrentUser(): Admin | null {
   try {
@@ -50,11 +50,7 @@ function Sidebar() {
     <aside className="flex h-screen w-[260px] shrink-0 flex-col bg-white shadow-sm">
       <div className="flex items-center justify-between bg-[#3A0099] px-5 py-4">
         <span className="text-lg font-bold text-white">NurtureWave</span>
-        <button
-          type="button"
-          className="text-white transition hover:opacity-80"
-          aria-label="Toggle menu"
-        >
+        <button type="button" className="text-white transition hover:opacity-80" aria-label="Toggle menu">
           <HiMenu className="h-6 w-6" />
         </button>
       </div>
@@ -79,6 +75,7 @@ function Sidebar() {
             </li>
           ))}
 
+          {/* Accounts với submenu nhiều mục */}
           <li>
             <button
               type="button"
@@ -96,20 +93,22 @@ function Sidebar() {
 
             {accountsOpen && (
               <ul className="mt-1 flex flex-col gap-1 pl-11">
-                <li>
-                  <NavLink
-                    to="/account"
-                    className={({ isActive }) =>
-                      `block rounded-lg px-3 py-2 text-sm transition ${
-                        isActive
-                          ? "font-medium text-[#3A0099]"
-                          : "text-gray-600 hover:bg-gray-100"
-                      }`
-                    }
-                  >
-                    Account
-                  </NavLink>
-                </li>
+                {accountSubItems.map(({ label, path }) => (
+                  <li key={path}>
+                    <NavLink
+                      to={path}
+                      className={({ isActive }) =>
+                        `block rounded-lg px-3 py-2 text-sm transition ${
+                          isActive
+                            ? "font-medium text-[#3A0099]"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`
+                      }
+                    >
+                      {label}
+                    </NavLink>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
@@ -140,7 +139,7 @@ function Sidebar() {
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full px-4 py-2.5 text-left text-sm font-medium text-gray-700 transition hover:bg-red-500 hover:text-white  flex items-center gap-2"
+              className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-gray-700 transition hover:bg-red-500 hover:text-white"
             >
               <HiLogout className="h-5 w-5 shrink-0" /> LogOut
             </button>
@@ -151,9 +150,7 @@ function Sidebar() {
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-400 text-sm font-semibold text-white">
             {avatarLetter}
           </div>
-          <span className="flex-1 truncate text-sm font-semibold text-gray-800">
-            {displayName}
-          </span>
+          <span className="flex-1 truncate text-sm font-semibold text-gray-800">{displayName}</span>
           <button
             type="button"
             onClick={() => setUserMenuOpen((prev) => !prev)}

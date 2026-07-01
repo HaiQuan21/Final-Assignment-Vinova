@@ -19,6 +19,7 @@ function ActionButtons({ onType,onAction, onDelete }: ActionButtonsProps) {
           >
           { onType === "article" && <CiEdit size={20}/> } 
           { onType === "voucher" && <HiOutlineEye size={20}/> }
+          { onType === "admin" && <CiEdit size={20} /> }
         </button>
       )}
       
