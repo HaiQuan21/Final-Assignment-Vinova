@@ -3,6 +3,7 @@ import type { SortingState } from "@tanstack/react-table";
 import { useGetVouchers } from "./useGetVoucher";
 import { useCreateVoucher } from "./useCreateVoucher";
 import { usePagination } from "../../../hooks/usePagination";
+import { usePatchCareStatus } from "./usePatchCareStatus";
 
 export function useVoucher() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -14,6 +15,15 @@ export function useVoucher() {
   });
 
   const { handleCreate, isSubmitting: isCreating } = useCreateVoucher(fetchVoucher);
+
+  const {
+    handleToggleCancel,
+    handleToggleClick,
+    handleToggleConfirm,
+    targetVoucher,
+    confirmOpen,
+    isPending,
+  } = usePatchCareStatus(fetchVoucher);
 
   return {
     // Data
@@ -28,5 +38,11 @@ export function useVoucher() {
     // Create
     handleCreate,
     isCreating,
+    //PatchCareStatus
+    handleToggleClick, handleToggleConfirm,
+    handleToggleCancel,
+    confirmOpen,
+    targetVoucher,
+    isPending,
   };
 }

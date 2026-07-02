@@ -4,7 +4,7 @@ import { type GetArticlesPDParams, type CreateArticlePDPayload,type UpdateArticl
 export const getAllArticlePD = (params?: GetArticlesPDParams) =>
     axiosInstance.get("/articles",{params});
   export const getArticlePDById = (id: string) =>
-    axiosInstance.get(`/articles/:${id}`);
+    axiosInstance.get(`/articles/${id}`);
   export const createArticlePD = (data: CreateArticlePDPayload) =>
     axiosInstance.post("/articles", data);
   export const updateArticlePD = (id: string, data: UpdateArticlePDPayload) =>

@@ -13,7 +13,7 @@ function MainLayout() {
   return (
     <div className="flex min-h-screen font-[Montserrat]">
       <Sidebar />
-      <main className="flex-1 overflow-auto bg-white">
+      <main className="flex-1 overflow-auto bg-[#F6F8FA]">
         <Toolbar title={title} formType={currentItem?.formType} />
         <Outlet />
       </main>

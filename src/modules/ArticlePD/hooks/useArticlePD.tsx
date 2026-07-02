@@ -62,6 +62,7 @@ export function useArticlePD(type: "article" | "pd") {
     handleEditClick,
     handleEditSubmit,
     handleEditClose,
+    isFetching,
     // Delete
     deleteModalOpen,
     deletingArticle,

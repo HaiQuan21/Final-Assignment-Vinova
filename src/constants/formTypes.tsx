@@ -44,13 +44,19 @@ interface ToggleFieldConfig extends BaseFieldConfig {
   options: { value: string; label: string }[];
 }
 
+interface ImageFieldConfig extends BaseFieldConfig {
+  type: "image";
+  placeholder?: string;
+}
+
 // Muốn thêm field mới sau này thì thêm 1 interface tương tự
 export type FieldConfig =
   | TextFieldConfig
   | SelectFieldConfig
   | TextAreaFieldConfig
   | DateFieldConfig
-  |ToggleFieldConfig;
+  |ToggleFieldConfig
+  |ImageFieldConfig;
 
 export type FormValues = Record<string, string>;
 export type FormErrors = Record<string, string | undefined>;

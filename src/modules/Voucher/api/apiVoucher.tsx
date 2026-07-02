@@ -1,5 +1,5 @@
 import axiosInstance from "../../../api/axiosInstance";
-import { type GetVouchersParams, type VoucherPayload, type ListDoulaVoucherParams } from "./payloadAPIVoucher";
+import { type GetVouchersParams, type VoucherPayload, type ListDoulaVoucherParams, type PatchCareStatusPayload } from "./payloadAPIVoucher";
 // ─── Vouchers ───────────────────────────────────────────────────────────────────
 
 export const getVouchers = (params?: GetVouchersParams) =>
@@ -12,3 +12,5 @@ export const getVouchers = (params?: GetVouchersParams) =>
    axiosInstance.post("/vouchers", data);
  export const getListDoulaVoucher = (params : ListDoulaVoucherParams) =>
   axiosInstance.get("/doula-vouchers",{params});
+ export const patchCareStatus = (id: string, data: PatchCareStatusPayload) =>
+  axiosInstance.put(`/vouchers/${id}`,data);

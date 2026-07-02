@@ -8,8 +8,8 @@ import ConfirmModal from "../../components/ConfirmModal";
 import ArticlePDForm from "./ArticlePDForm";
 import { useArticlePD } from "./hooks/useArticlePD";
 import type { ArticlePD } from "../../constants/MainObjectClass";
-import FormSkeleton from "../../../components/FormSkeleton";
-
+import FormSkeleton from "../../components/FormSkeleton";
+import { articlepdFields } from "./articlepdFormProps";
 interface ArticlePDProps {
   type: "article" | "pd";
 }

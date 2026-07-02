@@ -37,3 +37,25 @@ export interface CreateVoucherResponse{
       hasNextPage: boolean
     }
   }
+
+  export interface PatchCareStatusResponse{
+    message: string,
+    data: {
+      id: string,
+      code: string,
+      description: string,
+      startDate: string,
+      endDate: string,
+      status: string,
+      type: string,
+      amount: number,
+      minPayAmount: number,
+      maxDiscountAmount: number,
+      stripeCouponId: string | null,
+      createdBy: string,
+      updatedBy: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null
+    }
+  }

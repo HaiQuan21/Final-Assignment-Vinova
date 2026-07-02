@@ -30,13 +30,11 @@ interface CommonTableProps<T> {
   onPaginationChange: (pagination: PaginationState) => void;
   manualPagination?: boolean;
   totalEntries?: number;
-  // Hiện dropdown "n per page" — truyền mảng thì hiện, không truyền thì ẩn
   pageSizeOptions?: number[];
   rowSelection?: RowSelectionState;
   onRowSelectionChange?: (selection: RowSelectionState) => void;
-  FIXED_ROW_COUNT
+  FIXED_ROW_COUNT: number;
 }
-
 
 function CommonTable<T>({
   data,
@@ -51,9 +49,7 @@ function CommonTable<T>({
   manualPagination = true,
   totalEntries,
   pageSizeOptions,
-  // rowSelection = {},
-  // onRowSelectionChange,
-  FIXED_ROW_COUNT
+  FIXED_ROW_COUNT,
 }: CommonTableProps<T>) {
   const resolvedTotalEntries = manualPagination
     ? (totalEntries ?? 0)
@@ -63,12 +59,12 @@ function CommonTable<T>({
     Math.ceil(resolvedTotalEntries / pagination.pageSize),
   );
 
-  const ROW_HEIGHT = 72; // px — dùng số để tính height container
+  const ROW_HEIGHT = 72;
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, pagination, /*rowSelection*/ },
+    state: { sorting, pagination },
     onSortingChange: (updater) => {
       const next = typeof updater === "function" ? updater(sorting) : updater;
       onSortingChange(next);
@@ -78,16 +74,10 @@ function CommonTable<T>({
         typeof updater === "function" ? updater(pagination) : updater;
       onPaginationChange(next);
     },
-    // onRowSelectionChange: (updater) => {
-    //   const next =
-    //     typeof updater === "function" ? updater(rowSelection) : updater;
-    //   onRowSelectionChange?.(next);
-    // },
     getCoreRowModel: getCoreRowModel(),
     manualSorting,
     manualPagination,
     pageCount,
-    // enableRowSelection: !!onRowSelectionChange,
     ...(manualSorting ? {} : { getSortedRowModel: getSortedRowModel() }),
     ...(manualPagination
       ? {}
@@ -106,30 +96,35 @@ function CommonTable<T>({
   );
   const pageItems = getPaginationRange(currentPage, pageCount);
 
-  // Chiều cao cố định: header ~52px + 8 rows × 72px = 628px
   const HEADER_HEIGHT = 52;
   const TABLE_BODY_HEIGHT = FIXED_ROW_COUNT * ROW_HEIGHT;
   const CONTAINER_HEIGHT = HEADER_HEIGHT + TABLE_BODY_HEIGHT;
 
   const rows = table.getRowModel().rows;
   const fillerCount = Math.max(0, FIXED_ROW_COUNT - rows.length);
-
   const allColumns = table.getAllColumns();
 
+  const paginationButtonClass =
+    "flex h-8 w-8 items-center justify-center border border-gray-200 bg-white text-sm transition hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40";
+
+  const getRowBgClass = (index: number) =>
+    index % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white";
+
   return (
-    <div className="flex flex-col gap-2">
-      {/* Container cố định chiều cao — scroll dọc bên trong, scroll ngang toàn bộ */}
+    <div className="overflow-hidden border border-gray-200 bg-white">
       <div
-        className="w-full overflow-x-auto overflow-y-auto rounded-lg border border-gray-200"
+        className="w-full overflow-x-auto overflow-y-auto"
         style={{ height: `${CONTAINER_HEIGHT}px` }}
       >
-        <table className="w-full border-collapse text-left text-sm" style={{ tableLayout: "auto" }}>
-          {/* Header sticky có thể cuộn xuống khi scroll dọc */}
+        <table
+          className="w-full border-collapse text-left text-sm"
+          style={{ tableLayout: "auto" }}
+        >
           <thead className="sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className=" border-b-black bg-[#F1F3F4] "
+                className="bg-[#F1F3F4]"
                 style={{ height: `${HEADER_HEIGHT}px` }}
               >
                 {headerGroup.headers.map((header) => {
@@ -146,12 +141,14 @@ function CommonTable<T>({
                           ? header.column.getToggleSortingHandler()
                           : undefined
                       }
-                      className={`whitespace-nowrap px-5 py-4 font-semibold text-gray-700
+                      className={`whitespace-nowrap border-b border-r border-gray-200 px-5 py-4 font-semibold text-gray-700 last:border-r-0
                         ${canSort ? "cursor-pointer select-none" : ""}
-                        ${isAction ? "sticky right-0 bg-[#F1F3F4] shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)]" : ""}
+                        ${isAction ? "text-center" : ""}
                       `}
                     >
-                      <div className="flex items-center gap-1.5">
+                      <div
+                        className={`flex items-center gap-1.5 ${isAction ? "justify-center" : ""}`}
+                      >
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
@@ -181,13 +178,20 @@ function CommonTable<T>({
                 <tr
                   key={`skeleton-${index}`}
                   style={{ height: `${ROW_HEIGHT}px` }}
-                  className={`border-b border-gray-100 ${
-                    index % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white"
-                  }`}
+                  className={`border-b border-gray-200 ${getRowBgClass(index)}`}
                 >
                   {allColumns.map((col) => (
-                    <td key={col.id} style={{ width: col.getSize() }}>
-                      <div className="h-4 animate-pulse rounded bg-[#F1F3F4]" style={{width: `${60 + ((allColumns.indexOf(col) * 17) % 25)}%`}} />
+                    <td
+                      key={col.id}
+                      style={{ width: col.getSize() }}
+                      className="border-b border-r border-gray-200 px-5 py-4 last:border-r-0"
+                    >
+                      <div
+                        className="h-4 animate-pulse rounded bg-gray-100"
+                        style={{
+                          width: `${60 + ((allColumns.indexOf(col) * 17) % 25)}%`,
+                        }}
+                      />
                     </td>
                   ))}
                 </tr>
@@ -196,7 +200,7 @@ function CommonTable<T>({
               <>
                 <tr
                   style={{ height: `${ROW_HEIGHT}px` }}
-                  className="border-b border-gray-100 bg-white"
+                  className={`border-b border-gray-200 ${getRowBgClass(0)}`}
                 >
                   <td
                     colSpan={columns.length}
@@ -209,11 +213,14 @@ function CommonTable<T>({
                   <tr
                     key={`empty-${index}`}
                     style={{ height: `${ROW_HEIGHT}px` }}
-                    className={`border-b border-gray-100 last:border-0 ${
-                      (index + 1) % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white"
-                    }`}
+                    className={`border-b border-gray-200 last:border-0 ${getRowBgClass(index + 1)}`}
                   >
-                    <td colSpan={columns.length} />
+                    {columns.map((_, colIdx) => (
+                      <td
+                        key={colIdx}
+                        className="border-r border-gray-200 last:border-r-0"
+                      />
+                    ))}
                   </tr>
                 ))}
               </>
@@ -223,12 +230,8 @@ function CommonTable<T>({
                   <tr
                     key={row.id}
                     style={{ height: `${ROW_HEIGHT}px` }}
-                    className={`border-b border-gray-100 last:border-0 ${
-                      row.getIsSelected()
-                        ? "bg-purple-50"
-                        : index % 2 === 1
-                          ? "bg-[#F1F3F4]"
-                          : "bg-white"
+                    className={`border-b border-gray-200 last:border-0 ${
+                      row.getIsSelected() ? "bg-purple-50" : getRowBgClass(index)
                     }`}
                   >
                     {row.getVisibleCells().map((cell) => {
@@ -237,21 +240,22 @@ function CommonTable<T>({
                         <td
                           key={cell.id}
                           style={{ width: cell.column.getSize() }}
-                          className={`px-5 py-4 align-middle text-gray-700 ${
-                            isAction
-                              ? `sticky right-0 shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)] ${
-                                  row.getIsSelected()
-                                    ? "bg-purple-50"
-                                    : index % 2 === 1
-                                      ? "bg-[#F1F3F4]"
-                                      : "bg-white"
-                                }`
-                              : ""
+                          className={`border-r border-gray-200 px-5 py-4 align-middle text-gray-700 last:border-r-0 ${
+                            isAction ? "text-center" : ""
                           }`}
                         >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
+                          {isAction ? (
+                            <div className="flex items-center justify-center">
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </div>
+                          ) : (
+                            flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )
                           )}
                         </td>
                       );
@@ -259,36 +263,21 @@ function CommonTable<T>({
                   </tr>
                 ))}
 
-                {/* Filler rows giữ đủ 8 dòng */}
                 {Array.from({ length: fillerCount }).map((_, index) => {
                   const rowIndex = rows.length + index;
                   return (
-                    <tr
-                      key={`filler-${index}`}
-                      style={{ height: `${ROW_HEIGHT}px` }}
-                      className={`border-b border-gray-100 last:border-0 ${
-                        rowIndex % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white"
-                      }`}
-                    >
-                      {columns.map((col, colIdx) => {
-                        const isAction =
-                          "id" in col ? col.id === "action" : false;
-                        return (
-                          <td
-                            key={colIdx}
-                            className={
-                              isAction
-                                ? `sticky right-0 shadow-[-4px_0_6px_-1px_rgba(0,0,0,0.08)] ${
-                                    rowIndex % 2 === 1
-                                      ? "bg-[#F1F3F4]"
-                                      : "bg-white"
-                                  }`
-                                : ""
-                            }
-                          />
-                        );
-                      })}
-                    </tr>
+                  <tr
+                    key={`filler-${index}`}
+                    style={{ height: `${ROW_HEIGHT}px` }}
+                    className={`border-b border-gray-200 last:border-0 ${getRowBgClass(rowIndex)}`}
+                  >
+                    {columns.map((_, colIdx) => (
+                      <td
+                        key={colIdx}
+                        className="border-r border-gray-200 last:border-r-0"
+                      />
+                    ))}
+                  </tr>
                   );
                 })}
               </>
@@ -297,19 +286,17 @@ function CommonTable<T>({
         </table>
       </div>
 
-      {/* Pagination footer */}
-      <div className="flex flex-wrap items-center justify-between gap-4 px-1 py-4 text-sm text-gray-500">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 px-5 py-3 text-sm text-gray-500">
         <span>
           showing {startEntry} to {endEntry} of {resolvedTotalEntries} entries.
         </span>
 
         <div className="flex items-center gap-2">
-          {/* Per-page dropdown — chỉ hiện khi truyền pageSizeOptions */}
           {pageSizeOptions && (
             <select
               value={pagination.pageSize}
               onChange={(e) => table.setPageSize(Number(e.target.value))}
-              className="rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 outline-none transition focus:border-gray-400"
+              className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 outline-none transition focus:border-gray-400"
             >
               {pageSizeOptions.map((size) => (
                 <option key={size} value={size}>
@@ -319,13 +306,12 @@ function CommonTable<T>({
             </select>
           )}
 
-          {/* Page numbers */}
           <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-40"
+              className={`${paginationButtonClass} text-gray-400`}
             >
               <HiChevronLeft size={16} />
             </button>
@@ -343,10 +329,10 @@ function CommonTable<T>({
                   key={item}
                   type="button"
                   onClick={() => table.setPageIndex(item - 1)}
-                  className={`flex h-8 w-8 items-center justify-center rounded-md transition ${
+                  className={`${paginationButtonClass} ${
                     item === currentPage
-                      ? "bg-[#3A0099] text-white"
-                      : "text-gray-600 hover:bg-gray-100"
+                      ? "bg-gray-100 font-medium text-gray-700"
+                      : "text-gray-600"
                   }`}
                 >
                   {item}
@@ -358,7 +344,7 @@ function CommonTable<T>({
               type="button"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition hover:bg-gray-100 disabled:pointer-events-none disabled:opacity-40"
+              className={`${paginationButtonClass} text-gray-400`}
             >
               <HiChevronRight size={16} />
             </button>

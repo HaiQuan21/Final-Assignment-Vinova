@@ -1,43 +1,28 @@
-import { useEffect, useMemo, useState } from "react";
-import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import { useMemo } from "react";
+import type { ColumnDef } from "@tanstack/react-table";
 import CommonTable from "../../components/CommonTable";
 import StatusBadge from "../../components/StatusBadge";
 import ActionButtons from "../../components/ActionButtons";
-import { usePagination } from "../../hooks/usePagination";
-import { getVouchers } from "./api/apiVoucher";
 import { type Voucher } from "../../constants/MainObjectClass";
-import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useVoucher } from "./hooks/useVoucher";
+import ConfirmModal from "../../components/ConfirmModal";
 
 function VoucherTable() {
-  const [data, setData] = useState<Voucher[]>([]);
-  const [totalEntries, setTotalEntries] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const { pagination, setPagination } = usePagination(8);
+
   const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
-  const search = searchParams.get("search") ?? "";
+  const {
+    data, totalEntries, isLoading,
+    sorting, setSorting, pagination, setPagination,
+    handleToggleClick, handleToggleConfirm,
+    handleToggleCancel,
+    confirmOpen,
+    targetVoucher,
+    isPending,
+  } = useVoucher();
 
   console.log("Data Voucher trả về", data);
-
-  useEffect(() => {
-    setIsLoading(true);
-    getVouchers({
-      page: pagination.pageIndex + 1,
-      limit: pagination.pageSize,
-      offset: pagination.pageIndex * pagination.pageSize,
-      search: search || undefined,
-      sort:
-        sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
-    })
-      .then(({ data: res }) => {
-        setData(res.data);
-        setTotalEntries(res.metadata.totalCount);
-      })
-      .finally(() => setIsLoading(false));
-  }, [pagination.pageIndex, pagination.pageSize, sorting,search]);
 
   const columns = useMemo<ColumnDef<Voucher>[]>(
     () => [
@@ -70,17 +55,25 @@ function VoucherTable() {
         id: "action",
         header: "Action",
         enableSorting: false,
-        cell: ({ row }) => (
+        size: 170,
+        cell: ({ row }) => {
+          const voucher = row.original;
+          const isExpired = voucher.status === "expired";
+          const isThisRowPending = isPending === voucher.id;
+
+          return(
           <ActionButtons
             onType={"voucher"}
             onAction={() => navigate(`/vouchers/${row.original.id}`)}
-            onDelete={() => console.log("delete", row.original.id)}
+            onDelete={() => handleToggleClick(voucher)}
+            deleteDisabled={isExpired}
+            isPendingDelete={isThisRowPending}
           />
-        ),
-        size:170
+          )
+      },
       },
     ],
-    [],
+    [isPending],
   );
 
   return (
@@ -103,6 +96,20 @@ function VoucherTable() {
         FIXED_ROW_COUNT={8}
         emptyMessage="No vouchers found"
       />
+      <ConfirmModal
+      isOpen={confirmOpen}
+      title="Change Voucher Status?"
+      message={
+        targetVoucher
+          ? `Change "${targetVoucher.code}" from ${targetVoucher.status} to ${
+              targetVoucher.status === "active" ? "inactive" : "active"
+            }?`
+          : ""
+      }
+      confirmLabel="Confirm"
+      onConfirm={handleToggleConfirm}
+      onCancel={handleToggleCancel}
+    />
     </div>
   );
 }

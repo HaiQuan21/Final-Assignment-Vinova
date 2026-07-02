@@ -12,6 +12,18 @@ export interface VoucherPayload {
     maxDiscountAmount: number;
   }
 
+export interface PatchCareStatusPayload{
+  code: string,
+  description: string,
+  startDate: string,
+  endDate: string,
+  status: string,
+  type: string,
+  amount: number,
+  minPayAmount: number,
+  maxDiscountAmount: number
+}
+
   export interface GetVouchersParams{
     page?: number;
     limit?: number;
