@@ -10,6 +10,8 @@ import { useArticlePD } from "./hooks/useArticlePD";
 import type { ArticlePD } from "../../constants/MainObjectClass";
 import FormSkeleton from "../../components/FormSkeleton";
 import { articlepdFields } from "./articlepdFormProps";
+import { formatDate } from "../../lib/formatDate";
+
 interface ArticlePDProps {
   type: "article" | "pd";
 }
@@ -54,7 +56,7 @@ function ArticlePDTable({ type }: ArticlePDProps) {
       { accessorKey: "title", header: "Title", size: 170 },
       { accessorKey: "author", header: "Author", size: 170 },
       { accessorKey: "category.name", header: "Category", size: 170 },
-      { accessorKey: "createdAt", header: "Create Date", size: 170 },
+      { accessorKey: "createdAt", header: "Create Date", size: 170, cell: (info) => formatDate(info.getValue<string>()), },
       {
         accessorKey: "status",
         header: "Status",

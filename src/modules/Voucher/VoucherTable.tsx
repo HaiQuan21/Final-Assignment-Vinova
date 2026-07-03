@@ -7,6 +7,7 @@ import { type Voucher } from "../../constants/MainObjectClass";
 import { useNavigate } from "react-router-dom";
 import { useVoucher } from "./hooks/useVoucher";
 import ConfirmModal from "../../components/ConfirmModal";
+import { formatDate } from "../../lib/formatDate";
 
 function VoucherTable() {
 
@@ -19,7 +20,6 @@ function VoucherTable() {
     handleToggleCancel,
     confirmOpen,
     targetVoucher,
-    isPending,
   } = useVoucher();
 
   console.log("Data Voucher trả về", data);
@@ -42,8 +42,8 @@ function VoucherTable() {
         cell: (info) => <StatusBadge status={info.getValue<string>()} />,
         size:170
       },
-      { accessorKey: "startDate", header: "Start Date" ,size:170},
-      { accessorKey: "endDate", header: "End Date" ,size:170},
+      { accessorKey: "startDate", header: "Start Date" ,size:170, cell: (info) => formatDate(info.getValue<string>()),},
+      { accessorKey: "endDate", header: "End Date" ,size:170, cell: (info) => formatDate(info.getValue<string>()),},
       {
         cell: ({ row }) =>
           `${row.original.numOfUsed}/${row.original.quantityUse}`,
@@ -59,7 +59,6 @@ function VoucherTable() {
         cell: ({ row }) => {
           const voucher = row.original;
           const isExpired = voucher.status === "expired";
-          const isThisRowPending = isPending === voucher.id;
 
           return(
           <ActionButtons
@@ -67,13 +66,12 @@ function VoucherTable() {
             onAction={() => navigate(`/vouchers/${row.original.id}`)}
             onDelete={() => handleToggleClick(voucher)}
             deleteDisabled={isExpired}
-            isPendingDelete={isThisRowPending}
           />
           )
       },
       },
     ],
-    [isPending],
+    [],
   );
 
   return (

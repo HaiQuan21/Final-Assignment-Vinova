@@ -22,7 +22,6 @@ export function useVoucher() {
     handleToggleConfirm,
     targetVoucher,
     confirmOpen,
-    isPending,
   } = usePatchCareStatus(fetchVoucher);
 
   return {
@@ -43,6 +42,5 @@ export function useVoucher() {
     handleToggleCancel,
     confirmOpen,
     targetVoucher,
-    isPending,
   };
 }

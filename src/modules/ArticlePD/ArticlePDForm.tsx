@@ -4,7 +4,7 @@ import Form from "../../components/Form";
 
 import { type ArticlePDFormValues,initialValues,articlepdFields } from "./articlepdFormProps";
 import { articleSchema } from "../../schemas/articleSchema";
-import { getAllCategories } from "../../api/apiService";
+import { getAllCategories } from "../Category/api/apiCategory";
 
 interface ArticleFormProps {
   onSubmit: (values: ArticlePDFormValues) => void;

@@ -30,21 +30,6 @@ function FieldImage({
       render={({ field: rhfField }) => (
         <div className={`w-full ${className}`}>
           <Label label={label} required={required} />
-
-          {/* Input nhập URL */}
-          <input
-            type="text"
-            placeholder={placeholder ?? "Enter image URL"}
-            value={rhfField.value ?? ""}
-            onChange={(e) => rhfField.onChange(e.target.value)}
-            disabled={disabled}
-            className={`w-full rounded border-2 border-gray-300 px-4 py-3 outline-none transition focus:border-gray-500
-              ${error ? "border-red-500" : ""}
-            `}
-          />
-
-          {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-
           {/* Preview ảnh khi có URL hợp lệ */}
           {rhfField.value && (
             <div className="mt-2 overflow-hidden rounded-lg border border-gray-200">

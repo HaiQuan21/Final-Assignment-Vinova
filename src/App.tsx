@@ -20,7 +20,7 @@ export default function App() {
 
   const ArticlePD = lazy(()=>import("./modules/ArticlePD/ArticlePDTable"));
 
-  const Category = lazy(()=>import("./modules/Category/Category"));
+  const Category = lazy(()=>import("./modules/Category/CategoriesTable"));
 
   const HelpDocuments = lazy(()=>import("./modules/HelpDocuments/HelpDocuments"));
 

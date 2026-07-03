@@ -4,7 +4,6 @@ import { patchCareStatus } from "../api/apiVoucher";
 import type { Voucher } from "../../../constants/MainObjectClass";
 
 export function usePatchCareStatus(onSuccess?: () => void) {
-  const [isPending, setIsPending] = useState<string | null>(null); // lưu id đang xử lý
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [targetVoucher, setTargetVoucher] = useState<Voucher | null>(null);
 
@@ -15,12 +14,11 @@ export function usePatchCareStatus(onSuccess?: () => void) {
   };
 
   const handleToggleConfirm = () => {
-    if (!targetVoucher || isPending) return;
+    if (!targetVoucher) return;
 
     const nextStatus =
       targetVoucher.status === "active" ? "inactive" : "active";
 
-    setIsPending(targetVoucher.id);
     patchCareStatus(targetVoucher.id, {
       code: targetVoucher.code,
       description: targetVoucher.description ?? "",
@@ -41,7 +39,6 @@ export function usePatchCareStatus(onSuccess?: () => void) {
       .catch((err) => {
         toast.error(err?.response?.data?.message ?? "An error occurred.");
       })
-      .finally(() => setIsPending(null));
   };
 
   const handleToggleCancel = () => {
@@ -55,6 +52,5 @@ export function usePatchCareStatus(onSuccess?: () => void) {
     handleToggleCancel,
     confirmOpen,
     targetVoucher,
-    isPending,
   };
 }

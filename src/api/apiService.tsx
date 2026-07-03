@@ -2,7 +2,6 @@ import axiosInstance from "./axiosInstance";
 import {
   type LoginPayload,
   type RefreshTokenPayload,
-  type GetCategoriesParams,
 } from "../constants/payloadAPI";
 import { type LoginResponse } from "../constants/responseAPI";
 
@@ -11,10 +10,6 @@ export const postLogin = (data: LoginPayload) =>
   axiosInstance.post<LoginResponse>("/auth/login", data);
 export const refreshToken = (data: RefreshTokenPayload) =>
   axiosInstance.post("/auth/refresh-access-token", data);
-
-// ─── Catgories ───────────────────────────────────────────────────────────────────
-export const getAllCategories =  (params?: GetCategoriesParams) =>
-  axiosInstance.get("/categories",{params});
 
 // ─── Doula Package ───────────────────────────────────────────────────────────────────
 export const getPackageList = () =>

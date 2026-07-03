@@ -8,12 +8,4 @@ export interface LoginPayload {
     refreshToken: string;
   }
 
-  export interface GetCategoriesParams{
-    page?: number;
-    limit?: number;
-    offset?: number;
-    search?: number;
-    sort?: string;
-    f_name?: string;
-  }
 

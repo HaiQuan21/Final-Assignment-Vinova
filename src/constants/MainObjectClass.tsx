@@ -72,7 +72,16 @@ export interface Category {
   id: string;
   name: string;
   title: string;
-  image: string;
+  picture:{
+    createAt: string,
+    id: string,
+    metadata: {
+      thumbnail: { uri: string; key: string };
+      medium: { uri: string; key: string };
+    };
+    type: string,
+    uri: string
+  }
   status: string;
   slug: string;
   createdAt: string;

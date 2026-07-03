@@ -6,10 +6,9 @@ interface ActionButtonsProps {
   onAction?: () => void;
   onDelete?: () => void;
   deleteDisabled?: boolean; //disabled icon thùng rác
-  isPendingDelete?: boolean; //hiện loading khi đang xử lý
 }
 
-function ActionButtons({ onType, onAction, onDelete,deleteDisabled = false,isPendingDelete = false }: ActionButtonsProps) {
+function ActionButtons({ onType, onAction, onDelete,deleteDisabled = false}: ActionButtonsProps) {
   return (
     <div className="flex items-center justify-center gap-3">
       {onAction && (
@@ -22,19 +21,18 @@ function ActionButtons({ onType, onAction, onDelete,deleteDisabled = false,isPen
           {onType === "article" && <CiEdit size={20} />}
           {onType === "voucher" && <HiOutlineEye size={20} />}
           {onType === "admin" && <CiEdit size={20} />}
+          {onType === "category" && <CiEdit size={20} /> }
         </button>
       )}
 
       {onDelete && (
         <button
         type="button"
-        onClick={deleteDisabled || isPendingDelete ? undefined : onDelete}
-        disabled={deleteDisabled || isPendingDelete}
+        onClick={deleteDisabled ? undefined : onDelete}
+        disabled={deleteDisabled}
         className={`transition ${
           deleteDisabled
-            ? "cursor-not-allowed text-gray-200" // expired → icon mờ, không click được
-            : isPendingDelete
-              ? "cursor-wait text-gray-300"
+            ? "cursor-not-allowed text-gray-200" 
               : "text-[#A0A7AC] hover:text-red-400"
         }`}
         aria-label="Delete"

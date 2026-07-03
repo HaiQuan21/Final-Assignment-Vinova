@@ -9,6 +9,8 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import { useCreateArticlePD } from "../modules/ArticlePD/hooks/useCreateArticlePD";
 import { useCreateVoucher } from "../modules/Voucher/hooks/useCreateVoucher";
 import { useCreateAdmin } from "../modules/Account/Admin/hooks/useCreateAdmin";
+import CategoryForm from "../modules/Category/CategoryForm";
+import { useCreateCategories } from "../modules/Category/hooks/useCreateCategories";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
   const {pathname} = useLocation();
@@ -64,7 +66,11 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
   const { handleCreate: handleCreateVoucher, isSubmitting: isCreatingVoucher } =
     useCreateVoucher(() => setIsOpen(false));
 
-  const isSubmitting = isCreatingArticle || isCreatingVoucher || isCreatingPD;
+  //Create Category
+  const { handleCreate: handleCreateCategory, isSubmitting: isCreatingCategory } =
+  useCreateCategories(() => setIsOpen(false));
+
+  const isSubmitting = isCreatingArticle || isCreatingVoucher || isCreatingPD || isCreatingCategory;
 
   const renderForm = () => {
     switch (formType) {
@@ -80,6 +86,8 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
       case "admin":
         return <AdminForm onSubmit={handleCreateAdmin} isSubmitting={isSubmitting} />;
         break;
+      case "category":
+          return <CategoryForm onSubmit={handleCreateCategory} isSubmitting={isCreatingCategory} />;
       default:
         return <p className="text-sm text-gray-500">Chưa có form tạo mới cho mục này.</p>;
         break;
