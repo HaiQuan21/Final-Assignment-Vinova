@@ -1,9 +1,7 @@
 import { useState } from "react";
-import type { SortingState, PaginationState } from "@tanstack/react-table";
+import type { SortingState } from "@tanstack/react-table";
 import { useGetArticlePD } from "./useGetArticlePD";
 import { useCreateArticlePD } from "./useCreateArticlePD";
-import { useEditArticlePD } from "./useEditArticlePD";
-import { useDeleteArticlePD } from "./useDeleteArticlePD";
 import { usePagination } from "../../../hooks/usePagination";
 
 export function useArticlePD(type: "article" | "pd") {
@@ -21,54 +19,16 @@ export function useArticlePD(type: "article" | "pd") {
     fetchArticlePD,
   );
 
-  const {
-    editOpen,
-    editingArticle,
-    isSubmitting: isEditing,
-    toFormValues,
-    handleEditClick,
-    handleEditSubmit,
-    handleEditClose,
-    isFetching,
-  } = useEditArticlePD(type, fetchArticlePD);
-
-  const {
-    deleteModalOpen,
-    deletingArticle,
-    handleDeleteClick,
-    handleDeleteConfirm,
-    handleDeleteCancel,
-    isDeleting,
-  } = useDeleteArticlePD(fetchArticlePD);
-
   return {
-    // Data
     data,
     totalEntries,
     isLoading,
-    // Pagination & Sorting
     sorting,
     setSorting,
     pagination,
     setPagination,
-    // Create
+    fetchArticlePD,
     handleCreate,
-    isCreating,
-    // Edit
-    editOpen,
-    editingArticle,
-    isEditing,
-    toFormValues,
-    handleEditClick,
-    handleEditSubmit,
-    handleEditClose,
-    isFetching,
-    // Delete
-    deleteModalOpen,
-    deletingArticle,
-    handleDeleteClick,
-    handleDeleteConfirm,
-    handleDeleteCancel,
-    isDeleting
+    isSubmitting: isCreating,
   };
 }

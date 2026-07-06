@@ -1,37 +1,40 @@
 export interface GetListOfDoulaResponse{
     message: string,
-    "data": [
+    data: [
       {
-        id: "a62e64ce-ad2e-43d4-b53b-159cfaa382ac",
-        title: "Do not choose me",
-        status: "active",
+        id: string,
+        title: string,
+        status: string,
         user: {
-          fullName: "Dylan Doula",
-          firstName: "Dylan",
+          fullName: string,
+          firstName: string,
           middleName: string | null,
-          lastName: "Doula",
-          birthDate: "2006-08-02T00:00:00.000Z",
-          email: "dylan+doula@vinova.com.sg"
+          lastName: string,
+          birthDate: string,
+          email: string,
+          countryCode: string,
+          phoneNumber: string,
+          lastAccess: string,
         },
         address: {
-          id: "ea0fc060-379e-4722-8ea5-b44042f9e610",
-          fullAddress: "33 Union Street, KYABRAM VIC 3620"
+          id: string,
+          fullAddress: string
         },
         picture: {
-          id: "c8753b6f-2230-44d0-a794-d039ddcb1b48",
-          uri: "https://s3.ap-southeast-1.amazonaws.com/nurturewave-be-dev/uploads%2Fimages%2Ffafff79b-025e-4681-bb5d-fbf73b38364d_image_picker_35FE64CC-EC10-439F-BE32-419B6F57BF1F-5526-0000051D46A0AE26.jpg",
-          type: "images",
+          id: string,
+          uri: string,
+          type: string,
           metadata: {
             thumbnail: {
-              uri: "https://s3.ap-southeast-1.amazonaws.com/nurturewave-be-dev/uploads/images/75e95faf-dd7b-4eda-99ac-226f05d90fc4_thumbnail.jpeg",
-              key: "uploads/images/75e95faf-dd7b-4eda-99ac-226f05d90fc4_thumbnail.jpeg"
+              uri: string,
+              key: string
             },
             medium: {
-              uri: "https://s3.ap-southeast-1.amazonaws.com/nurturewave-be-dev/uploads/images/8097a5e0-3763-4482-b9c6-57579e986a24_medium.jpeg",
-              key: "uploads/images/8097a5e0-3763-4482-b9c6-57579e986a24_medium.jpeg"
+              uri: string,
+              key: string
             }
           },
-          createdAt: "2024-08-06T09:11:08.114Z"
+          createdAt: string
         }
       }],
     metadata: {
@@ -42,3 +45,44 @@ export interface GetListOfDoulaResponse{
       hasNextPage: boolean
     }
   }
+
+export interface GetDoulaDetailByIdResponse{
+  message: "Success",
+  data: {
+    id: "9e3cdb77-58e7-4624-8395-be52b0155910",
+    title: "super otis",
+    description: "hihiihh",
+    businessName: null,
+    status: "active",
+    photos: [
+     string
+    ],
+    qualifications: [
+      "Hehe"
+    ],
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: null,
+    cometChatUid: string,
+    user: {
+      fullName: string,
+      firstName: string,
+      middleName: null,
+      lastName: string,
+      picture: null,
+      birthDate: string
+    },
+    categories: [
+      {
+        id: string,
+        image: string,
+        name: string,
+        title: string
+      }
+    ],
+    address: {
+      id: string,
+      fullAddress: string
+    }
+  }
+}

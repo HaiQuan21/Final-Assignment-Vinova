@@ -1,4 +1,4 @@
-export function formatDate(dateStr?: string | null): string {
+export function formatDate(isBirthday: boolean,dateStr?: string | null): string {
     if (!dateStr) return "-";
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return "-";
@@ -9,6 +9,6 @@ export function formatDate(dateStr?: string | null): string {
 
     const hh = String(date.getHours()).padStart(2, "0");
     const min = String(date.getMinutes()).padStart(2, "0");
-  
-    return `${dd}/${mm}/${yyyy} ${hh}:${min}`;
+
+    return isBirthday ?  `${dd}/${mm}/${yyyy}` : `${dd}/${mm}/${yyyy} ${hh}:${min}`;
   }

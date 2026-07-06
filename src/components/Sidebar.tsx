@@ -9,6 +9,7 @@ import {
 } from "react-icons/hi";
 import type { Admin } from "../constants/MainObjectClass";
 import { navItems, accountSubItems } from "../constants/navigation"; // ← đổi accountItem thành accountSubItems
+import { isSuperAdmin } from "../lib/getCurrentUser";
 
 function getCurrentUser(): Admin | null {
   try {
@@ -50,7 +51,11 @@ function Sidebar() {
     <aside className="flex h-screen w-[260px] shrink-0 flex-col bg-white shadow-sm">
       <div className="flex items-center justify-between bg-[#3A0099] px-5 py-4">
         <span className="text-lg font-bold text-white">NurtureWave</span>
-        <button type="button" className="text-white transition hover:opacity-80" aria-label="Toggle menu">
+        <button
+          type="button"
+          className="text-white transition hover:opacity-80"
+          aria-label="Toggle menu"
+        >
           <HiMenu className="h-6 w-6" />
         </button>
       </div>
@@ -93,22 +98,27 @@ function Sidebar() {
 
             {accountsOpen && (
               <ul className="mt-1 flex flex-col gap-1 pl-11">
-                {accountSubItems.map(({ label, path }) => (
-                  <li key={path}>
-                    <NavLink
-                      to={path}
-                      className={({ isActive }) =>
-                        `block rounded-lg px-3 py-2 text-sm transition ${
-                          isActive
-                            ? "font-medium text-[#3A0099]"
-                            : "text-gray-600 hover:bg-gray-100"
-                        }`
-                      }
-                    >
-                      {label}
-                    </NavLink>
-                  </li>
-                ))}
+                {accountSubItems
+                  .filter((item) => {
+                    if (item.path === "/account/admin") return isSuperAdmin();
+                    return true;
+                  })
+                  .map(({ label, path }) => (
+                    <li key={path}>
+                      <NavLink
+                        to={path}
+                        className={({ isActive }) =>
+                          `block rounded-lg px-3 py-2 text-sm transition ${
+                            isActive
+                              ? "font-medium text-[#3A0099]"
+                              : "text-gray-600 hover:bg-gray-100"
+                          }`
+                        }
+                      >
+                        {label}
+                      </NavLink>
+                    </li>
+                  ))}
               </ul>
             )}
           </li>
@@ -150,7 +160,9 @@ function Sidebar() {
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gray-400 text-sm font-semibold text-white">
             {avatarLetter}
           </div>
-          <span className="flex-1 truncate text-sm font-semibold text-gray-800">{displayName}</span>
+          <span className="flex-1 truncate text-sm font-semibold text-gray-800">
+            {displayName}
+          </span>
           <button
             type="button"
             onClick={() => setUserMenuOpen((prev) => !prev)}

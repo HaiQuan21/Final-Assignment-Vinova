@@ -11,7 +11,8 @@ import type { ArticlePD } from "../../constants/MainObjectClass";
 import FormSkeleton from "../../components/FormSkeleton";
 import { articlepdFields } from "./articlepdFormProps";
 import { formatDate } from "../../lib/formatDate";
-
+import { useEditArticlePD } from "./hooks/useEditArticlePD";
+import { useDeleteArticlePD } from "./hooks/useDeleteArticlePD";
 interface ArticlePDProps {
   type: "article" | "pd";
 }
@@ -21,25 +22,32 @@ function ArticlePDTable({ type }: ArticlePDProps) {
     data,
     totalEntries,
     isLoading,
+    fetchArticlePD,
     sorting,
-    setSorting,
-    pagination,
     setPagination,
+    pagination,
+    setSorting,
+  } = useArticlePD(type);
+
+  const {
     editOpen,
     editingArticle,
-    isEditing,
+    isSubmitting: isEditing,
     toFormValues,
     handleEditClick,
     handleEditSubmit,
     handleEditClose,
     isFetching,
+  } = useEditArticlePD(type, fetchArticlePD);
+
+  const {
     deleteModalOpen,
     deletingArticle,
     handleDeleteClick,
     handleDeleteConfirm,
     handleDeleteCancel,
     isDeleting,
-  } = useArticlePD(type);
+  } = useDeleteArticlePD(fetchArticlePD);
 
   const columns = useMemo<ColumnDef<ArticlePD>[]>(
     () => [
@@ -56,7 +64,12 @@ function ArticlePDTable({ type }: ArticlePDProps) {
       { accessorKey: "title", header: "Title", size: 170 },
       { accessorKey: "author", header: "Author", size: 170 },
       { accessorKey: "category.name", header: "Category", size: 170 },
-      { accessorKey: "createdAt", header: "Create Date", size: 170, cell: (info) => formatDate(info.getValue<string>()), },
+      {
+        accessorKey: "createdAt",
+        header: "Create Date",
+        size: 170,
+        cell: (info) => formatDate(false,info.getValue<string>()),
+      },
       {
         accessorKey: "status",
         header: "Status",
@@ -69,8 +82,7 @@ function ArticlePDTable({ type }: ArticlePDProps) {
         enableSorting: false,
         cell: ({ row }) => (
           <ActionButtons
-            onType="article"
-            onAction={() => handleEditClick(row.original)}
+            onEdit={() => handleEditClick(row.original)}
             onDelete={() => handleDeleteClick(row.original)}
           />
         ),

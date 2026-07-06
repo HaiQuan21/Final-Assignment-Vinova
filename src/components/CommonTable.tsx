@@ -118,7 +118,7 @@ function CommonTable<T>({
       >
         <table
           className="w-full border-collapse text-left text-sm"
-          style={{ tableLayout: "auto" }}
+          style={{ tableLayout: "fixed", width: table.getTotalSize(),minWidth:"100%", }}
         >
           <thead className="sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (

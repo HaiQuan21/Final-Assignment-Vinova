@@ -97,7 +97,7 @@ function LoginPage() {
         transition: Bounce,
       });
 
-      setTimeout(() => navigate("/account"), 2000);
+      setTimeout(() => navigate("/static-content"), 2000);
     } catch (error) {
       const message = axios.isAxiosError(error)
         ? (error.response?.data?.message as string | undefined) ??
@@ -120,7 +120,7 @@ function LoginPage() {
         defaultValues={defaultValues}
         onSubmit={handleSubmit}
         submitLabel="Login"
-        submitClassName="mt-2 self-end rounded-md bg-indigo-700 px-6 py-2 font-bold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
+        submitStyleType="login"
       />
     </div>
   );

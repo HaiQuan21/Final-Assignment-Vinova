@@ -14,6 +14,7 @@ import {
   widthClass,
 } from "../constants/formTypes";
 import FieldImage from "./FieldImage";
+import Button from "./Button";
 
 function Form<T extends FormValues>({
   schema,
@@ -21,7 +22,8 @@ function Form<T extends FormValues>({
   defaultValues,
   onSubmit,
   submitLabel = "Send",
-  submitClassName = "mt-2 w-full rounded-xl bg-gray-800 px-4 py-3 font-medium text-white transition hover:bg-gray-700",
+  submitStyleType,
+  submitClassName,
   submitDisabled = false,
   className = "",
 }: FormProps<T>) {
@@ -38,7 +40,9 @@ function Form<T extends FormValues>({
   const watchedValues = useWatch({ control });
 
   const renderField = (field: FieldConfig): ReactNode => {
-    const errorMessage = (errors as any)[field.name]?.message as string | undefined;
+    const errorMessage = (errors as any)[field.name]?.message as
+      | string
+      | undefined;
     const currentValue = String((watchedValues as any)?.[field.name] ?? "");
 
     // Props chung truyền xuống field — control và name thay thế cho Controller bên ngoài
@@ -94,16 +98,13 @@ function Form<T extends FormValues>({
           </>
         );
 
-        case "image":
-          return (
-            <>
-              <FieldImage
-                {...commonProps}
-                placeholder={field.placeholder}
-              />
-              {field.renderHint?.(currentValue)}
-            </>
-          );
+      case "image":
+        return (
+          <>
+            <FieldImage {...commonProps} placeholder={field.placeholder} />
+            {field.renderHint?.(currentValue)}
+          </>
+        );
 
       default:
         // text | email | password | number | tel | image
@@ -135,13 +136,15 @@ function Form<T extends FormValues>({
         ))}
       </div>
 
-      <button
+      <Button
         type="submit"
+        styleType={submitStyleType}
+        isLoading={isSubmitting}
         disabled={submitDisabled || isSubmitting}
-        className={submitClassName}
+        className={`w-full ${submitClassName}`}
       >
-        {isSubmitting ? "Submitting..." : submitLabel}
-      </button>
+        {submitLabel}
+      </Button>
     </form>
   );
 }

@@ -7,5 +7,5 @@ export const getListOfDoulas = (params?: GetListOfDoulasParams) =>
     axiosInstance.get(`/doulas/${id}`);
   export const updateDoulaById = (id: string, data: UpdateDoulaPayload) =>
     axiosInstance.put(`/doulas/${id}`, data);
-  export const deleteDoulaById = (id) =>
+  export const deleteDoulaById = (id : string) =>
     axiosInstance.delete(`/doulas/${id}`,);

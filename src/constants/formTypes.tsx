@@ -3,6 +3,7 @@ import { type FormEvent } from "react";
 import { type FormType } from "./navigation";
 import type { ReactNode } from "react";
 import type { ZodType } from "zod";
+import { type ButtonStyle } from "../components/Button";
 
 export interface BaseFieldConfig {
   name: string;
@@ -87,7 +88,8 @@ export interface FormProps<T extends FormValues = FormValues> {
   defaultValues: T;
   onSubmit: (values: T) => void | Promise<void>;
   submitLabel?: string;
-  submitClassName?: string;
+  submitStyleType?: ButtonStyle; 
+  submitClassName?: string;   
   submitDisabled?: boolean;
   className?: string;
 }

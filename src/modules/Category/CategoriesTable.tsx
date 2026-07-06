@@ -59,7 +59,7 @@ function CategoryTable() {
         accessorKey: "createdAt",
         header: "Created Date",
         size: 200,
-        cell: (info) => formatDate(info.getValue<string>()),
+        cell: (info) => formatDate(false,info.getValue<string>()),
       },
       {
         id: "action",
@@ -68,8 +68,7 @@ function CategoryTable() {
         size: 120,
         cell: ({ row }) => (
           <ActionButtons
-            onType="category"
-            onAction={() => handleEditClick(row.original)}
+            onEdit={() => handleEditClick(row.original)}
             onDelete={() => handleDeleteClick(row.original)}
           />
         ),
@@ -123,6 +122,7 @@ function CategoryTable() {
         message={`Are you sure you want to delete "${deletingCategory?.name}"?`}
         onConfirm={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
+        isDeleting={isDeleting}
       />
     </div>
   );

@@ -11,6 +11,7 @@ import { useCreateVoucher } from "../modules/Voucher/hooks/useCreateVoucher";
 import { useCreateAdmin } from "../modules/Account/Admin/hooks/useCreateAdmin";
 import CategoryForm from "../modules/Category/CategoryForm";
 import { useCreateCategories } from "../modules/Category/hooks/useCreateCategories";
+import Button from "./Button";
 
 export default function Toolbar({ title, formType }: ToolbarProps) {
   const {pathname} = useLocation();
@@ -70,21 +71,19 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
   const { handleCreate: handleCreateCategory, isSubmitting: isCreatingCategory } =
   useCreateCategories(() => setIsOpen(false));
 
-  const isSubmitting = isCreatingArticle || isCreatingVoucher || isCreatingPD || isCreatingCategory;
-
   const renderForm = () => {
     switch (formType) {
       case "article":
-        return <ArticlePDForm onSubmit={handleCreateArticle} isSubmitting={isSubmitting} />;
+        return <ArticlePDForm onSubmit={handleCreateArticle} isSubmitting={isCreatingArticle} />;
         break;
       case "voucher":
-        return <CreateVoucherForm onSubmit={handleCreateVoucher} isSubmitting={isSubmitting} />;
+        return <CreateVoucherForm onSubmit={handleCreateVoucher} isSubmitting={isCreatingVoucher} />;
         break;
       case "pd":
-        return <ArticlePDForm onSubmit={handleCreatePD} isSubmitting={isSubmitting} />;
+        return <ArticlePDForm onSubmit={handleCreatePD} isSubmitting={isCreatingPD} />;
         break;
       case "admin":
-        return <AdminForm onSubmit={handleCreateAdmin} isSubmitting={isSubmitting} />;
+        return <AdminForm onSubmit={handleCreateAdmin} isSubmitting={isCreatingAdmin} />;
         break;
       case "category":
           return <CategoryForm onSubmit={handleCreateCategory} isSubmitting={isCreatingCategory} />;
@@ -113,13 +112,9 @@ export default function Toolbar({ title, formType }: ToolbarProps) {
           />
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="whitespace-nowrap rounded-md bg-[#5B21B6] px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-[#4C1D95]"
-        >
-          Create {title}
-        </button>
+        <Button styleType="create" onClick={()=>setIsOpen(true)} size="lg">
+            Create {title}
+        </Button>
       </div>
 
       <SlideOver

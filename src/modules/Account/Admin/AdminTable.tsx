@@ -10,8 +10,12 @@ import { useAdmin } from "./hooks/useAdmin";
 import type { AdminItem } from "../../../constants/MainObjectClass";
 import FormSkeleton from "../../../components/FormSkeleton";
 import { updateAdminFields } from "./AdminFormProps";
+import { useUpdateAdminById } from "./hooks/useUpdateAdminById";
+import { useDeleteAdminById } from "./hooks/useDeleteAdminById";
+import { getCurrentUser } from "../../../lib/getCurrentUser";
 
 function AdminTable() {
+  const currentUser = getCurrentUser();
   const {
     data,
     totalEntries,
@@ -20,47 +24,59 @@ function AdminTable() {
     setSorting,
     pagination,
     setPagination,
+    fetchAllAdmin,
+  } = useAdmin();
+
+  const {
     editOpen,
     editingAdmin,
-    isEditing,
+    isSubmitting: isEditing,
     isFetching,
     toFormValues,
     handleEditClick,
     handleEditSubmit,
     handleEditClose,
+  } = useUpdateAdminById(fetchAllAdmin);
+
+  const {
     deleteModalOpen,
     deletingAdmin,
+    isDeleting,
     handleDeleteClick,
     handleDeleteConfirm,
     handleDeleteCancel,
-    isDeleting,
-  } = useAdmin();
+  } = useDeleteAdminById(fetchAllAdmin);
 
   const columns = useMemo<ColumnDef<AdminItem>[]>(
     () => [
-      { accessorKey: "username", header: "Username", size: 180 },
-      { accessorKey: "firstName", header: "First Name", size: 160 },
-      { accessorKey: "lastName", header: "Last Name", size: 160 },
+      { accessorKey: "username", header: "Username", size: 220 },
+      { accessorKey: "firstName", header: "First Name", size: 220 },
+      { accessorKey: "lastName", header: "Last Name", size: 220 },
       { accessorKey: "email", header: "Email", size: 240 },
-      { accessorKey: "role", header: "Role", size: 130 },
+      { accessorKey: "role", header: "Role", size: 220 },
       {
         accessorKey: "status",
         header: "Status",
-        size: 130,
+        size: 220,
         cell: (info) => <StatusBadge status={info.getValue<string>()} />,
       },
       {
         id: "action",
         header: "Action",
         enableSorting: false,
-        size: 100,
-        cell: ({ row }) => (
-          <ActionButtons
-            onType="admin"
-            onAction={() => handleEditClick(row.original)}
-            onDelete={() => handleDeleteClick(row.original)}
-          />
-        ),
+        size: 130,
+        cell: ({ row }) => {
+          const isSelf = row.original.id === currentUser?.id;
+          return (
+            <ActionButtons
+              onEdit={() => handleEditClick(row.original)}
+              onDelete={
+                isSelf ? undefined : () => handleDeleteClick(row.original)
+              }
+              deleteDisabled={isSelf}
+            />
+          );
+        },
       },
     ],
     [],
@@ -94,12 +110,13 @@ function AdminTable() {
         title="Update Admin User"
       >
         {isFetching ? (
-          <FormSkeleton fields={updateAdminFields} /> // ← skeleton theo đúng shape form Edit
+          <FormSkeleton fields={updateAdminFields} />
         ) : editingAdmin ? (
           <AdminForm
             onSubmit={handleEditSubmit}
             isSubmitting={isEditing}
             defaultValues={toFormValues(editingAdmin)}
+            targetAdminId={editingAdmin.id} // ← truyền id để AdminForm tự xác định isSelf
           />
         ) : null}
       </SlideOver>

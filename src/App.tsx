@@ -10,6 +10,8 @@ import AuthLayout from "./layouts/AuthLayout";
 import MainLayout from "./layouts/MainLayout";
 // import Account from "./modules/Account";
 import Loading from "./components/Loading";
+import { isSuperAdmin } from "./lib/getCurrentUser";
+
 
 export default function App() {
   const Login = lazy(() => import("./pages/LoginPage"));
@@ -36,7 +38,7 @@ export default function App() {
 
   const AdminAccount = lazy(() => import("./modules/Account/Admin/AdminTable"));
 
-  const DoulaAccount = lazy(() => import("./modules/Account/Doula/doulaAccount"));
+  const DoulaAccount = lazy(() => import("./modules/Account/Doula/DoulaTable"));
 
   const ClientAccount = lazy(() => import("./modules/Account/Client/clientAccount"));
   return (
@@ -54,7 +56,7 @@ export default function App() {
 
           <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
-              <Route path="/account/admin" element={<AdminAccount />} />
+              <Route path="/account/admin" element={isSuperAdmin() ? <AdminAccount/> : <Navigate to="/account/doula" replace />} />
               <Route path="/account/doula" element={<DoulaAccount />} />
               <Route path="/account/client" element={<ClientAccount />} />
               <Route path="/articles" element={<ArticlePD key="article" type="article" />} />

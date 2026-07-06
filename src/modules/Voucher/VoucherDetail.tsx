@@ -6,13 +6,6 @@ import CommonTable from "../../components/CommonTable";
 import { useVoucherDetail } from "./hooks/useVoucherDetail";
 import type { VoucherDoula } from "../../constants/MainObjectClass";
 
-// Interface cho usage history item
-interface VoucherUsage {
-  id: string;
-  fullName: string;
-  updatedAt: string;
-}
-
 function VoucherDetail() {
   const navigate = useNavigate();
 
@@ -20,7 +13,6 @@ function VoucherDetail() {
     vouchersDetail,
     isVoucherDetailLoading,
     doulaVouchersDetail,
-    pagination,
     setPagination,
     setSorting,
     sorting,

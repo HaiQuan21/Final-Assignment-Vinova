@@ -100,3 +100,67 @@ export interface AdminItem {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Doula {
+  id: string;
+  title: string;
+  status: string;
+  user: {
+    fullName: string;
+    firstName: string;
+    middleName: string | null;
+    lastName: string;
+    birthDate: string;
+    email: string;
+    countryCode: string,
+    phoneNumber: string,
+    lastAccess: string,
+  };
+  address: {
+    id: string;
+    fullAddress: string;
+  } | null;
+  picture: {
+    id: string;
+    uri: string;
+    type: string;
+    metadata: {
+      thumbnail: { uri: string; key: string };
+      medium: { uri: string; key: string };
+    };
+    createdAt: string;
+  } | null,
+  createdAt: string
+}
+
+export interface DoulaDetail {
+  id: string;
+  title: string;
+  description: string;
+  businessName: string | null;
+  status: string;
+  photos: string[];
+  qualifications: string[];
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  cometChatUid: string;
+  user: {
+    fullName: string;
+    firstName: string;
+    middleName: string | null;
+    lastName: string;
+    picture: string | null;
+    birthDate: string;
+  };
+  categories: {
+    id: string;
+    image: string;
+    name: string;
+    title: string;
+  }[];
+  address: {
+    id: string;
+    fullAddress: string;
+  } | null;
+}

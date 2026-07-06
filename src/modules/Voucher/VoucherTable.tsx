@@ -42,8 +42,8 @@ function VoucherTable() {
         cell: (info) => <StatusBadge status={info.getValue<string>()} />,
         size:170
       },
-      { accessorKey: "startDate", header: "Start Date" ,size:170, cell: (info) => formatDate(info.getValue<string>()),},
-      { accessorKey: "endDate", header: "End Date" ,size:170, cell: (info) => formatDate(info.getValue<string>()),},
+      { accessorKey: "startDate", header: "Start Date" ,size:170, cell: (info) => formatDate(false,info.getValue<string>()),},
+      { accessorKey: "endDate", header: "End Date" ,size:170, cell: (info) => formatDate(false,info.getValue<string>()),},
       {
         cell: ({ row }) =>
           `${row.original.numOfUsed}/${row.original.quantityUse}`,
@@ -62,8 +62,7 @@ function VoucherTable() {
 
           return(
           <ActionButtons
-            onType={"voucher"}
-            onAction={() => navigate(`/vouchers/${row.original.id}`)}
+            onView={() => navigate(`/vouchers/${row.original.id}`)}
             onDelete={() => handleToggleClick(voucher)}
             deleteDisabled={isExpired}
           />

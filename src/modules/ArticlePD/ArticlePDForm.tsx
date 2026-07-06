@@ -53,11 +53,7 @@ function ArticleFormPD({
       defaultValues={defaultValues ?? initialValues}
       onSubmit={onSubmit}
       submitLabel={isEditMode ? "Save Changes" : "Create"} // ← dynamic label
-      submitClassName={`mt-2 w-full rounded-md px-4 py-3 font-semibold text-white transition ${
-        isSubmitting
-          ? "bg-[#3A0099]/60 cursor-not-allowed"
-          : "bg-[#3A0099] hover:bg-[#270165]"
-      }`}
+      submitStyleType={isEditMode ? "save" : "create"}
       submitDisabled={isSubmitting}
     />
   );

@@ -23,11 +23,7 @@ function CreateVoucherForm({ onSubmit, isSubmitting = false }: Props) {
       defaultValues={initialValues}
       onSubmit={handleSubmit}
       submitLabel="Create"
-      submitClassName={`mt-2 w-full rounded-md px-4 py-3 font-semibold text-white transition ${
-        isSubmitting
-          ? "bg-[#3A0099]/60 cursor-not-allowed"
-          : "bg-[#3A0099] hover:bg-[#2d0080]"
-      }`}
+      submitStyleType="create"
       submitDisabled={isSubmitting}
     />
   );

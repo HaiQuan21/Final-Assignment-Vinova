@@ -1,51 +1,33 @@
 import Form from "../../../components/Form";
 import {
   createAdminFields,
-  updateAdminFields,
   createInitialValues,
+  getUpdateAdminFields,
   type AdminFormProps,
 } from "./AdminFormProps";
-import {
-  createAdminSchema,
-  updateAdminSchema,
-  type CreateAdminFormValues,
-  type UpdateAdminFormValues,
-} from "../../../schemas/adminSchemas";
+import { createAdminSchema, updateAdminSchema } from "../../../schemas/adminSchemas";
 
-function AdminForm({ onSubmit, isSubmitting = false, defaultValues }: AdminFormProps) {
+function AdminForm({
+  onSubmit,
+  isSubmitting = false,
+  defaultValues,
+  targetAdminId, // ← nhận id của admin đang được edit
+}: AdminFormProps) {
   const isEditMode = !!defaultValues;
 
-  const updateInitialValues: UpdateAdminFormValues = defaultValues ?? {
-    username: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    status: "active",
-    password: "",
-  };
+  // ← build fields động theo targetAdminId
+  const fields = isEditMode
+    ? getUpdateAdminFields(targetAdminId)
+    : createAdminFields;
 
-  return isEditMode ? (
+  return (
     <Form
-      schema={updateAdminSchema}
-      fields={updateAdminFields}
-      defaultValues={updateInitialValues}
-      onSubmit={onSubmit as (values: UpdateAdminFormValues) => void}
-      submitLabel="Update"
-      submitClassName={`mt-2 w-full rounded-md px-4 py-3 font-semibold text-white transition ${
-        isSubmitting ? "bg-[#3A0099]/60 cursor-not-allowed" : "bg-[#3A0099] hover:bg-[#270165]"
-      }`}
-      submitDisabled={isSubmitting}
-    />
-  ) : (
-    <Form
-      schema={createAdminSchema}
-      fields={createAdminFields}
-      defaultValues={createInitialValues}
-      onSubmit={onSubmit as (values: CreateAdminFormValues) => void}
-      submitLabel="Create"
-      submitClassName={`mt-2 w-full rounded-md px-4 py-3 font-semibold text-white transition ${
-        isSubmitting ? "bg-[#3A0099]/60 cursor-not-allowed" : "bg-[#3A0099] hover:bg-[#270165]"
-      }`}
+      schema={isEditMode ? updateAdminSchema : createAdminSchema}
+      fields={fields}
+      defaultValues={defaultValues ?? createInitialValues}
+      onSubmit={onSubmit as any}
+      submitLabel={isEditMode ? "Update" : "Create"}
+      submitStyleType={isEditMode ? "save" : "create"}
       submitDisabled={isSubmitting}
     />
   );
