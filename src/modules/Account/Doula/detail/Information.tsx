@@ -1,6 +1,9 @@
-import { mockDoula } from "../DoulaDetail";
+import { useGetDoulaDetailById } from "../hooks/useGetDoulaDetailById";
+
 // ── Tab: Information ─────────────────────────────────────────────────────────
-function InformationTab() {
+export function InformationTab() {
+    const {data, isLoading, fetchDoulaDetailById} = useGetDoulaDetailById()
+
     return (
       <div className="flex flex-col gap-8 p-4">
         {/* Pictures of service */}
@@ -8,9 +11,9 @@ function InformationTab() {
           <h3 className="mb-3 text-base font-semibold text-gray-800">
             Pictures of service
           </h3>
-          {mockDoula.photos.length > 0 ? (
+          {data?.photos?.length > 0 ? (
             <div className="flex flex-wrap gap-3">
-              {mockDoula.photos.map((url, idx) => (
+              {data.photos.map((url, idx) => (
                 <img
                   key={idx}
                   src={url}
@@ -27,14 +30,14 @@ function InformationTab() {
         {/* Services */}
         <div>
           <h3 className="mb-3 text-base font-semibold text-gray-800">Services</h3>
-          {mockDoula.services.length > 0 ? (
+          {data?.categories?.length > 0 ? (
             <div className="flex flex-wrap gap-2">
-              {mockDoula.services.map((s) => (
+              {data?.categories.map((s) => (
                 <span
-                  key={s}
+                  key={s.id}
                   className="rounded-full border border-gray-300 px-4 py-1.5 text-sm text-gray-700"
                 >
-                  {s}
+                  {s?.name}
                 </span>
               ))}
             </div>
@@ -48,9 +51,9 @@ function InformationTab() {
           <h3 className="mb-3 text-base font-semibold text-gray-800">
             Qualifications
           </h3>
-          {mockDoula.qualifications.length > 0 ? (
+          {data?.qualifications?.length > 0 ? (
             <ul className="list-disc pl-5 text-sm text-gray-700">
-              {mockDoula.qualifications.map((q, idx) => (
+              {data?.qualifications.map((q, idx) => (
                 <li key={idx}>{q}</li>
               ))}
             </ul>

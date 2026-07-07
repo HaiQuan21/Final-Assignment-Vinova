@@ -1,24 +1,31 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { getDoulaDetailById } from "../api/apiDoula";
 import type { DoulaDetail } from "../../../../constants/MainObjectClass";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 export function useGetDoulaDetailById() {
+  const {id} = useParams<{id : string}>();
   const [data, setData] = useState<DoulaDetail | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchDoulaDetailById = (id: string) => {
+  const fetchDoulaDetailById = () => {
     setIsLoading(true);
-    return getDoulaDetailById(id)
+    getDoulaDetailById(id)
       .then(({ data: res }) => {
         setData(res.data);
-        return res.data as DoulaDetail;
+        console.log("Doula By Id được trả về",res);
       })
       .catch((err) => {
         toast.error(err?.response?.data?.message ?? "Failed to load doula detail.");
       })
       .finally(() => setIsLoading(false));
   };
+
+  useEffect(() => {
+    if (!id) return;
+    fetchDoulaDetailById();
+  }, [id]);
 
   return { data, isLoading, fetchDoulaDetailById };
 }

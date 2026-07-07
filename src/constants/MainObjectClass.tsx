@@ -152,6 +152,10 @@ export interface DoulaDetail {
     lastName: string;
     picture: string | null;
     birthDate: string;
+    email: string,
+    countryCode: string,
+    phoneNumber: string,
+    lastAccess: string,
   };
   categories: {
     id: string;
@@ -162,5 +166,39 @@ export interface DoulaDetail {
   address: {
     id: string;
     fullAddress: string;
+  } | null;
+}
+
+export interface Client {
+  id: string;
+  fullName: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  birthDate: string;
+  email: string;
+  phoneNumber: string | null;
+  countryCode: string | null;
+  googleId: string | null;
+  appleId: string | null;
+  status: string;
+  verifiedEmail: boolean;
+  verifiedPhoneNumber: boolean;
+  updatedBy: string;
+  deletedBy: string;
+  deActiveAt: string | null;
+  isExternal: boolean;
+  createdAt: string;
+  updatedAt: string;
+  address: { fullAddress: string } | null;
+  picture: {
+    id: string;
+    uri: string;
+    type: string;
+    metadata: {
+      thum: { uri: string; key: string };
+      medium: { uri: string; key: string };
+    };
+    createdAt: string;
   } | null;
 }

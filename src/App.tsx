@@ -40,7 +40,7 @@ export default function App() {
 
   const DoulaAccount = lazy(() => import("./modules/Account/Doula/DoulaTable"));
 
-  const ClientAccount = lazy(() => import("./modules/Account/Client/clientAccount"));
+  const ClientAccount = lazy(() => import("./modules/Account/Client/ClientTable"));
 
   const DoulaDetail = lazy(()=>import("./modules/Account/Doula/DoulaDetail"))
   

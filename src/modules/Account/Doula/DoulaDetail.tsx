@@ -1,42 +1,33 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { HiArrowLeft, HiPencil } from "react-icons/hi";
-import { HiStar } from "react-icons/hi2";
+
 import TabBar from "../../../components/Tabbar";
 import StatusBadge from "../../../components/StatusBadge";
-import CommonTable from "../../../components/CommonTable";
-import { usePagination } from "../../../hooks/usePagination";
-import { useState } from "react";
-import type { ColumnDef } from "@tanstack/react-table";
-import { formatDate } from "../../../lib/formatDate";
-
-// ── Mock data ────────────────────────────────────────────────────────────────
-export const mockDoula = {
-  id: "28d8b93d-1b9a-4d2a-9d93-7b4601b9ecca",
-  fullName: "Robin Nguyen",
-  status: "active",
-  email: "robin+111@vinova.com.sg",
-  phone: "+61 43545453",
-  birthday: "18/03/2007",
-  address: "Lot 45 Daymar Road South, DAYMAR QLD 4497",
-  businessName: "-",
-  aboutDoulas: "-",
-  avatar: "https://i.pravatar.cc/80?u=robin",
-  photos: [
-    "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=200",
-    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200",
-  ],
-  services: ["Health care"],
-  qualifications: [],
-};
- 
+ import { InformationTab } from "./detail/Information";
+ import { PackagesTab } from "./detail/Packages";
+ import { ReviewsTab } from "./detail/Reviews";
+ import { SubscriptionTab } from "./detail/Subscription";
+ import { useGetDoulaDetailById } from "./hooks/useGetDoulaDetailById";
+ import { formatDate } from "../../../lib/formatDate";
 
 // ── Main: DoulaDetail ────────────────────────────────────────────────────────
 function DoulaDetail() {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  // TODO: thay mockDoula bằng data từ useGetDoulaDetailById(id)
-  const doula = mockDoula;
+  const {data, isLoading, fetchDoulaDetailById } = useGetDoulaDetailById();
+
+  const doula = data;
+
+
+ if (isLoading) {
+  return (
+    <div className="flex h-64 items-center justify-center text-gray-400">
+      Loading...
+    </div>
+  );
+}
+
+if (!doula) return null;
 
   return (
     <div className="flex flex-col">
@@ -64,12 +55,12 @@ function DoulaDetail() {
         <div className="flex flex-wrap items-start gap-6">
           {/* Avatar */}
           <img
-            src={doula.avatar}
-            alt={doula.fullName}
+            src={doula?.user?.picture || "-"}
+            alt={doula?.user?.fullName || "-"}
             className="h-16 w-16 rounded-full object-cover"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src =
-                `https://ui-avatars.com/api/?name=${encodeURIComponent(doula.fullName)}&background=3A0099&color=fff`;
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(doula.user.fullName)}&background=3A0099&color=fff`;
             }}
           />
 
@@ -77,27 +68,27 @@ function DoulaDetail() {
           <div className="flex flex-1 flex-wrap gap-x-10 gap-y-3">
             <div>
               <p className="text-xs text-gray-400">Full name</p>
-              <p className="font-semibold text-gray-800">{doula.fullName}</p>
+              <p className="font-semibold text-gray-800">{doula.user.fullName || "-"}</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">Status</p>
-              <span className="font-semibold text-gray-800"><StatusBadge status={doula.status} /></span>
+              <span className="font-semibold text-gray-800"><StatusBadge status={doula.status || "-"} /></span>
             </div>
             <div>
               <p className="text-xs text-gray-400">Email</p>
-              <p className="font-semibold text-sm text-gray-700">{doula.email}</p>
+              <p className="font-semibold text-sm text-gray-700">{doula.user.email || "-"}</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">Phone</p>
-              <p className=" font-semibold text-sm text-gray-700">{doula.phone || "-"}</p>
+              <p className=" font-semibold text-sm text-gray-700">{doula.user.phoneNumber || "-"}</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">Birthday</p>
-              <p className="font-semibold text-sm text-gray-700">{doula.birthday}</p>
+              <p className="font-semibold text-sm text-gray-700">{formatDate (true,doula.user.birthDate) || "-"}</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">Address</p>
-              <p className="font-semibold max-w-xs text-sm text-gray-700">{doula.address || "-"}</p>
+              <p className="font-semibold max-w-xs text-sm text-gray-700">{doula.address.fullAddress || "-"}</p>
             </div>
             <div>
               <p className="text-xs text-gray-400">Business name</p>
@@ -105,7 +96,7 @@ function DoulaDetail() {
             </div>
             <div className="w-full">
               <p className="text-xs text-gray-400">About Doulas</p>
-              <p className="font-semibold text-sm text-gray-700">{doula.aboutDoulas || "-"}</p>
+              <p className="font-semibold text-sm text-gray-700">{doula.description || "-"}</p>
             </div>
           </div>
         </div>

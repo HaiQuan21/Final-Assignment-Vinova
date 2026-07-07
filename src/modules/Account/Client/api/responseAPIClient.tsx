@@ -1,7 +1,6 @@
 export interface GetListClientsResponse{
     message: string,
-    data: [
-        {
+    data: {
             fullName: string,
             id: string,
             firstName: string,
@@ -41,8 +40,7 @@ export interface GetListClientsResponse{
               },
               createdAt: string
             }
-          }
-    ],
+          },
     metadata: {
     page: number,
     limit: number,

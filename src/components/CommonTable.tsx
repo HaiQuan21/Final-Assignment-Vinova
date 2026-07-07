@@ -118,7 +118,11 @@ function CommonTable<T>({
       >
         <table
           className="w-full border-collapse text-left text-sm"
-          style={{ tableLayout: "fixed", width: table.getTotalSize(),minWidth:"100%", }}
+          style={{
+            tableLayout: "fixed",
+            width: table.getTotalSize(),
+            minWidth: "100%",
+          }}
         >
           <thead className="sticky top-0 z-10">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -231,7 +235,9 @@ function CommonTable<T>({
                     key={row.id}
                     style={{ height: `${ROW_HEIGHT}px` }}
                     className={`border-b border-gray-200 last:border-0 ${
-                      row.getIsSelected() ? "bg-purple-50" : getRowBgClass(index)
+                      row.getIsSelected()
+                        ? "bg-purple-50"
+                        : getRowBgClass(index)
                     }`}
                   >
                     {row.getVisibleCells().map((cell) => {
@@ -266,18 +272,18 @@ function CommonTable<T>({
                 {Array.from({ length: fillerCount }).map((_, index) => {
                   const rowIndex = rows.length + index;
                   return (
-                  <tr
-                    key={`filler-${index}`}
-                    style={{ height: `${ROW_HEIGHT}px` }}
-                    className={`border-b border-gray-200 last:border-0 ${getRowBgClass(rowIndex)}`}
-                  >
-                    {columns.map((_, colIdx) => (
-                      <td
-                        key={colIdx}
-                        className="border-r border-gray-200 last:border-r-0"
-                      />
-                    ))}
-                  </tr>
+                    <tr
+                      key={`filler-${index}`}
+                      style={{ height: `${ROW_HEIGHT}px` }}
+                      className={`border-b border-gray-200 last:border-0 ${getRowBgClass(rowIndex)}`}
+                    >
+                      {columns.map((_, colIdx) => (
+                        <td
+                          key={colIdx}
+                          className="border-r border-gray-200 last:border-r-0"
+                        />
+                      ))}
+                    </tr>
                   );
                 })}
               </>

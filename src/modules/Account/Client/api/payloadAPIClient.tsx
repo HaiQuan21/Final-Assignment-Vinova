@@ -4,12 +4,6 @@ export interface GetListClientParams{
     page: number,
     limit: number,
     offset: number,
-    f_email: string,
-    f_firstname: string,
-    f_lastname: string,
-    f_status: string,
-    f_phoneNumber: string,
-    embed: string
 }
 
 export interface EditClientByIdPayload{

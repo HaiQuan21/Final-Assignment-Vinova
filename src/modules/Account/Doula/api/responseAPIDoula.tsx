@@ -57,13 +57,13 @@ export interface GetDoulaDetailByIdResponse{
     photos: [
      string
     ],
-    qualifications: [
-      "Hehe"
-    ],
+    qualifications: string,
     createdAt: string,
     updatedAt: string,
     deletedAt: null,
     cometChatUid: string,
+    deletedBy: string,
+    isTrialed: string,
     user: {
       fullName: string,
       firstName: string,
@@ -71,11 +71,30 @@ export interface GetDoulaDetailByIdResponse{
       lastName: string,
       picture: null,
       birthDate: string
+      email: string,
+      countryCode: string,
+      phoneNumber: string,
+      lastAccess: string,
     },
     categories: [
       {
         id: string,
-        image: string,
+        picture: {
+          createdAt: string,
+          id: string,
+          metadata:{
+            medium:{
+              key: string,
+              uri: string,
+            },
+            thumbnail:{
+              key: string,
+              uri: string,
+            }
+          },
+          type:string,
+          uri: string,
+        },
         name: string,
         title: string
       }
@@ -83,6 +102,7 @@ export interface GetDoulaDetailByIdResponse{
     address: {
       id: string,
       fullAddress: string
-    }
+    },
+
   }
 }

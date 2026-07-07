@@ -37,7 +37,7 @@ const breadcrumbs: BreadcrumbItem[] = currentItem
       <main className="flex-1 overflow-auto bg-[#F6F8FA]">
         <Toolbar
           title={title}
-          formType={breadcrumbs.length <= 1 ? currentItem?.formType : undefined}
+          formType={currentItem?.formType}
           breadcrumbs={breadcrumbs}
           isDetailPage={isDetailPage}
         />

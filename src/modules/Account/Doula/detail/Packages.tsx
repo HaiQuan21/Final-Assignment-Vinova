@@ -2,7 +2,9 @@ import { useState } from "react";
 import { usePagination } from "../../../../hooks/usePagination";
 import type { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "../../../../lib/formatDate";
-const mockPackages: {
+import CommonTable from "../../../../components/CommonTable";
+
+export const mockPackages: {
     name: string;
     coverPhoto: string;
     price: string;
@@ -11,7 +13,7 @@ const mockPackages: {
   }[] = [];
 
 // ── Tab: Packages ─────────────────────────────────────────────────────────────
-function PackagesTab() {
+export function PackagesTab() {
     const [sorting, setSorting] = useState([]);
     const { pagination, setPagination } = usePagination(25);
   

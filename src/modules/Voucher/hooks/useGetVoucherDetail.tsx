@@ -10,7 +10,6 @@ import { useParams } from "react-router-dom";
     const [data, setData] = useState<Voucher>();
     const [isLoading, setIsLoading] = useState(false);
 
-
     const fetchVoucherDetail = () => {
       setIsLoading(true);
       getVouchersById(id)

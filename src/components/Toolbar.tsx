@@ -27,6 +27,9 @@ export default function Toolbar({
   const [inputValue, setInputValue] = useState(
     searchParams.get("search") ?? "",
   );
+  const SUPPORTED_FORM_TYPES = ["article", "voucher", "pd", "admin", "category"] as const;
+
+  const hasForm = formType && SUPPORTED_FORM_TYPES.includes(formType as any);
 
   //reset string trên searchbar khi qua một trang khác
   useEffect(() => {
@@ -134,13 +137,7 @@ export default function Toolbar({
   return (
     <>
       <div className="flex w-full items-center justify-between gap-4 bg-white px-6 py-4 border-b-2">
-        {breadcrumbs.length > 1 ? (
           <Breadcrumbs items={breadcrumbs} />
-        ) : (
-          <span className="whitespace-nowrap text-xl text-gray-900">
-            {title}
-          </span>
-        )}
 
         {!isDetailPage && (
           <>
@@ -158,13 +155,18 @@ export default function Toolbar({
               />
             </div>
 
+          {hasForm ? (
             <Button
-              styleType="create"
-              onClick={() => setIsOpen(true)}
-              size="lg"
-            >
-              Create {title}
-            </Button>
+            styleType="create"
+            onClick={() => setIsOpen(true)}
+            size="lg"
+          >
+            Create {title}
+          </Button>
+          ):(
+            <div></div>
+          )}
+            
           </>
         )}
       </div>

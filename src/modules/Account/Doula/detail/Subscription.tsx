@@ -1,3 +1,8 @@
+import CommonTable from "../../../../components/CommonTable";
+import { useState } from "react";
+import { usePagination } from "../../../../hooks/usePagination";
+import type { ColumnDef } from "@tanstack/react-table";
+import StatusBadge from "../../../../components/StatusBadge";
 
 const mockSubscription = {
     name: "Test trim",
@@ -16,7 +21,7 @@ const mockBillingHistory = [
   ];
 
 // ── Tab: Subscription ────────────────────────────────────────────────────────
-function SubscriptionTab() {
+export function SubscriptionTab() {
     const [sorting, setSorting] = useState([]);
     const { pagination, setPagination } = usePagination(25);
   
