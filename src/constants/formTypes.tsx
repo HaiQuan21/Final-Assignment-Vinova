@@ -4,6 +4,7 @@ import { type FormType } from "./navigation";
 import type { ReactNode } from "react";
 import type { ZodType } from "zod";
 import { type ButtonStyle } from "../components/Button";
+import type { BreadcrumbItem } from "../components/Breadcrumb";
 
 export interface BaseFieldConfig {
   name: string;
@@ -50,14 +51,20 @@ interface ImageFieldConfig extends BaseFieldConfig {
   placeholder?: string;
 }
 
+interface PhoneFieldConfig extends BaseFieldConfig {
+  type: "phone";
+  countryCodeName: string; // field name cho country code
+}
+
 // Muốn thêm field mới sau này thì thêm 1 interface tương tự
 export type FieldConfig =
   | TextFieldConfig
   | SelectFieldConfig
   | TextAreaFieldConfig
   | DateFieldConfig
-  |ToggleFieldConfig
-  |ImageFieldConfig;
+  | ToggleFieldConfig
+  | ImageFieldConfig
+  | PhoneFieldConfig;
 
 export type FormValues = Record<string, string>;
 export type FormErrors = Record<string, string | undefined>;
@@ -80,6 +87,8 @@ export interface SlideOverProps {
 export interface ToolbarProps {
   title: string;
   formType?: FormType;
+  breadcrumbs?: BreadcrumbItem[];
+  isDetailPage?: boolean;
 }
 
 export interface FormProps<T extends FormValues = FormValues> {

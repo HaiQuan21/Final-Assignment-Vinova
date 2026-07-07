@@ -41,6 +41,9 @@ export default function App() {
   const DoulaAccount = lazy(() => import("./modules/Account/Doula/DoulaTable"));
 
   const ClientAccount = lazy(() => import("./modules/Account/Client/clientAccount"));
+
+  const DoulaDetail = lazy(()=>import("./modules/Account/Doula/DoulaDetail"))
+  
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
@@ -57,7 +60,10 @@ export default function App() {
           <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
               <Route path="/account/admin" element={isSuperAdmin() ? <AdminAccount/> : <Navigate to="/account/doula" replace />} />
+
               <Route path="/account/doula" element={<DoulaAccount />} />
+              <Route path="/account/doula/:id" element={<DoulaDetail />} />
+
               <Route path="/account/client" element={<ClientAccount />} />
               <Route path="/articles" element={<ArticlePD key="article" type="article" />} />
               <Route path="/category" element={<Category />} />

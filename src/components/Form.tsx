@@ -15,6 +15,7 @@ import {
 } from "../constants/formTypes";
 import FieldImage from "./FieldImage";
 import Button from "./Button";
+import FieldPhoneNumber from "./FieldPhoneNumber";
 
 function Form<T extends FormValues>({
   schema,
@@ -105,6 +106,22 @@ function Form<T extends FormValues>({
             {field.renderHint?.(currentValue)}
           </>
         );
+        
+        case "phone":
+          return (
+            <>
+              <FieldPhoneNumber
+                name={field.name}
+                countryCodeName={field.countryCodeName}
+                control={control}
+                label={field.label}
+                required={field.required}
+                disabled={field.disabled || isSubmitting}
+                error={errorMessage}
+              />
+              {field.renderHint?.(currentValue)}
+            </>
+          );
 
       default:
         // text | email | password | number | tel | image
