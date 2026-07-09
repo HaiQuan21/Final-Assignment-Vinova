@@ -44,6 +44,7 @@ export default function App() {
 
   const DoulaDetail = lazy(()=>import("./modules/Account/Doula/DoulaDetail"))
   
+  const ClientDetail = lazy(()=>import("./modules/Account/Client/ClientDetail"))
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
@@ -65,6 +66,8 @@ export default function App() {
               <Route path="/account/doula/:id" element={<DoulaDetail />} />
 
               <Route path="/account/client" element={<ClientAccount />} />
+              <Route path="/account/client/:id" element={<ClientDetail />} />
+
               <Route path="/articles" element={<ArticlePD key="article" type="article" />} />
               <Route path="/category" element={<Category />} />
               <Route path="/help-documents" element={<HelpDocuments />} />

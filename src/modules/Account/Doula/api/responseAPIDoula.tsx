@@ -55,7 +55,23 @@ export interface GetDoulaDetailByIdResponse{
     businessName: null,
     status: "active",
     photos: [
-     string
+      id: string,
+      media:{
+        createdAt: string,
+        id: string,
+        metadata:{
+          medium:{
+            key: string,
+            uri: string
+          },
+          thumbnail:{
+            key: string,
+            uri: string
+          }
+        },
+        type: string,
+        uri: string
+      }
     ],
     qualifications: string,
     createdAt: string,

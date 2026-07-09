@@ -24,9 +24,10 @@ export function useUpdateDoulaById(onSuccess?: () => void) {
       .finally(() => setIsFetching(false));
   };
 
-  const handleEditSubmit = (id: string, payload: UpdateDoulaPayload) => {
+  const handleEditSubmit = (values: UpdateDoulaPayload) => {
+    if (!editingDoula) return;
     setIsSubmitting(true);
-    updateDoulaById(id, payload)
+    updateDoulaById(editingDoula.id, values)
       .then((res) => {
         toast.success(res.data.message ?? "Updated successfully.");
         setEditOpen(false);

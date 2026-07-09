@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import SlideOver from "./SlideOver";
 import ArticlePDForm from "../modules/ArticlePD/ArticlePDForm";
 import CreateVoucherForm from "../modules/Voucher/CreateVoucherForm";
 import AdminForm from "../modules/Account/Admin/AdminForm";
 import type { ToolbarProps } from "../constants/formTypes";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useCreateArticlePD } from "../modules/ArticlePD/hooks/useCreateArticlePD";
 import { useCreateVoucher } from "../modules/Voucher/hooks/useCreateVoucher";
 import { useCreateAdmin } from "../modules/Account/Admin/hooks/useCreateAdmin";
 import CategoryForm from "../modules/Category/CategoryForm";
 import { useCreateCategories } from "../modules/Category/hooks/useCreateCategories";
+import { useTableParams } from "../hooks/useTableParams"; // chỉnh lại path cho đúng vị trí thật của bạn
 import Button from "./Button";
 import Breadcrumbs from "./Breadcrumb";
-import type { BreadcrumbItem } from "./Breadcrumb";
 
 export default function Toolbar({
   title,
@@ -23,44 +23,42 @@ export default function Toolbar({
 }: ToolbarProps) {
   const { pathname } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [inputValue, setInputValue] = useState(
-    searchParams.get("search") ?? "",
-  );
-  const SUPPORTED_FORM_TYPES = ["article", "voucher", "pd", "admin", "category"] as const;
+
+  const { search, setSearch, setAll } = useTableParams();
+  const [inputValue, setInputValue] = useState(search);
+
+  const SUPPORTED_FORM_TYPES = [
+    "article",
+    "voucher",
+    "pd",
+    "admin",
+    "category",
+  ] as const;
 
   const hasForm = formType && SUPPORTED_FORM_TYPES.includes(formType as any);
 
-  //reset string trên searchbar khi qua một trang khác
+  // Reset searchbar + URL params khi chuyển route.
+  // Bỏ qua lần chạy đầu (mount) để giữ nguyên page/search khi mở link từ tab khác.
+  const prevPathnameRef = useRef(pathname);
   useEffect(() => {
-    setInputValue("");
-    setSearchParams(
-      (prev) => {
-        prev.delete("search");
-        prev.set("page", "1");
-        return prev;
-      },
-      { replace: true },
-    );
-  }, [pathname]);
+    if (prevPathnameRef.current === pathname) return;
+    prevPathnameRef.current = pathname;
 
+    setInputValue("");
+    setAll({ search: "", page: 1 });
+  }, [pathname, setAll]);
+
+  // Debounce đẩy inputValue lên URL qua setSearch.
+  // setSearch tự so sánh với giá trị hiện tại trên URL nên không cần
+  // guard "skip lần đầu" ở đây — nếu inputValue === search hiện tại thì
+  // setSearch sẽ không ghi gì cả.
   useEffect(() => {
     const timer = setTimeout(() => {
-      setSearchParams(
-        (prev) => {
-          if (inputValue) {
-            prev.set("search", inputValue);
-          } else {
-            prev.delete("search");
-          }
-          prev.set("page", "1");
-          return prev;
-        },
-        { replace: true },
-      );
+      setSearch(inputValue);
     }, 400);
     return () => clearTimeout(timer);
-  }, [inputValue]);
+  }, [inputValue, setSearch]);
+
   //Create Article
   const { handleCreate: handleCreateArticle, isSubmitting: isCreatingArticle } =
     useCreateArticlePD("article", () => setIsOpen(false));
@@ -92,7 +90,6 @@ export default function Toolbar({
             isSubmitting={isCreatingArticle}
           />
         );
-        break;
       case "voucher":
         return (
           <CreateVoucherForm
@@ -100,7 +97,6 @@ export default function Toolbar({
             isSubmitting={isCreatingVoucher}
           />
         );
-        break;
       case "pd":
         return (
           <ArticlePDForm
@@ -108,7 +104,6 @@ export default function Toolbar({
             isSubmitting={isCreatingPD}
           />
         );
-        break;
       case "admin":
         return (
           <AdminForm
@@ -116,7 +111,6 @@ export default function Toolbar({
             isSubmitting={isCreatingAdmin}
           />
         );
-        break;
       case "category":
         return (
           <CategoryForm
@@ -130,14 +124,13 @@ export default function Toolbar({
             Chưa có form tạo mới cho mục này.
           </p>
         );
-        break;
     }
   };
 
   return (
     <>
       <div className="flex w-full items-center justify-between gap-4 bg-white px-6 py-4 border-b-2">
-          <Breadcrumbs items={breadcrumbs} />
+        <Breadcrumbs items={breadcrumbs} />
 
         {!isDetailPage && (
           <>
@@ -155,18 +148,17 @@ export default function Toolbar({
               />
             </div>
 
-          {hasForm ? (
-            <Button
-            styleType="create"
-            onClick={() => setIsOpen(true)}
-            size="lg"
-          >
-            Create {title}
-          </Button>
-          ):(
-            <div></div>
-          )}
-            
+            {hasForm ? (
+              <Button
+                styleType="create"
+                onClick={() => setIsOpen(true)}
+                size="lg"
+              >
+                Create {title}
+              </Button>
+            ) : (
+              <div></div>
+            )}
           </>
         )}
       </div>

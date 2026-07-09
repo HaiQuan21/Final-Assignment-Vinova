@@ -1,3 +1,5 @@
+import { string } from "zod";
+
 export interface Admin {
   id: string;
   username: string;
@@ -139,7 +141,27 @@ export interface DoulaDetail {
   description: string;
   businessName: string | null;
   status: string;
-  photos: string[];
+  photos: [
+    {
+      id: string,
+      media: {
+        createdAt: string,
+        id: string,
+        metadata:{
+          medium:{
+            key: string,
+            uri: string
+          },
+          thumbnail:{
+            key: string,
+            uri: string
+          }
+        }
+        type: string,
+        uri: string,
+      }
+    }
+  ];
   qualifications: string[];
   createdAt: string;
   updatedAt: string;
@@ -157,12 +179,12 @@ export interface DoulaDetail {
     phoneNumber: string,
     lastAccess: string,
   };
-  categories: {
+  categories:{
     id: string;
     image: string;
     name: string;
     title: string;
-  }[];
+  };
   address: {
     id: string;
     fullAddress: string;

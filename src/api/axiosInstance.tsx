@@ -2,7 +2,7 @@ import axios from "axios";
 import { refreshToken as refreshTokenApi } from "./apiService";
 
 const axiosInstance = axios.create({
-  baseURL: "https://dir-rentals-duties-edge.trycloudflare.com/api/v1/admins",
+  baseURL: "https://winds-royalty-stocks-thu.trycloudflare.com/api/v1/admins",
   timeout: 10000,
   headers: { "Content-Type": "application/json" },
 });

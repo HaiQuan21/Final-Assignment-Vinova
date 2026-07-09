@@ -1,42 +1,39 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { PaginationState, SortingState } from "@tanstack/react-table";
 import { getAllAdmin } from "../api/apiAdmin";
 import type { AdminItem } from "../../../../constants/MainObjectClass";
 
-interface UseGetAllAdminParams {
-  pagination: PaginationState;
-  sorting: SortingState;
-  refetchKey?: number;
-}
-
-export function useGetAllAdmin({ pagination, sorting, refetchKey = 0 }: UseGetAllAdminParams) {
+export function useGetAllAdmin() {
   const [data, setData] = useState<AdminItem[]>([]);
   const [totalEntries, setTotalEntries] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const [searchParams] = useSearchParams();
+
+  const page = Number(searchParams.get("page") ?? 1);
+  const limit = Number(searchParams.get("limit") ?? 25);
   const search = searchParams.get("search") ?? "";
+  const sort = searchParams.get("sort") ?? "";
 
   const fetchAllAdmin = useCallback(() => {
     setIsLoading(true);
     getAllAdmin({
-      page: pagination.pageIndex + 1,
-      limit: pagination.pageSize,
-      offset: pagination.pageIndex * pagination.pageSize,
+      page,
+      limit,
+      offset: (page - 1) * limit,
       search: search || undefined,
-      sort: sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(",") || undefined,
+      sort: sort || undefined,
     })
       .then(({ data: res }) => {
         setData(res.data);
         setTotalEntries(res.metadata.totalCount);
       })
       .finally(() => setIsLoading(false));
-  }, [pagination.pageIndex, pagination.pageSize, sorting, search]);
+  }, [page, limit, search, sort]);
 
   useEffect(() => {
     fetchAllAdmin();
-  }, [fetchAllAdmin, refetchKey]);
+  }, [fetchAllAdmin]);
 
   return { data, totalEntries, isLoading, fetchAllAdmin };
 }

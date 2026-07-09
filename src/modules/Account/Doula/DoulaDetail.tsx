@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HiArrowLeft, HiPencil } from "react-icons/hi";
 
 import TabBar from "../../../components/Tabbar";
@@ -14,7 +14,7 @@ import StatusBadge from "../../../components/StatusBadge";
 function DoulaDetail() {
   const navigate = useNavigate();
 
-  const {data, isLoading, fetchDoulaDetailById } = useGetDoulaDetailById();
+  const {data, isLoading} = useGetDoulaDetailById();
 
   const doula = data;
 

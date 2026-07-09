@@ -6,26 +6,20 @@ import ActionButtons from "../../../components/ActionButtons";
 import SlideOver from "../../../components/SlideOver";
 import ConfirmModal from "../../../components/ConfirmModal";
 import AdminForm from "./AdminForm";
-import { useAdmin } from "./hooks/useAdmin";
 import type { AdminItem } from "../../../constants/MainObjectClass";
 import FormSkeleton from "../../../components/FormSkeleton";
 import { updateAdminFields } from "./AdminFormProps";
 import { useUpdateAdminById } from "./hooks/useUpdateAdminById";
 import { useDeleteAdminById } from "./hooks/useDeleteAdminById";
 import { getCurrentUser } from "../../../lib/getCurrentUser";
+import { useGetAllAdmin } from "./hooks/useGetAllAdmin";
+import { useTableParams } from "../../../hooks/useTableParams";
 
 function AdminTable() {
   const currentUser = getCurrentUser();
-  const {
-    data,
-    totalEntries,
-    isLoading,
-    sorting,
-    setSorting,
-    pagination,
-    setPagination,
-    fetchAllAdmin,
-  } = useAdmin();
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(25);
+
+  const { data, totalEntries, isLoading, fetchAllAdmin } = useGetAllAdmin();
 
   const {
     editOpen,

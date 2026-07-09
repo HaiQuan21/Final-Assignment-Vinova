@@ -12,20 +12,16 @@ export interface UpdateDoulaPayload{
         countryCode: string,
         phoneNumber: string
     },
-    deletedPhotos: [
-        string
-    ],
-    newPhotos: [
-        string
-    ],
+    deletedPhotos: string[]
+    ,
+    newPhotos: string[]
+    ,
     title: string,
     description: string,
-    qualifications: [
-        string
-    ],
-    categoryIds: [
-        string
-    ],
+    qualifications: string[]
+    ,
+    categoryIds: string
+    ,
     businessName: string,
     status: string
 }

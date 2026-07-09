@@ -11,11 +11,9 @@ import ClientForm from "./ClientForm";
 import { useGetListClient } from "./hooks/useGetListClient";
 import { useUpdateClientById } from "./hooks/useUpdateClientById";
 import { useDeleteClientById } from "./hooks/useDeleteClientById";
-import { usePagination } from "../../../hooks/usePagination";
-import { useState } from "react";
-import type { SortingState } from "@tanstack/react-table";
 import type { Client } from "../../../constants/MainObjectClass";
 import { formatDate } from "../../../lib/formatDate";
+import { useTableParams } from "../../../hooks/useTableParams";
 
 const clientFormFields = [
   { name: "phoneNumber", label: "Phone Number", type: "phone" as const, countryCodeName: "countryCode" },
@@ -24,14 +22,10 @@ const clientFormFields = [
 
 function ClientTable() {
   const navigate = useNavigate();
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const { pagination, setPagination } = usePagination(25);
 
-  const { data, totalEntries, isLoading, fetchListClient } = useGetListClient({
-    pagination,
-    sorting,
-  });
-
+  const { data, totalEntries, isLoading, fetchListClient } = useGetListClient();
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(25);
+  
   const {
     editOpen, editingClient, isSubmitting: isEditing, isFetching,
     toFormValues, handleEditClick, handleEditSubmit, handleEditClose,

@@ -7,20 +7,25 @@ import ConfirmModal from "../../../components/ConfirmModal";
 import { useGetListOfDoula } from "./hooks/useGetListOfDoula";
 import { useUpdateDoulaById } from "./hooks/useUpdateDoulaById";
 import { useDeleteDoulaById } from "./hooks/useDeleteDoulaById";
-import { usePagination } from "../../../hooks/usePagination";
-import { useState } from "react";
-import type { SortingState } from "@tanstack/react-table";
 import type { Doula } from "../../../constants/MainObjectClass";
 import { formatDate } from "../../../lib/formatDate";
 import { useNavigate } from "react-router-dom";
+import { useTableParams } from "../../../hooks/useTableParams";
+import SlideOver from "../../../components/SlideOver";
+import FormSkeleton from "../../../components/FormSkeleton";
+import DoulaForm from "./DoulaForm";
+
+const doulaFormFields = [
+  { name: "phoneNumber", label: "Phone Number", type: "phone" as const, countryCodeName: "countryCode" },
+  { name: "status", label: "Status", type: "select" as const, options: [{ value: "active", label: "Active" }, { value: "inactive", label: "Inactive" }] },
+];
 
 function DoulaTable() {
   const navigate = useNavigate();
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const { pagination, setPagination } = usePagination(25);
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(25);
 
   const { data, totalEntries, isLoading, fetchListOfDoulas } =
-    useGetListOfDoula({ pagination, sorting });
+    useGetListOfDoula();
 
   const {
     editOpen, editingDoula, isSubmitting: isEditing, isFetching,
@@ -166,6 +171,43 @@ function DoulaTable() {
         FIXED_ROW_COUNT={8}
         emptyMessage="No doulas found"
       />
+            {/* Edit SlideOver */}
+            <SlideOver isOpen={editOpen} onClose={handleEditClose} title="Update Client">
+        {isFetching ? (
+          <FormSkeleton fields={doulaFormFields} />
+        ) : editingDoula ? (
+          <DoulaForm
+            onSubmit={(values) =>
+              handleEditSubmit({
+                user: {
+                  countryCode: values.countryCode,
+                  phoneNumber: values.phoneNumber
+              },
+              deletedPhotos: []
+              ,
+              newPhotos: []
+              ,
+              title: editingDoula.title,
+              description: editingDoula.description,
+              qualifications: 
+                  editingDoula.qualifications
+              ,
+              categoryIds: 
+                  editingDoula.categories.id
+              ,
+              businessName: editingDoula.businessName,
+              status: values.status
+              })
+            }
+            isSubmitting={isEditing}
+            defaultValues={{
+              countryCode: editingDoula.user.countryCode ?? "+61",
+              phoneNumber: editingDoula.user.phoneNumber ?? "",
+              status: editingDoula.status,
+            }}
+          />
+        ) : null}
+      </SlideOver>
 
       <ConfirmModal
         isOpen={deleteModalOpen}

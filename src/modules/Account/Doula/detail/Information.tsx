@@ -13,11 +13,11 @@ export function InformationTab() {
           </h3>
           {data?.photos?.length > 0 ? (
             <div className="flex flex-wrap gap-3">
-              {data.photos.map((url, idx) => (
+              {data.photos.map((photo) => (
                 <img
-                  key={idx}
-                  src={url}
-                  alt={`service-${idx}`}
+                  key={photo.id}
+                  src={photo.media.uri}
+                  alt={`service-${photo.id}`}
                   className="h-32 w-32 rounded-lg object-cover"
                 />
               ))}
@@ -30,7 +30,7 @@ export function InformationTab() {
         {/* Services */}
         <div>
           <h3 className="mb-3 text-base font-semibold text-gray-800">Services</h3>
-          {data?.categories?.length > 0 ? (
+          {!!data?.categories ? (
             <div className="flex flex-wrap gap-2">
               {data?.categories.map((s) => (
                 <span
