@@ -35,7 +35,7 @@ function FieldInputSingle({
               onChange={(e) => rhfField.onChange(e.target.value)}
               disabled={disabled}
               maxLength={maxLength}
-              className={`w-full rounded border-2 border-gray-300 px-4 py-3 pr-12 outline-none transition focus:border-gray-500
+              className={`w-full rounded border-2 border-gray-300 hover:border-[#4A15AD] px-4 py-3 pr-12 outline-none transition focus:border-gray-500
                 ${error ? "border-red-500" : ""}
                 ${className}
               `}

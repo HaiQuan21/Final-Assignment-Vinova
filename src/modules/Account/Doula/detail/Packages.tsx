@@ -1,26 +1,22 @@
-import { useState } from "react";
-import { usePagination } from "../../../../hooks/usePagination";
-import type { ColumnDef } from "@tanstack/react-table";
-import { formatDate } from "../../../../lib/formatDate";
+import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import CommonTable from "../../../../components/CommonTable";
+import { useGetPackageList } from "../hooks/useDoulaPackage/useGetPackageList";
+import { useTableParams } from "../../../../hooks/useTableParams";
+import { formatDate } from "../../../../lib/formatDate";
+import type { DoulaPackage } from "../../../../constants/MainObjectClass";
 
-export const mockPackages: {
-    name: string;
-    coverPhoto: string;
-    price: string;
-    createdDate: string;
-    numberOfClients: number;
-  }[] = [];
-
+interface PackagesTabProps {
+  doulaId: string;
+}
 // ── Tab: Packages ─────────────────────────────────────────────────────────────
-export function PackagesTab() {
-    const [sorting, setSorting] = useState([]);
-    const { pagination, setPagination } = usePagination(25);
-  
-    const packageColumns: ColumnDef<(typeof mockPackages)[0]>[] = [
+export function PackagesTab({ doulaId }: PackagesTabProps) {
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(25);
+  const { data, totalEntries, isLoading } = useGetPackageList(doulaId);
+
+    const packageColumns: ColumnDef<DoulaPackage>[] = [
       { accessorKey: "name", header: "Package Name", size: 280 },
       {
-        accessorKey: "coverPhoto",
+        accessorKey: "image",
         header: "Cover photo",
         size: 200,
         enableSorting: false,
@@ -33,7 +29,7 @@ export function PackagesTab() {
           );
         },
       },
-      { accessorKey: "price", header: "Price", size: 150 },
+      { accessorKey: "price", header: "Price", size: 150,cell: (info) => `$${info.getValue<string>()}` },
       {
         accessorKey: "createdDate",
         header: "Created date",
@@ -53,7 +49,7 @@ export function PackagesTab() {
     return (
       <div className="p-4">
         <CommonTable
-          data={mockPackages}
+          data={data}
           columns={packageColumns}
           sorting={sorting}
           onSortingChange={setSorting}

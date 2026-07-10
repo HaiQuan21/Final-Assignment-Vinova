@@ -8,7 +8,7 @@ export function usePatchCareStatus(onSuccess?: () => void) {
   const [targetVoucher, setTargetVoucher] = useState<Voucher | null>(null);
 
   const handleToggleClick = (voucher: Voucher) => {
-    if (voucher.status === "expired") return;
+    if (voucher.status === "inactive") return;
     setTargetVoucher(voucher);
     setConfirmOpen(true);
   };
@@ -16,8 +16,7 @@ export function usePatchCareStatus(onSuccess?: () => void) {
   const handleToggleConfirm = () => {
     if (!targetVoucher) return;
 
-    const nextStatus =
-      targetVoucher.status === "active" ? "inactive" : "active";
+    const nextStatus ="inactive";
 
     patchCareStatus(targetVoucher.id, {
       code: targetVoucher.code,

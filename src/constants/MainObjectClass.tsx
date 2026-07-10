@@ -184,7 +184,7 @@ export interface DoulaDetail {
     image: string;
     name: string;
     title: string;
-  };
+  }[];
   address: {
     id: string;
     fullAddress: string;
@@ -223,4 +223,131 @@ export interface Client {
     };
     createdAt: string;
   } | null;
+}
+
+export interface DoulaPackage {
+  id: string;
+  name: string;
+  price: string;
+  image: string;
+  doulaId: string;
+  numberOfClients: string;
+  picture2: string | null;
+}
+
+export interface DoulaPackageDetail {
+  id: string;
+  doulaId: string;
+  name: string;
+  price: string;
+  description: string;
+  shortDescription: string;
+  image: string;
+  qualifications: string[];
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  cares: {
+    id: string;
+    createdAt: string;
+    status: string;
+    user: {
+      fullName: string;
+      lastName: string;
+      firstName: string;
+      middleName: string | null;
+      picture: string;
+      email: string;
+      status: string;
+      picture2: string | null;
+    };
+  }[];
+  picture2: string | null;
+}
+
+export interface DoulaReview{
+  id: string,
+  doulaId: string,
+  userId: string,
+  comment: string,
+  start: number,
+  expertiseStar: number,
+  communicationStar: number,
+  punctualityStar: number,
+  supportStar: number,
+  createdAt: string,
+  updatedAt: string,
+  user: {
+    fullName: string,
+    firstName: string,
+    middleName: string | null,
+    lastName: string,
+    picture: string
+  }
+}
+
+export interface DoulaReviewDetail{
+    id: string,
+    careId: string,
+    comment: string,
+    expertiseStar: number,
+    communicationStar: number,
+    punctualityStar: number,
+    supportStar: number,
+    userId: string,
+    start: number,
+    doulaId: string,
+    updatedAt: string,
+    createdAt: string,
+    deletedAt: string | null
+}
+
+export interface DoulaReviewStar{
+  id: string,
+  title: string,
+  description: string,
+  businessName: string,
+  starAvg: number,
+  status: string,
+  qualifications: [],
+  stripeCustomerId: string,
+  isTrialed: boolean,
+  createdAt: string,
+  updatedAt: string,
+  avgStart: null,
+  avgExpertiseStar: null,
+  avgCommunicationStar: null,
+  avgPunctualityStar: null,
+  avgSupportStar: null,
+  totalReview: string
+}
+
+export interface DoulaSubscription{
+  id: string,
+  subscriptionPlanName: string,
+  endTime: string | null,
+  status: string,
+  createdAt: string,
+  subscription: {
+    id: string,
+    name: string,
+    description: string,
+    price: [
+      {
+        name: string,
+        amount: number,
+        count: number,
+        interval: string,
+        description: string
+      }
+    ]
+  },
+  price: {
+    name: string,
+    amount: number,
+    count: number,
+    interval: string,
+    description: string
+  },
+  nextBillingDate: string
 }

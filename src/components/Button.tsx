@@ -13,15 +13,15 @@ export type ButtonStyle =
   | "back";       
 
 const styleMap: Record<ButtonStyle, string> = {
-  create:  "bg-[#5B21B6] text-white hover:bg-[#4C1D95] disabled:bg-[#5B21B6]/50",
-  login:   "text-blue-500 hover:text-red-500",
-  save:    "bg-[#3A0099] text-white hover:bg-[#270165] disabled:bg-[#3A0099]/50",
-  cancel:  "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50",
-  delete:  "bg-red-500 text-white hover:bg-red-600 disabled:bg-red-300",
-  confirm: "bg-red-500 text-white hover:bg-red-600 disabled:bg-red-300",
-  toggle:  "bg-yellow-400 text-white hover:bg-yellow-500 disabled:bg-yellow-200",
-  view:    "bg-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-40",
-  back:    "bg-transparent text-gray-600 hover:text-gray-900 disabled:opacity-40 px-0",
+  create:  "bg-[#5B21B6] text-white hover:bg-[#4C1D95] disabled:bg-[#5B21B6]/50 cursor-pointer",
+  login:   "text-blue-500 hover:text-red-500 cursor-pointer",
+  save:    "bg-[#3A0099] text-white hover:bg-[#270165] disabled:bg-[#3A0099]/50 cursor-pointer",
+  cancel:  "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 cursor-pointer",
+  delete:  "bg-red-500 text-white hover:bg-red-600 disabled:bg-red-300 cursor-pointer",
+  confirm: "bg-red-500 text-white hover:bg-red-600 disabled:bg-red-300 cursor-pointer",
+  toggle:  "bg-yellow-400 text-white hover:bg-yellow-500 disabled:bg-yellow-200 cursor-pointer",
+  view:    "bg-transparent text-gray-600 hover:bg-gray-100 disabled:opacity-40 cursor-pointer",
+  back:    "bg-transparent text-gray-600 hover:text-gray-900 disabled:opacity-40 px-0 cursor-pointer",
 };
 
 const sizeMap = {

@@ -6,28 +6,27 @@ import ActionButtons from "../../components/ActionButtons";
 import SlideOver from "../../components/SlideOver";
 import ConfirmModal from "../../components/ConfirmModal";
 import ArticlePDForm from "./ArticlePDForm";
-import { useArticlePD } from "./hooks/useArticlePD";
 import type { ArticlePD } from "../../constants/MainObjectClass";
 import FormSkeleton from "../../components/FormSkeleton";
 import { articlepdFields } from "./articlepdFormProps";
 import { formatDate } from "../../lib/formatDate";
 import { useEditArticlePD } from "./hooks/useEditArticlePD";
 import { useDeleteArticlePD } from "./hooks/useDeleteArticlePD";
+import { useTableParams } from "../../hooks/useTableParams";
+import { useGetArticlePD } from "./hooks/useGetArticlePD";
+
 interface ArticlePDProps {
   type: "article" | "pd";
 }
 
 function ArticlePDTable({ type }: ArticlePDProps) {
-  const {
-    data,
-    totalEntries,
-    isLoading,
-    fetchArticlePD,
-    sorting,
-    setPagination,
+
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(8);
+  const { data, totalEntries, isLoading, fetchArticlePD } = useGetArticlePD({
     pagination,
-    setSorting,
-  } = useArticlePD(type);
+    sorting,
+    type,
+  });
 
   const {
     editOpen,

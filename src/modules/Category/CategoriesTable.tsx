@@ -7,20 +7,32 @@ import SlideOver from "../../components/SlideOver";
 import ConfirmModal from "../../components/ConfirmModal";
 import FormSkeleton from "../../components/FormSkeleton";
 import CategoryForm from "./CategoryForm";
-import { useCategory } from "./hooks/useCategory";
 import type { Category } from "../../constants/MainObjectClass";
 import { formatDate } from "../../lib/formatDate";
 import { categoryFields } from "./categoryFormProps";
+import { useTableParams } from "../../hooks/useTableParams";
+import { useGetAllCategories } from "./hooks/useGetAllCategories";
+import { useUpdateCategories } from "./hooks/useUpdateCategories";
+import { useDeleteCategories } from "./hooks/useDeleteCategories";
 
 function CategoryTable() {
+
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(8);
+
+  const { data, totalEntries, isLoading, fetchAllCategories } = useGetAllCategories({
+    pagination,
+    sorting,
+  });
+
   const {
-    data, totalEntries, isLoading,
-    sorting, setSorting, pagination, setPagination,
-    editOpen, editingCategory, isEditing, isFetching,
+    editOpen, editingCategory, isSubmitting: isEditing, isFetching,
     toFormValues, handleEditClick, handleEditSubmit, handleEditClose,
+  } = useUpdateCategories(fetchAllCategories);
+
+  const {
     deleteModalOpen, deletingCategory, isDeleting,
     handleDeleteClick, handleDeleteConfirm, handleDeleteCancel,
-  } = useCategory();
+  } = useDeleteCategories(fetchAllCategories);
 
   const columns = useMemo<ColumnDef<Category>[]>(
     () => [

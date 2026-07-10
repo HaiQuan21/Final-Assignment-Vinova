@@ -47,7 +47,7 @@ function FieldPhoneNumber({
               value={field.value ?? "+61"}
               onChange={(e) => field.onChange(e.target.value)}
               disabled={disabled}
-              className="border-r border-gray-300 bg-gray-50 px-3 py-3 text-sm text-gray-700 outline-none"
+              className="border-r border-gray-300 hover:border-[#4A15AD] bg-gray-50 px-3 py-3 text-sm text-gray-700 outline-none"
             >
               {countryCodes.map(({ code, flag, country }) => (
                 <option key={code} value={code}>

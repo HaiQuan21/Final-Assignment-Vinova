@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { getDoulaDetailById, updateDoulaById } from "../api/apiDoula";
-import type { Doula, DoulaDetail } from "../../../../constants/MainObjectClass";
-import type { UpdateDoulaPayload } from "../api/payloadAPIDoula";
+import { updateReviewById, getReviewDetail } from "../../api/Doula Reviews/apiDoulaReview";
+import type { DoulaReview,DoulaReviewDetail } from "../../../../../constants/MainObjectClass";
+import type { UpdateReviewByIdPayload } from "../../api/Doula Reviews/payloadAPIDoulaReview";
 
 export function useUpdateDoulaById(onSuccess?: () => void) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [editingDoula, setEditingDoula] = useState<DoulaDetail | null>(null);
+  const [editingDoula, setEditingDoula] = useState<DoulaReviewDetail | null>(null);
 
-  const handleEditClick = (doula: Doula) => {
+  const handleEditClick = (doula: DoulaReview) => {
     setIsFetching(true);
     setEditOpen(true);
-    getDoulaDetailById(doula.id)
+    getReviewDetail(doula.id)
       .then(({ data: res }) => {
         setEditingDoula(res.data);
       })
@@ -24,10 +24,10 @@ export function useUpdateDoulaById(onSuccess?: () => void) {
       .finally(() => setIsFetching(false));
   };
 
-  const handleEditSubmit = (values: UpdateDoulaPayload) => {
+  const handleEditSubmit = (values: UpdateReviewByIdPayload) => {
     if (!editingDoula) return;
     setIsSubmitting(true);
-    updateDoulaById(editingDoula.id, values)
+    updateReviewById(editingDoula.id, values)
       .then((res) => {
         toast.success(res.data.message ?? "Updated successfully.");
         setEditOpen(false);

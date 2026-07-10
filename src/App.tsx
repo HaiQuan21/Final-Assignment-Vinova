@@ -30,7 +30,7 @@ export default function App() {
 
   const StaticContent = lazy(()=>import("./modules/StaticContent/StaticContent"));
 
-  const Subscriptions = lazy(()=>import("./modules/Subscription/Subscriptions"));
+  const Subscriptions = lazy(()=>import("./modules/Subscription/SubscriptionsTable"));
 
   const Voucher = lazy(()=>import("./modules/Voucher/VoucherTable"));
   

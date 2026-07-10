@@ -20,7 +20,7 @@ export interface UpdateDoulaPayload{
     description: string,
     qualifications: string[]
     ,
-    categoryIds: string
+    categoryIds: string[]
     ,
     businessName: string,
     status: string

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getListOfDoulas } from "../api/apiDoula";
-import type { Doula } from "../../../../constants/MainObjectClass";
+import { getListOfDoulas } from "../../api/Doula/apiDoula";
+import type { Doula } from "../../../../../constants/MainObjectClass";
 
 export function useGetListOfDoula() {
   const [data, setData] = useState<Doula[]>([]);

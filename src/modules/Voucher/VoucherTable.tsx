@@ -5,24 +5,30 @@ import StatusBadge from "../../components/StatusBadge";
 import ActionButtons from "../../components/ActionButtons";
 import { type Voucher } from "../../constants/MainObjectClass";
 import { useNavigate } from "react-router-dom";
-import { useVoucher } from "./hooks/useVoucher";
+
 import ConfirmModal from "../../components/ConfirmModal";
 import { formatDate } from "../../lib/formatDate";
+import { useTableParams } from "../../hooks/useTableParams";
+import { useGetVouchers } from "./hooks/useGetVoucher";
+import { usePatchCareStatus } from "./hooks/usePatchCareStatus";
 
 function VoucherTable() {
 
   const navigate = useNavigate();
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(25);
+
+  const { data, totalEntries, isLoading,fetchVoucher } = useGetVouchers({
+    pagination,
+    sorting,
+  });
 
   const {
-    data, totalEntries, isLoading,
-    sorting, setSorting, pagination, setPagination,
-    handleToggleClick, handleToggleConfirm,
     handleToggleCancel,
-    confirmOpen,
+    handleToggleClick,
+    handleToggleConfirm,
     targetVoucher,
-  } = useVoucher();
-
-  console.log("Data Voucher trả về", data);
+    confirmOpen,
+  } = usePatchCareStatus(fetchVoucher);
 
   const columns = useMemo<ColumnDef<Voucher>[]>(
     () => [
@@ -58,13 +64,13 @@ function VoucherTable() {
         size: 170,
         cell: ({ row }) => {
           const voucher = row.original;
-          const isExpired = voucher.status === "expired";
+          const isInactive = voucher.status === "inactive";
 
           return(
           <ActionButtons
             onView={() => navigate(`/vouchers/${row.original.id}`)}
             onDelete={() => handleToggleClick(voucher)}
-            deleteDisabled={isExpired}
+            deleteDisabled={isInactive}
           />
           )
       },
@@ -98,9 +104,7 @@ function VoucherTable() {
       title="Change Voucher Status?"
       message={
         targetVoucher
-          ? `Change "${targetVoucher.code}" from ${targetVoucher.status} to ${
-              targetVoucher.status === "active" ? "inactive" : "active"
-            }?`
+          ? `Change "${targetVoucher.code}" from ${targetVoucher.status} to inactive`
           : ""
       }
       confirmLabel="Confirm"

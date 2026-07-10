@@ -26,7 +26,7 @@ function FieldTextArea({
             onChange={(e) => rhfField.onChange(e.target.value)}
             disabled={disabled}
             rows={rows}
-            className={`w-full resize-none rounded border-2 border-gray-300 px-4 py-3 outline-none transition focus:border-gray-500
+            className={`w-full resize-none rounded border-2 border-gray-300 hover:border-[#4A15AD] px-4 py-3 outline-none transition focus:border-gray-500
               ${error ? "border-red-500" : ""}
               ${className}
             `}

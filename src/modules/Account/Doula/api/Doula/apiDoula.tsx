@@ -1,4 +1,4 @@
-import axiosInstance from "../../../../api/axiosInstance";
+import axiosInstance from "../../../../../api/axiosInstance";
 import { type GetListOfDoulasParams,type UpdateDoulaPayload } from "./payloadAPIDoula";
 // ─── Articles ─────────────────────────────────────────────────────────────────
 export const getListOfDoulas = (params?: GetListOfDoulasParams) =>

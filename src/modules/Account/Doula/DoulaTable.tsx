@@ -4,9 +4,9 @@ import CommonTable from "../../../components/CommonTable";
 import StatusBadge from "../../../components/StatusBadge";
 import ActionButtons from "../../../components/ActionButtons";
 import ConfirmModal from "../../../components/ConfirmModal";
-import { useGetListOfDoula } from "./hooks/useGetListOfDoula";
-import { useUpdateDoulaById } from "./hooks/useUpdateDoulaById";
-import { useDeleteDoulaById } from "./hooks/useDeleteDoulaById";
+import { useGetListOfDoula } from "./hooks/useDoula/useGetListOfDoula";
+import { useUpdateDoulaById } from "./hooks/useDoula/useUpdateDoulaById";
+import { useDeleteDoulaById } from "./hooks/useDoula/useDeleteDoulaById";
 import type { Doula } from "../../../constants/MainObjectClass";
 import { formatDate } from "../../../lib/formatDate";
 import { useNavigate } from "react-router-dom";
@@ -193,7 +193,7 @@ function DoulaTable() {
                   editingDoula.qualifications
               ,
               categoryIds: 
-                  editingDoula.categories.id
+                  editingDoula.categories.map(category => category.id)           
               ,
               businessName: editingDoula.businessName,
               status: values.status

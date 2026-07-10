@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useRef, useState,useEffect } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   HiMenu,
   HiChevronDown,
@@ -33,8 +33,14 @@ function getAvatarLetter(admin: Admin | null) {
 
 function Sidebar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const menuRef = useRef<HTMLDivElement>(null);
-  const [accountsOpen, setAccountsOpen] = useState(false);
+
+  const isAccountRoute = accountSubItems.some((item) =>
+    location.pathname.startsWith(item.path)
+  );
+
+  const [accountsOpen, setAccountsOpen] = useState(isAccountRoute);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const admin = getCurrentUser();
@@ -46,6 +52,12 @@ function Sidebar() {
     setUserMenuOpen(false);
     navigate("/login");
   };
+
+  useEffect(() => {
+    if (isAccountRoute) {
+      setAccountsOpen(true);
+    }
+  }, [isAccountRoute]);
 
   return (
     <aside className="flex h-screen w-[260px] shrink-0 flex-col bg-white shadow-sm">

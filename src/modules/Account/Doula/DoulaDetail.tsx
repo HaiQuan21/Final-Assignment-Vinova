@@ -7,7 +7,7 @@ import StatusBadge from "../../../components/StatusBadge";
  import { PackagesTab } from "./detail/Packages";
  import { ReviewsTab } from "./detail/Reviews";
  import { SubscriptionTab } from "./detail/Subscription";
- import { useGetDoulaDetailById } from "./hooks/useGetDoulaDetailById";
+ import { useGetDoulaDetailById } from "./hooks/useDoula/useGetDoulaDetailById";
  import { formatDate } from "../../../lib/formatDate";
 
 // ── Main: DoulaDetail ────────────────────────────────────────────────────────
@@ -107,9 +107,9 @@ if (!doula) return null;
         <TabBar
           tabs={[
             { label: "Information", content: <InformationTab /> },
-            { label: "Subscription", content: <SubscriptionTab /> },
-            { label: "Packages", content: <PackagesTab /> },
-            { label: "Reviews", content: <ReviewsTab /> },
+            { label: "Subscription", content: <SubscriptionTab doulaId={doula.id}/> },
+            { label: "Packages", content: <PackagesTab doulaId={doula.id}/> },
+            { label: "Reviews", content: <ReviewsTab doulaId={doula.id} /> },
           ]}
         />
       </div>

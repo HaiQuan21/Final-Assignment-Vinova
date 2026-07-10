@@ -1,4 +1,4 @@
-import { useGetDoulaDetailById } from "../hooks/useGetDoulaDetailById";
+import { useGetDoulaDetailById } from "../hooks/useDoula/useGetDoulaDetailById";
 
 // ── Tab: Information ─────────────────────────────────────────────────────────
 export function InformationTab() {

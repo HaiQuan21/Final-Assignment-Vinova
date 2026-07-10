@@ -21,7 +21,6 @@ function MainLayout() {
 
 const breadcrumbs: BreadcrumbItem[] = currentItem
   ? [
-      ...(currentItem.breadcrumb ?? []),
       {
         label: currentItem.label,
         path: isDetailPage ? currentItem.path : undefined,

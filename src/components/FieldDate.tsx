@@ -25,7 +25,7 @@ function FieldDate({
               value={rhfField.value ?? ""}
               onChange={(e) => rhfField.onChange(e.target.value)}
               disabled={disabled}
-              className={`w-full rounded border-2 border-gray-300 px-4 py-3 pr-10 outline-none transition focus:border-gray-500
+              className={`w-full rounded border-2 border-gray-300 hover:border-[#4A15AD] px-4 py-3 pr-10 outline-none transition focus:border-gray-500
                 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:opacity-0
                 ${error ? "border-red-500" : ""}
                 ${className}

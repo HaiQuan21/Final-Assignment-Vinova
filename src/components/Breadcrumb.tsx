@@ -20,7 +20,7 @@ function Breadcrumbs({ items }: BreadcrumbsProps) {
             {index !== 0 && <span className="text-gray-400">/</span>}
 
             {isLast || !item.path ? (
-              // Item cuối hoặc không có path → text thường, không click
+              
               <span className="text-gray-800 font-medium">{item.label}</span>
             ) : (
               // Có path → click được, hover underline

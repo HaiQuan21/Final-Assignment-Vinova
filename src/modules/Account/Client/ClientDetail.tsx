@@ -6,9 +6,8 @@ import StatusBadge from "../../../components/StatusBadge";
 import CommonTable from "../../../components/CommonTable";
 import TabBar from "../../../components/Tabbar";
 import { useGetUserById } from "./hooks/useGetUserById";
-import { usePagination } from "../../../hooks/usePagination";
 import { formatDate } from "../../../lib/formatDate";
-
+import { useTableParams } from "../../../hooks/useTableParams";
 // ── Mock packages ─────────────────────────────────────────────────────────────
 const mockPackages: {
   packageName: string;
@@ -19,8 +18,7 @@ const mockPackages: {
 
 // ── Tab: Packages ─────────────────────────────────────────────────────────────
 function PackagesTab() {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const { pagination, setPagination } = usePagination(25);
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(25);
 
   const columns: ColumnDef<(typeof mockPackages)[0]>[] = [
     { accessorKey: "packageName", header: "Package Name", size: 350 },

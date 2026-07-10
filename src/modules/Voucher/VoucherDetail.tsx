@@ -3,20 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { HiArrowLeft } from "react-icons/hi";
 import type { ColumnDef } from "@tanstack/react-table";
 import CommonTable from "../../components/CommonTable";
-import { useVoucherDetail } from "./hooks/useVoucherDetail";
 import type { VoucherDoula } from "../../constants/MainObjectClass";
+import { useGetVouchersDetail } from "./hooks/useGetVoucherDetail";
+import { useTableParams } from "../../hooks/useTableParams";
+import { useGetListDoulaVoucher } from "./hooks/useGetListDoulaVoucher";
 
 function VoucherDetail() {
   const navigate = useNavigate();
 
+  const { pagination, setPagination, sorting, setSorting } = useTableParams(5);
+
   const {
-    vouchersDetail,
-    isVoucherDetailLoading,
-    doulaVouchersDetail,
-    setPagination,
-    setSorting,
-    sorting,
-  } = useVoucherDetail();
+    data: vouchersDetail,
+    isLoading: isVoucherDetailLoading,
+    fetchVoucherDetail,
+  } = useGetVouchersDetail();
+
+  const {
+    data: doulaVouchersDetail,
+    totalEntries: doulaVoucherDetailTotal,
+    isLoading: doulaVoucherDetailLoading,
+  } = useGetListDoulaVoucher({ pagination, sorting });
+
 
   const usageData: VoucherDoula[] = doulaVouchersDetail ?? [];
 

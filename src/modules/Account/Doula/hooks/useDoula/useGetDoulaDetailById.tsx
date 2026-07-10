@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
-import { getDoulaDetailById } from "../api/apiDoula";
-import type { DoulaDetail } from "../../../../constants/MainObjectClass";
+import { getDoulaDetailById } from "../../api/Doula/apiDoula";
+import type { DoulaDetail } from "../../../../../constants/MainObjectClass";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 

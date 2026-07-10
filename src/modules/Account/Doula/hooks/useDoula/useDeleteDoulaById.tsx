@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { deleteDoulaById } from "../api/apiDoula";
-import type { Doula } from "../../../../constants/MainObjectClass";
+import { deleteDoulaById } from "../../api/Doula/apiDoula";
+import type { Doula } from "../../../../../constants/MainObjectClass";
 
 export function useDeleteDoulaById(onSuccess?: () => void) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
