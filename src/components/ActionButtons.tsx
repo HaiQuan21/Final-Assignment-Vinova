@@ -16,15 +16,15 @@ function ActionButtons({
   deleteDisabled = false,
 }: ActionButtonsProps) {
   return (
-    <div className="flex items-center justify-center gap-3">
+    <div className="flex items-center justify-center gap-2">
       {onView && (
         <button
           type="button"
           onClick={onView}
-          className="text-[#E879A9] transition focus:text-[#d1437f]"
+          className="rounded-md p-1.5 text-[#E879A9] transition hover:bg-gray-400 focus:text-[#d1437f]"
           aria-label="Action"
         >
-        <HiOutlineEye size={20} />
+          <HiOutlineEye size={20} />
         </button>
       )}
 
@@ -32,7 +32,7 @@ function ActionButtons({
         <button
           type="button"
           onClick={onEdit}
-          className="text-[#E879A9] transition focus:text-[#d1437f]"
+          className="rounded-md p-1.5 text-[#E879A9] transition hover:bg-gray-400 focus:text-[#d1437f]"
           aria-label="Action"
         >
           <CiEdit size={20} />
@@ -44,10 +44,10 @@ function ActionButtons({
           type="button"
           onClick={deleteDisabled ? undefined : onDelete}
           disabled={deleteDisabled}
-          className={`transition ${
+          className={`rounded-md p-1.5 transition ${
             deleteDisabled
               ? "cursor-not-allowed text-gray-200"
-              : "text-[#A0A7AC] hover:text-red-400"
+              : "text-[#A0A7AC] hover:bg-gray-400 hover:text-red-400"
           }`}
           aria-label="Delete"
         >

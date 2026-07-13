@@ -105,7 +105,7 @@ function CommonTable<T>({
   const allColumns = table.getAllColumns();
 
   const paginationButtonClass =
-    "flex h-8 w-8 items-center justify-center border border-gray-200 bg-white text-sm transition hover:bg-gray-50 disabled:pointer-events-none disabled:opacity-40";
+    "flex h-8 w-8 items-center justify-center border text-sm transition disabled:pointer-events-none disabled:opacity-40";
 
   const getRowBgClass = (index: number) =>
     index % 2 === 1 ? "bg-[#F1F3F4]" : "bg-white";
@@ -337,7 +337,7 @@ function CommonTable<T>({
                   onClick={() => table.setPageIndex(item - 1)}
                   className={`${paginationButtonClass} ${
                     item === currentPage
-                      ? "bg-gray-100 font-medium text-gray-700"
+                      ? "border-gray-900 bg-gray-900 text-white "
                       : "text-gray-600"
                   }`}
                 >

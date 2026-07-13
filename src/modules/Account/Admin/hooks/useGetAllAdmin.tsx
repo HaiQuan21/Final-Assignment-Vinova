@@ -21,8 +21,8 @@ export function useGetAllAdmin() {
       page,
       limit,
       offset: (page - 1) * limit,
-      search: search || undefined,
-      sort: sort || undefined,
+      search: search ,
+      sort: sort,
     })
       .then(({ data: res }) => {
         setData(res.data);

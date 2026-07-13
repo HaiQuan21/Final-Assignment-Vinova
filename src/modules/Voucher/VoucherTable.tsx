@@ -85,10 +85,7 @@ function VoucherTable() {
         data={data}
         columns={columns}
         sorting={sorting}
-        onSortingChange={(newSorting) => {
-          setSorting(newSorting);
-          setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-        }}
+        onSortingChange={setSorting}
         manualSorting
         pagination={pagination}
         onPaginationChange={setPagination}

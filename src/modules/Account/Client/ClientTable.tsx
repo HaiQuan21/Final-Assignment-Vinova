@@ -172,10 +172,7 @@ function ClientTable() {
         data={data}
         columns={columns}
         sorting={sorting}
-        onSortingChange={(s) => {
-          setSorting(s);
-          setPagination((p) => ({ ...p, pageIndex: 0 }));
-        }}
+        onSortingChange={setSorting}
         manualSorting
         pagination={pagination}
         onPaginationChange={setPagination}

@@ -139,7 +139,7 @@ export interface DoulaDetail {
   id: string;
   title: string;
   description: string;
-  businessName: string | null;
+  businessName: string;
   status: string;
   photos: [
     {
