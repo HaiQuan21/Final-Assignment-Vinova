@@ -1,9 +1,12 @@
 import { useGetDoulaDetailById } from "../hooks/useDoula/useGetDoulaDetailById";
-
 // ── Tab: Information ─────────────────────────────────────────────────────────
 export function InformationTab() {
     const {data, isLoading, fetchDoulaDetailById} = useGetDoulaDetailById()
-
+  
+    if (!data) {
+      return <p className="text-sm text-gray-400">No data</p>;
+    }
+  
     return (
       <div className="flex flex-col gap-8 p-4">
         {/* Pictures of service */}
@@ -11,7 +14,7 @@ export function InformationTab() {
           <h3 className="mb-3 text-base font-semibold text-gray-800">
             Pictures of service
           </h3>
-          {data?.photos?.length > 0 ? (
+          {data.photos?.length > 0 ? (
             <div className="flex flex-wrap gap-3">
               {data.photos.map((photo) => (
                 <img
@@ -51,7 +54,7 @@ export function InformationTab() {
           <h3 className="mb-3 text-base font-semibold text-gray-800">
             Qualifications
           </h3>
-          {data?.qualifications?.length > 0 ? (
+          {data.qualifications?.length > 0 ? (
             <ul className="list-disc pl-5 text-sm text-gray-700">
               {data?.qualifications.map((q, idx) => (
                 <li key={idx}>{q}</li>

@@ -91,7 +91,7 @@ function ClientTable() {
       {
         id: "phoneNumber",
         header: "Phone number",
-        size: 160,
+        size: 220,
         enableSorting: false,
         cell: ({ row }) => {
           const cc = row.original.countryCode ?? "";
@@ -107,7 +107,7 @@ function ClientTable() {
       {
         accessorKey: "birthDate",
         header: "Birthday",
-        size: 130,
+        size: 200,
         cell: (info) => formatDate(true,info.getValue<string>()),
       },
       // ── Address ───────────────────────────────────────────────────────
@@ -126,14 +126,14 @@ function ClientTable() {
       {
         accessorKey: "createdAt",
         header: "Created Date",
-        size: 160,
+        size: 220,
         cell: (info) => formatDate(false,info.getValue<string>()),
       },
       // ── Last Access — API chưa có field này ───────────────────────────
       {
         id: "lastAccess",
         header: "Last Access",
-        size: 160,
+        size: 220,
         enableSorting: false,
         cell: () => <span className="text-gray-400">-</span>,
       },
@@ -141,7 +141,7 @@ function ClientTable() {
       {
         accessorKey: "status",
         header: "Status",
-        size: 130,
+        size: 220,
         cell: (info) => <StatusBadge status={info.getValue<string>()} />,
       },
       // ── Action ────────────────────────────────────────────────────────

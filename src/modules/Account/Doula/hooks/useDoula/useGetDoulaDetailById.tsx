@@ -5,11 +5,11 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 export function useGetDoulaDetailById() {
-  const {id} = useParams<{id : string}>();
+  const { id } = useParams<{id : string}>();
   const [data, setData] = useState<DoulaDetail | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchDoulaDetailById = () => {
+  const fetchDoulaDetailById = (id:string) => {
     setIsLoading(true);
     getDoulaDetailById(id)
       .then(({ data: res }) => {
@@ -23,8 +23,8 @@ export function useGetDoulaDetailById() {
   };
 
   useEffect(() => {
-    if (!id) return;
-    fetchDoulaDetailById();
+    if (!id) return; // hoặc redirect / show error
+    fetchDoulaDetailById(id);
   }, [id]);
 
   return { data, isLoading, fetchDoulaDetailById };

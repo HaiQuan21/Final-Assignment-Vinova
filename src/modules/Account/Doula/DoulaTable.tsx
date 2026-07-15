@@ -114,7 +114,7 @@ function DoulaTable() {
       {
         id: "createdDate",
         header: "Created Date",
-        size: 200,
+        size: 220,
         enableSorting: false,
         cell: ({row}) => formatDate(false,row.original.createdAt)?? "-",
       },

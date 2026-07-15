@@ -7,8 +7,8 @@ const statusColorMap: Record<string, string> = {
   published: "bg-green-500",
   unpublished: "bg-gray-500",
   draft: "bg-yellow-500",
-  inactive: "bg-yellow-500",
-  expired: "bg-red-500",
+  inactive: "bg-red-500",
+  expired: "bg-yellow -500",
   cancelled: "bg-red-500",
 };
 
